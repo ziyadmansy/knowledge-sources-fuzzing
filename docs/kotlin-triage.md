@@ -22,7 +22,7 @@ this manual triage. Only *runs*/*probes* rows can be credited to the method.
 | 9 | `id: ""` | RRRA | Jackson decodes `id = 0` | Jackson empty-string coercion default (as #2) | runs |
 | 10 | `id: "1.0"` (string) | AARR | Gson and Moshi accept a numeric string with a fraction as `Long` | Documented lenient number-from-string reading | runs |
 | 11 | unquoted string, `NaN`, single quotes | ARRR | Gson lenient syntax by default | Documented: Gson default strictness is legacy/lenient; maintainer comment on gson #3119 | runs, probes |
-| 12 | raw U+0000–U+001F inside a string | AAAR | Gson, Moshi **and kotlinx (non-lenient `Json`)** accept; only Jackson rejects. Dart `jsonDecode` rejects | RFC 8259 §7 violation. For kotlinx, previously reported only inside the generic benchmark issue #3273 (closed "not planned" without comment); Moshi likewise #2136–2138. **Candidate for a focused report (kotlinx)** | runs |
+| 12 | raw U+0000–U+001F inside a string | AAAR | Gson, Moshi **and kotlinx (non-lenient `Json`)** accept; only Jackson rejects. Dart `jsonDecode` rejects | RFC 8259 §7 violation. For kotlinx, previously reported only inside the generic benchmark issue #3273 (closed "not planned" without comment); Moshi likewise #2136–2138. **Focused report drafted: docs/upstream/kotlinx-control-chars/ (reproduced standalone on 1.11.0 and 1.12.0-RC); not filed** | runs |
 | 13 | `id: 9223372036854775808` (2^63) up to ~2^63+1024 | ARRR | Gson saturates to `Long.MAX_VALUE` | Known: gson #1727 (open since 2020), fix PR #1737 unmerged | hand |
 | 14 | `id: 18446744073709551617` (2^64+1) | RRAR | kotlinx wraps modulo 2^64 and decodes `id = 1` | Known: kotlinx #3267 (open, 2026-09-09, labelled bug) | hand |
 
