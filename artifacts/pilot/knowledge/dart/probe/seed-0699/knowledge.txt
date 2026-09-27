@@ -1,0 +1,23 @@
+1. All four implementations accept fully well-formed documents with correct types and valid enum values (Probe 1, 8, 10, 12, 14, 15).
+
+2. All reject if "id" is not an integer (string "1") (Probe 2) or if "amount" is not a string (integer 100) (Probe 3).
+
+3. All reject if "name" is not a string or null (e.g., integer 123) (Probe 4).
+
+4. All reject if "status" is not one of the allowed enum values ("active", "inactive", "unknown"), including in nested "child" (Probe 5, 16).
+
+5. All reject if "tags" is not an array of strings (e.g., contains integer 2, or is a string) (Probe 6, 7).
+
+6. All reject if "child" is present but missing required fields or empty object (Probe 9, 11, 17).
+
+7. All accept nested "child" objects with correct schema and types, including multi-level recursion (Probe 8, 12, 15).
+
+8. All reject if "tags" array contains null (Probe 13), but accept empty strings in "tags" (Probe 14).
+
+9. All accept extra unknown fields at any level and ignore them (Probe 18).
+
+10. When duplicate keys appear in an object, the last key wins in all implementations (Probe 19, 20), affecting decoding of "id" and "name" in "child".
+
+11. Exception types differ: manual, json_serializable, and freezed mostly throw _TypeError or ArgumentError; built_value throws DeserializationError.
+
+12. No disagreement in acceptance/rejection or decoded values except for duplicate keys where the last occurrence is used consistently.

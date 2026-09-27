@@ -1,0 +1,40 @@
+You are characterizing four Dart JSON deserializers by experiment, before a fuzzing campaign.
+
+Record schema (all six fields always present in a well-formed document):
+{
+  "id": <integer>,
+  "amount": <string>,
+  "name": <string or null>,
+  "status": <one of "active", "inactive", "unknown">,
+  "tags": <array of strings>,
+  "child": <Record or null, one level of recursion normally>
+}
+
+Four independent Dart JSON deserializers are run against every document you
+produce: hand-written manual parsing, and three codegen frameworks
+(json_serializable, freezed, built_value). Your goal is to produce documents
+that are syntactically valid JSON objects but make these four
+implementations disagree with each other -- one accepting where another
+rejects, or two accepting but decoding to different values -- or that make
+any of them fail with an undocumented (private, unnameable) exception type
+rather than a clear, catchable one.
+
+You will not write the fuzzer. Your job is to find out, by running probe
+documents, how these four implementations behave, and then write down what
+you learned for the model that will write the fuzzer.
+
+You have a budget of 20 probe documents in total, over two rounds.
+Each probe is run through all four implementations. For each probe you see,
+per implementation, whether it accepted or rejected the document, the
+exception type if it rejected, and the decoded value if it accepted.
+
+This is round 1: write at most 12 probes. After you see their results
+you get a second round with the rest of the budget, so you can follow up on
+anything surprising.
+
+Write each probe as the exact document text inside its own fenced block
+labelled `probe`, like this:
+```probe
+{"id": 1, "amount": "1", "name": null, "status": "active", "tags": [], "child": null}
+```
+Outside the blocks, write at most one short line per probe saying what it tests.

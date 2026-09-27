@@ -1,0 +1,19 @@
+1. All four implementations accept well-formed documents with correct types and known enum values (Probes 1–5, 9, 12, 13, 15, 16, 17, 18, 19, 20).
+
+2. All reject unknown enum values in the "status" field, but A_manual, B_json_serializable, and C_freezed throw ArgumentError, while D_built_value throws DeserializationError (Probe 6).
+
+3. All reject "amount" as a number instead of a string, with A_manual, B_json_serializable, and C_freezed throwing _TypeError, and D_built_value throwing DeserializationError (Probe 8).
+
+4. All reject an empty object {} as a "child" value (Probe 10, 14), with the same error types as in (3).
+
+5. All accept extra fields at the root or nested levels and ignore them (Probes 4, 5, 11, 15).
+
+6. When duplicate keys appear in an object, the last occurrence overrides earlier ones consistently across all implementations (Probes 11, 16, 17, 18, 19, 20).
+
+7. Deeply nested "child" objects beyond one level are accepted by all implementations (Probe 7, 13, 15).
+
+8. No implementation fails with undocumented or unnameable exceptions; all errors are either ArgumentError, _TypeError, or DeserializationError.
+
+9. No disagreements in acceptance or rejection were observed; all implementations behaved identically on all probes.
+
+10. No differences in decoded values were observed except for the effect of duplicate keys, which all handle identically by last-write-wins.

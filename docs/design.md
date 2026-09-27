@@ -212,3 +212,13 @@ $3/month org limit (resets 1 October). Actual spend is taken from the OpenAI das
 - **2026-09-27, before any data: pilot seed.** The step-3 gate run uses seed 699, which is outside every
   experiment seed range. It checks the pipeline end to end, and its output is never pooled with results.
   Any prompt change it prompts is logged here before seeds 700+ run.
+- **2026-09-27, pilot (seed 699), before any experiment data: both knowledge agents get the refinement
+  prompt's strategy hint.** Pilot v1 (`artifacts/pilot/knowledge/dart/probe-v1/`) spent 13 of 20 probes on
+  well-formed documents and 7 on duplicate keys. It found no divergence, and its summary claimed "no
+  unnameable exceptions" although `_TypeError` is private. The refinement prompt's generic strategy hint
+  (one thing off at a time: wrong type, missing field, type boundary), which every arm including `none`
+  already sees, was missing from the agent prompts. It is now included verbatim in both the probe and
+  code agent prompts, so each agent starts from exactly the `none` arm's a priori information and
+  nothing more. This was the only change, and the agent prompts are now frozen. Pilot v2 tested one wrong
+  thing at a time, but still never removed a field or used a non-integer `id`, and found 0 divergences
+  in 20 probes. That is kept as data about the method, not tuned away.

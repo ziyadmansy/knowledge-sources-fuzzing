@@ -1,0 +1,126 @@
+You are characterizing four Dart JSON deserializers by experiment, before a fuzzing campaign.
+
+Record schema (all six fields always present in a well-formed document):
+{
+  "id": <integer>,
+  "amount": <string>,
+  "name": <string or null>,
+  "status": <one of "active", "inactive", "unknown">,
+  "tags": <array of strings>,
+  "child": <Record or null, one level of recursion normally>
+}
+
+Four independent Dart JSON deserializers are run against every document you
+produce: hand-written manual parsing, and three codegen frameworks
+(json_serializable, freezed, built_value). Your goal is to produce documents
+that are syntactically valid JSON objects but make these four
+implementations disagree with each other -- one accepting where another
+rejects, or two accepting but decoding to different values -- or that make
+any of them fail with an undocumented (private, unnameable) exception type
+rather than a clear, catchable one.
+
+You will not write the fuzzer. Your job is to find out, by running probe
+documents, how these four implementations behave, and then write down what
+you learned for the model that will write the fuzzer.
+
+You have a budget of 20 probe documents in total, over two rounds.
+Each probe is run through all four implementations. For each probe you see,
+per implementation, whether it accepted or rejected the document, the
+exception type if it rejected, and the decoded value if it accepted.
+
+Round 1 probes and their results:
+
+Probe 1:
+{"id": 1, "amount": "100", "name": "Alice", "status": "active", "tags": ["tag1"], "child": null}
+  A_manual: accepted, decoded as {"id":1,"amount":"100","name":"Alice","status":"active","tags":["tag1"],"child":null}
+  B_json_serializable: accepted, decoded as {"id":1,"amount":"100","name":"Alice","status":"active","tags":["tag1"],"child":null}
+  C_freezed: accepted, decoded as {"id":1,"amount":"100","name":"Alice","status":"active","tags":["tag1"],"child":null}
+  D_built_value: accepted, decoded as {"id":1,"amount":"100","name":"Alice","status":"active","tags":["tag1"],"child":null}
+
+Probe 2:
+{"id": 2, "amount": "200", "name": null, "status": "inactive", "tags": [], "child": null}
+  A_manual: accepted, decoded as {"id":2,"amount":"200","name":null,"status":"inactive","tags":[],"child":null}
+  B_json_serializable: accepted, decoded as {"id":2,"amount":"200","name":null,"status":"inactive","tags":[],"child":null}
+  C_freezed: accepted, decoded as {"id":2,"amount":"200","name":null,"status":"inactive","tags":[],"child":null}
+  D_built_value: accepted, decoded as {"id":2,"amount":"200","name":null,"status":"inactive","tags":[],"child":null}
+
+Probe 3:
+{"id": 3, "amount": "300", "name": "Bob", "status": "unknown", "tags": ["a", "b"], "child": {"id": 4, "amount": "400", "name": "Child", "status": "active", "tags": [], "child": null}}
+  A_manual: accepted, decoded as {"id":3,"amount":"300","name":"Bob","status":"unknown","tags":["a","b"],"child":{"id":4,"amount":"400","name":"Child","status":"active","tags":[],"child":null}}
+  B_json_serializable: accepted, decoded as {"id":3,"amount":"300","name":"Bob","status":"unknown","tags":["a","b"],"child":{"id":4,"amount":"400","name":"Child","status":"active","tags":[],"child":null}}
+  C_freezed: accepted, decoded as {"id":3,"amount":"300","name":"Bob","status":"unknown","tags":["a","b"],"child":{"id":4,"amount":"400","name":"Child","status":"active","tags":[],"child":null}}
+  D_built_value: accepted, decoded as {"id":3,"amount":"300","name":"Bob","status":"unknown","tags":["a","b"],"child":{"id":4,"amount":"400","name":"Child","status":"active","tags":[],"child":null}}
+
+Probe 4:
+{"id": 5, "amount": "500", "name": "Eve", "status": "active", "tags": ["x"], "child": null, "extra": "field"}
+  A_manual: accepted, decoded as {"id":5,"amount":"500","name":"Eve","status":"active","tags":["x"],"child":null}
+  B_json_serializable: accepted, decoded as {"id":5,"amount":"500","name":"Eve","status":"active","tags":["x"],"child":null}
+  C_freezed: accepted, decoded as {"id":5,"amount":"500","name":"Eve","status":"active","tags":["x"],"child":null}
+  D_built_value: accepted, decoded as {"id":5,"amount":"500","name":"Eve","status":"active","tags":["x"],"child":null}
+
+Probe 5:
+{"id": 6, "amount": "600", "name": "Mallory", "status": "active", "tags": ["tag"], "child": {"id": 7, "amount": "700", "name": null, "status": "inactive", "tags": ["c"], "child": null, "extra": 123}}
+  A_manual: accepted, decoded as {"id":6,"amount":"600","name":"Mallory","status":"active","tags":["tag"],"child":{"id":7,"amount":"700","name":null,"status":"inactive","tags":["c"],"child":null}}
+  B_json_serializable: accepted, decoded as {"id":6,"amount":"600","name":"Mallory","status":"active","tags":["tag"],"child":{"id":7,"amount":"700","name":null,"status":"inactive","tags":["c"],"child":null}}
+  C_freezed: accepted, decoded as {"id":6,"amount":"600","name":"Mallory","status":"active","tags":["tag"],"child":{"id":7,"amount":"700","name":null,"status":"inactive","tags":["c"],"child":null}}
+  D_built_value: accepted, decoded as {"id":6,"amount":"600","name":"Mallory","status":"active","tags":["tag"],"child":{"id":7,"amount":"700","name":null,"status":"inactive","tags":["c"],"child":null}}
+
+Probe 6:
+{"id": 8, "amount": "800", "name": "Oscar", "status": "invalid_status", "tags": ["tag"], "child": null}
+  A_manual: rejected (ArgumentError)
+  B_json_serializable: rejected (ArgumentError)
+  C_freezed: rejected (ArgumentError)
+  D_built_value: rejected (DeserializationError)
+
+Probe 7:
+{"id": 9, "amount": "900", "name": "Peggy", "status": "active", "tags": ["tag"], "child": {"id": 10, "amount": "1000", "name": "Nested", "status": "unknown", "tags": ["nested"], "child": {"id": 11, "amount": "1100", "name": "TooDeep", "status": "active", "tags": [], "child": null}}}
+  A_manual: accepted, decoded as {"id":9,"amount":"900","name":"Peggy","status":"active","tags":["tag"],"child":{"id":10,"amount":"1000","name":"Nested","status":"unknown","tags":["nested"],"child":{"id":11,"amount":"1100","name":"TooDeep","status":"active","tags":[],"child":null}}}
+  B_json_serializable: accepted, decoded as {"id":9,"amount":"900","name":"Peggy","status":"active","tags":["tag"],"child":{"id":10,"amount":"1000","name":"Nested","status":"unknown","tags":["nested"],"child":{"id":11,"amount":"1100","name":"TooDeep","status":"active","tags":[],"child":null}}}
+  C_freezed: accepted, decoded as {"id":9,"amount":"900","name":"Peggy","status":"active","tags":["tag"],"child":{"id":10,"amount":"1000","name":"Nested","status":"unknown","tags":["nested"],"child":{"id":11,"amount":"1100","name":"TooDeep","status":"active","tags":[],"child":null}}}
+  D_built_value: accepted, decoded as {"id":9,"amount":"900","name":"Peggy","status":"active","tags":["tag"],"child":{"id":10,"amount":"1000","name":"Nested","status":"unknown","tags":["nested"],"child":{"id":11,"amount":"1100","name":"TooDeep","status":"active","tags":[],"child":null}}}
+
+Probe 8:
+{"id": 12, "amount": 1200, "name": "Quinn", "status": "active", "tags": ["tag"], "child": null}
+  A_manual: rejected (_TypeError)
+  B_json_serializable: rejected (_TypeError)
+  C_freezed: rejected (_TypeError)
+  D_built_value: rejected (DeserializationError)
+
+Probe 9:
+{"id": 13, "amount": "1300", "name": "Ruth", "status": "active", "tags": ["tag"], "child": {"id": 14, "amount": "1400", "name": "Child", "status": "active", "tags": ["tag"], "child": null}}
+  A_manual: accepted, decoded as {"id":13,"amount":"1300","name":"Ruth","status":"active","tags":["tag"],"child":{"id":14,"amount":"1400","name":"Child","status":"active","tags":["tag"],"child":null}}
+  B_json_serializable: accepted, decoded as {"id":13,"amount":"1300","name":"Ruth","status":"active","tags":["tag"],"child":{"id":14,"amount":"1400","name":"Child","status":"active","tags":["tag"],"child":null}}
+  C_freezed: accepted, decoded as {"id":13,"amount":"1300","name":"Ruth","status":"active","tags":["tag"],"child":{"id":14,"amount":"1400","name":"Child","status":"active","tags":["tag"],"child":null}}
+  D_built_value: accepted, decoded as {"id":13,"amount":"1300","name":"Ruth","status":"active","tags":["tag"],"child":{"id":14,"amount":"1400","name":"Child","status":"active","tags":["tag"],"child":null}}
+
+Probe 10:
+{"id": 15, "amount": "1500", "name": "Sam", "status": "active", "tags": ["tag"], "child": {"id": 16, "amount": "1600", "name": "Child", "status": "active", "tags": ["tag"], "child": {}}}
+  A_manual: rejected (_TypeError)
+  B_json_serializable: rejected (_TypeError)
+  C_freezed: rejected (_TypeError)
+  D_built_value: rejected (DeserializationError)
+
+Probe 11:
+{"id": 17, "amount": "1700", "name": "Trudy", "status": "active", "tags": ["tag"], "child": {"id": 18, "amount": "1800", "name": "Child", "status": "active", "tags": ["tag"], "child": null, "id": 999}}
+  A_manual: accepted, decoded as {"id":17,"amount":"1700","name":"Trudy","status":"active","tags":["tag"],"child":{"id":999,"amount":"1800","name":"Child","status":"active","tags":["tag"],"child":null}}
+  B_json_serializable: accepted, decoded as {"id":17,"amount":"1700","name":"Trudy","status":"active","tags":["tag"],"child":{"id":999,"amount":"1800","name":"Child","status":"active","tags":["tag"],"child":null}}
+  C_freezed: accepted, decoded as {"id":17,"amount":"1700","name":"Trudy","status":"active","tags":["tag"],"child":{"id":999,"amount":"1800","name":"Child","status":"active","tags":["tag"],"child":null}}
+  D_built_value: accepted, decoded as {"id":17,"amount":"1700","name":"Trudy","status":"active","tags":["tag"],"child":{"id":999,"amount":"1800","name":"Child","status":"active","tags":["tag"],"child":null}}
+
+Probe 12:
+{"id": 19, "amount": "1900", "name": "Victor", "status": "active", "tags": ["tag"], "child": null}
+  A_manual: accepted, decoded as {"id":19,"amount":"1900","name":"Victor","status":"active","tags":["tag"],"child":null}
+  B_json_serializable: accepted, decoded as {"id":19,"amount":"1900","name":"Victor","status":"active","tags":["tag"],"child":null}
+  C_freezed: accepted, decoded as {"id":19,"amount":"1900","name":"Victor","status":"active","tags":["tag"],"child":null}
+  D_built_value: accepted, decoded as {"id":19,"amount":"1900","name":"Victor","status":"active","tags":["tag"],"child":null}
+
+This is round 2: write at most 8 more probes. Use them to follow up on
+what round 1 showed: confirm surprises, find where a behaviour starts and
+stops, and try what round 1 did not cover.
+
+Write each probe as the exact document text inside its own fenced block
+labelled `probe`, like this:
+```probe
+{"id": 1, "amount": "1", "name": null, "status": "active", "tags": [], "child": null}
+```
+Outside the blocks, write at most one short line per probe saying what it tests.

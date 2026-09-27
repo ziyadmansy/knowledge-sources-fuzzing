@@ -1,0 +1,74 @@
+```probe
+{"id": 1, "amount": "100", "name": "Alice", "status": "active", "tags": ["tag1"], "child": null}
+```
+Baseline well-formed document, all fields correct types and values.
+
+```probe
+{"id": "1", "amount": "100", "name": "Alice", "status": "active", "tags": ["tag1"], "child": null}
+```
+"id" as string instead of integer (type mismatch).
+
+```probe
+{"id": 1, "amount": 100, "name": "Alice", "status": "active", "tags": ["tag1"], "child": null}
+```
+"amount" as integer instead of string (type mismatch).
+
+```probe
+{"id": 1, "amount": "100", "name": 123, "status": "active", "tags": ["tag1"], "child": null}
+```
+"name" as integer instead of string or null (type mismatch).
+
+```probe
+{"id": 1, "amount": "100", "name": null, "status": "enabled", "tags": ["tag1"], "child": null}
+```
+"status" with invalid enum value (not one of allowed strings).
+
+```probe
+{"id": 1, "amount": "100", "name": null, "status": "active", "tags": ["tag1", 2], "child": null}
+```
+"tags" array contains a non-string element (integer).
+
+```probe
+{"id": 1, "amount": "100", "name": null, "status": "active", "tags": "tag1", "child": null}
+```
+"tags" as string instead of array of strings.
+
+```probe
+{"id": 1, "amount": "100", "name": null, "status": "active", "tags": [], "child": {"id": 2, "amount": "50", "name": "Bob", "status": "inactive", "tags": ["tag2"], "child": null}}
+```
+Valid nested "child" record.
+
+```probe
+{"id": 1, "amount": "100", "name": null, "status": "active", "tags": [], "child": {"id": "2", "amount": "50", "name": "Bob", "status": "inactive", "tags": ["tag2"], "child": null}}
+```
+Nested "child" with "id" as string instead of integer (type mismatch in nested).
+
+```probe
+{"id": 1, "amount": "100", "name": null, "status": "active", "tags": [], "child": null}
+```
+Repeat baseline to check consistency.
+
+```probe
+{"id": 1, "amount": "100", "name": null, "status": "active", "tags": [], "child": {}}
+```
+"child" as empty object instead of null or full record.
+
+```probe
+{"id": 1, "amount": "100", "name": null, "status": "active", "tags": [], "child": {"id": 2, "amount": "50", "name": null, "status": "unknown", "tags": [], "child": {"id": 3, "amount": "25", "name": "Charlie", "status": "active", "tags": [], "child": null}}}
+```
+"child" nested two levels deep (beyond normal one level).
+
+```probe
+{"id": 1, "amount": "100", "name": null, "status": "active", "tags": [], "child": null, "extra": "field"}
+```
+Extra unexpected field at top level.
+
+```probe
+{"id": 1, "amount": "100", "name": null, "status": "active", "tags": [], "child": null, "id": 2}
+```
+Duplicate "id" field with different value.
+
+```probe
+{"id": 1, "amount": "100", "name": null, "status": "ACTIVE", "tags": [], "child": null}
+```
+"status" with uppercase enum value (case sensitivity test).

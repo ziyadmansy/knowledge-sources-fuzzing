@@ -1,0 +1,39 @@
+```probe
+{"id": 20, "amount": "2000", "name": "Wendy", "status": "active", "tags": ["tag"], "child": {"id": 21, "amount": "2100", "name": "Child", "status": "active", "tags": ["tag"], "child": {"id": 22, "amount": "2200", "name": "Grandchild", "status": "active", "tags": ["tag"], "child": null}}}
+```
+Test nested child recursion beyond one level (like probe 7) to confirm acceptance.
+
+```probe
+{"id": 23, "amount": "2300", "name": "Xavier", "status": "active", "tags": ["tag"], "child": {"id": 24, "amount": "2400", "name": "Child", "status": "active", "tags": ["tag"], "child": {"id": 25, "amount": "2500", "name": "Grandchild", "status": "active", "tags": ["tag"], "child": {}}}}
+```
+Test nested child with empty object at grandchild level (like probe 10) to confirm rejection.
+
+```probe
+{"id": 26, "amount": "2600", "name": "Yolanda", "status": "active", "tags": ["tag"], "child": {"id": 27, "amount": "2700", "name": "Child", "status": "active", "tags": ["tag"], "child": {"id": 28, "amount": "2800", "name": "Grandchild", "status": "active", "tags": ["tag"], "child": null, "extra": "ignored"}}}
+```
+Test nested child with extra field at grandchild level to confirm extra fields ignored in nested objects.
+
+```probe
+{"id": 29, "amount": "2900", "name": "Zara", "status": "active", "tags": ["tag"], "child": {"id": 30, "amount": "3000", "name": "Child", "status": "active", "tags": ["tag"], "child": null, "amount": "overridden"}}
+```
+Test extra field with same name as existing field in child object to see if it overrides or is ignored (like probe 11 but with "amount").
+
+```probe
+{"id": 31, "amount": "3100", "name": "Alan", "status": "active", "tags": ["tag"], "child": {"id": 32, "amount": "3200", "name": "Child", "status": "active", "tags": ["tag"], "child": null, "name": null}}
+```
+Test extra field with same name as existing field but null value in child object.
+
+```probe
+{"id": 33, "amount": "3300", "name": "Beth", "status": "active", "tags": ["tag"], "child": {"id": 34, "amount": "3400", "name": "Child", "status": "active", "tags": ["tag"], "child": null, "status": "inactive"}}
+```
+Test extra field with same name as existing field but different enum value in child object.
+
+```probe
+{"id": 35, "amount": "3500", "name": "Carl", "status": "active", "tags": ["tag"], "child": {"id": 36, "amount": "3600", "name": "Child", "status": "active", "tags": ["tag"], "child": null, "tags": ["override"]}}
+```
+Test extra field with same name as existing array field in child object.
+
+```probe
+{"id": 37, "amount": "3700", "name": "Diana", "status": "active", "tags": ["tag"], "child": {"id": 38, "amount": "3800", "name": "Child", "status": "active", "tags": ["tag"], "child": null, "child": null}}
+```
+Test duplicate "child" field in child object to see which value is used or if rejected.

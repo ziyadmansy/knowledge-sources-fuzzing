@@ -1,0 +1,39 @@
+```probe
+{"id": 1, "amount": "100", "name": null, "status": "active", "tags": ["tag1", null], "child": null}
+```
+Tests if `tags` array containing null (instead of string) is accepted or rejected.
+
+```probe
+{"id": 1, "amount": "100", "name": null, "status": "active", "tags": ["tag1", ""], "child": null}
+```
+Tests if empty string in `tags` array is accepted or rejected.
+
+```probe
+{"id": 1, "amount": "100", "name": null, "status": "active", "tags": ["tag1"], "child": {"id": 2, "amount": "50", "name": null, "status": "active", "tags": ["tag2"], "child": {"id": 3, "amount": "25", "name": null, "status": "active", "tags": ["tag3"], "child": null}}}
+```
+Tests deeper nested `child` recursion beyond one level.
+
+```probe
+{"id": 1, "amount": "100", "name": null, "status": "active", "tags": ["tag1"], "child": {"id": 2, "amount": "50", "name": null, "status": "invalid_status", "tags": ["tag2"], "child": null}}
+```
+Tests if invalid `status` in nested `child` is rejected similarly to top-level.
+
+```probe
+{"id": 1, "amount": "100", "name": null, "status": "active", "tags": ["tag1"], "child": {"id": 2, "amount": "50", "name": null, "status": "active", "tags": ["tag2"], "child": {}}}
+```
+Tests if empty object as nested `child.child` is rejected.
+
+```probe
+{"id": 1, "amount": "100", "name": null, "status": "active", "tags": ["tag1"], "child": {"id": 2, "amount": "50", "name": null, "status": "active", "tags": ["tag2"], "child": null, "extra_field": 123}}
+```
+Tests if extra unknown field in nested `child` is accepted or rejected.
+
+```probe
+{"id": 1, "amount": "100", "name": null, "status": "active", "tags": ["tag1"], "child": {"id": 2, "amount": "50", "name": null, "status": "active", "tags": ["tag2"], "child": null, "id": 3}}
+```
+Tests if duplicate keys in nested `child` (two `id` fields) cause rejection or acceptance.
+
+```probe
+{"id": 1, "amount": "100", "name": null, "status": "active", "tags": ["tag1"], "child": {"id": 2, "amount": "50", "name": null, "status": "active", "tags": ["tag2"], "child": null, "name": "Extra"}}
+```
+Tests if duplicate keys in nested `child` (two `name` fields) cause rejection or acceptance.

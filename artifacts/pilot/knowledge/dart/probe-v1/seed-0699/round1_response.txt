@@ -1,0 +1,59 @@
+```probe
+{"id": 1, "amount": "100", "name": "Alice", "status": "active", "tags": ["tag1"], "child": null}
+```
+Baseline well-formed document, all fields normal.
+
+```probe
+{"id": 2, "amount": "200", "name": null, "status": "inactive", "tags": [], "child": null}
+```
+Test null name and empty tags array.
+
+```probe
+{"id": 3, "amount": "300", "name": "Bob", "status": "unknown", "tags": ["a", "b"], "child": {"id": 4, "amount": "400", "name": "Child", "status": "active", "tags": [], "child": null}}
+```
+Test nested child record with normal values.
+
+```probe
+{"id": 5, "amount": "500", "name": "Eve", "status": "active", "tags": ["x"], "child": null, "extra": "field"}
+```
+Test extra unexpected field at root level.
+
+```probe
+{"id": 6, "amount": "600", "name": "Mallory", "status": "active", "tags": ["tag"], "child": {"id": 7, "amount": "700", "name": null, "status": "inactive", "tags": ["c"], "child": null, "extra": 123}}
+```
+Test extra unexpected field inside child.
+
+```probe
+{"id": 8, "amount": "800", "name": "Oscar", "status": "invalid_status", "tags": ["tag"], "child": null}
+```
+Test invalid enum value for status.
+
+```probe
+{"id": 9, "amount": "900", "name": "Peggy", "status": "active", "tags": ["tag"], "child": {"id": 10, "amount": "1000", "name": "Nested", "status": "unknown", "tags": ["nested"], "child": {"id": 11, "amount": "1100", "name": "TooDeep", "status": "active", "tags": [], "child": null}}}
+```
+Test child nested two levels deep (normally one level).
+
+```probe
+{"id": 12, "amount": 1200, "name": "Quinn", "status": "active", "tags": ["tag"], "child": null}
+```
+Test amount as integer instead of string.
+
+```probe
+{"id": 13, "amount": "1300", "name": "Ruth", "status": "active", "tags": ["tag"], "child": {"id": 14, "amount": "1400", "name": "Child", "status": "active", "tags": ["tag"], "child": null}}
+```
+Test normal nested child, repeated for control.
+
+```probe
+{"id": 15, "amount": "1500", "name": "Sam", "status": "active", "tags": ["tag"], "child": {"id": 16, "amount": "1600", "name": "Child", "status": "active", "tags": ["tag"], "child": {}}}
+```
+Test child with empty object as child field (should be null or record).
+
+```probe
+{"id": 17, "amount": "1700", "name": "Trudy", "status": "active", "tags": ["tag"], "child": {"id": 18, "amount": "1800", "name": "Child", "status": "active", "tags": ["tag"], "child": null, "id": 999}}
+```
+Test duplicate keys in child object (id repeated).
+
+```probe
+{"id": 19, "amount": "1900", "name": "Victor", "status": "active", "tags": ["tag"], "child": null}
+```
+Control probe, normal document again.

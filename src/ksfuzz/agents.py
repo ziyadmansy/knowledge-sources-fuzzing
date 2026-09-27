@@ -20,6 +20,7 @@ from pathlib import Path
 import re
 from typing import Any
 
+from .campaign import STRATEGY_HINT
 from .knowledge import KNOWLEDGE_CAP
 from .runner import run_batch
 from .targets import Target
@@ -66,7 +67,9 @@ you learned for the model that will write the fuzzer.
 You have a budget of {PROBE_BUDGET} probe documents in total, over two rounds.
 Each probe is run through all four implementations. For each probe you see,
 per implementation, whether it accepted or rejected the document, the
-exception type if it rejected, and the decoded value if it accepted."""
+exception type if it rejected, and the decoded value if it accepted.
+
+{STRATEGY_HINT}"""
 
 
 _PROBE_FORMAT = """Write each probe as the exact document text inside its own fenced block
@@ -135,6 +138,8 @@ code, before a fuzzing campaign.
 You will not write the fuzzer. Your job is to read the code below, work out
 how these four implementations behave, and then write down what you learned
 for the model that will write the fuzzer.
+
+{STRATEGY_HINT}
 
 {listing}
 

@@ -264,7 +264,7 @@ _IMPORT_INSTRUCTION = (
     "with string concatenation and Hypothesis `.map()`/`.flatmap()` transforms."
 )
 
-_STRATEGY_HINT = """Strategy hint: implementations are more likely to disagree on documents that
+STRATEGY_HINT = """Strategy hint: implementations are more likely to disagree on documents that
 are *almost* well-formed with one specific thing off (a field of the wrong
 type, a field missing rather than present-but-wrong, a value at a type
 boundary) than on documents that are broadly malformed in many ways at once
@@ -313,7 +313,7 @@ Other metrics from that iteration, for context only:
 {json.dumps(other_metrics, sort_keys=True)}
 {error_section}
 
-{_STRATEGY_HINT}
+{STRATEGY_HINT}
 
 Return only Python source defining `@st.composite def generated_json(draw) -> bytes`.
 {target.syntax_note}
