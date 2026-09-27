@@ -30,6 +30,8 @@ REPLACE = [
     ("artifact release, Zenodo DOI, preprint; CV/SOP entry.", "artifact release, DOI, preprint."),
     ("citing mansy2026agentic/mansy2026beyond here\n% deanonymizes the submission.", "the named citations are omitted\n% from this copy."),
     ("Copyright (c) 2026 Ziyad Mohammad Mansy Ibrahim", "Copyright (c) 2026 Anonymous Author(s)"),
+    ("kotlinx.serialization #3276", "kotlinx.serialization (issue number withheld for review)"),
+    ("#3276", "(issue number withheld for review)"),
     ("Paper 2's", "The previous study's"),
     ("paper 2's", "the previous study's"),
     ("Paper 2", "The previous study"),
@@ -42,7 +44,7 @@ REPLACE = [
 
 LEAK = re.compile(
     r"ziyad|mansy|ibrahim|zenodo|10\.5281|orcid|agentic-fuzzing|agentic-grammar|/Users/|"
-    r"AST 2027|FORGE|beyond sanitizers|paper [123]\b|\bPhD\b",
+    r"AST 2027|FORGE|beyond sanitizers|paper [123]\b|\bPhD\b|3276",
     re.IGNORECASE,
 )
 
@@ -63,7 +65,7 @@ def tracked_text_files() -> list[Path]:
 
 
 def drop_named_bib_entries(text: str) -> str:
-    return re.sub(r"@misc\{mansy2026(agentic|beyond),.*?\n\}\n\n?", "", text, flags=re.S)
+    return re.sub(r"@misc\{(mansy2026agentic|mansy2026beyond|kotlinxissue3276),.*?\n\}\n\n?", "", text, flags=re.S)
 
 
 def main() -> None:

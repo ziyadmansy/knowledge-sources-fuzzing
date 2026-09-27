@@ -1,4 +1,4 @@
-<!-- DRAFT, not filed. Target: https://github.com/Kotlin/kotlinx.serialization/issues/new
+<!-- FILED 2026-09-28 as https://github.com/Kotlin/kotlinx.serialization/issues/3276
      Label suggestion: bug. Reproducer: ./src/main/kotlin/Main.kt (./gradlew run -Pkx=1.12.0-RC) -->
 
 **Title:** Default (non-lenient) `Json` accepts unescaped control characters (U+0000–U+001F) inside strings

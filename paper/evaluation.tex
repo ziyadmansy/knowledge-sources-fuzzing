@@ -351,8 +351,8 @@ One behavior is a standards violation. kotlinx.serialization's
 and Dart's \texttt{jsonDecode} reject. We reproduced it outside the harness
 on version 1.11.0 and on the latest release candidate, 1.12.0-RC. It had
 been reported only inside a generic benchmark issue that was closed as not
-planned without comment~\cite{kotlinxissue3273}, and we have prepared a
-focused report. The same leniency is why the harness's validity label,
+planned without comment~\cite{kotlinxissue3273}, and we reported it in
+focused form~\ctrlreport. The same leniency is why the harness's validity label,
 which used kotlinx.serialization's parser, was not RFC-strict.
 
 Two more defects surfaced only in our manual reproductions, not in any run
