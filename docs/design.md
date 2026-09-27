@@ -140,16 +140,14 @@ before any report.
 Probing adds about 3 calls per seed. Estimate: 6 arm-sets × 5 seeds ≈ $0.6–1.0 total, well inside the
 $3/month org limit (resets 1 October). Actual spend is taken from the OpenAI dashboard, not estimates.
 
-## 8. Milestones (deadline pressure: PhD applications on 1 December)
+## 8. Steps (progress-based, not dated; hard deadline: preprint before PhD applications on 1 December)
 
-| Week | Dates | Deliverable | Gate |
-|---|---|---|---|
-| 1 | 28 Sep – 4 Oct | This design; Kotlin harness skeleton builds; Dart pipeline ported | |
-| 2 | 5 – 11 Oct | Kotlin 4-path harness + hand characterization smoke test; probing and code agents | **12 Oct go/no-go:** Kotlin shows ≥1 divergence pattern and the probe agent runs end-to-end on Dart. If Kotlin fails, fall back to Dart-only RQ1–RQ2 |
-| 3–4 | 12 – 25 Oct | All arms run; analyses; bug triage and reports | |
-| 5–6 | 26 Oct – 8 Nov | Paper draft | |
-| 7 | 9 – 15 Nov | Revision, artifact release, Zenodo DOI | |
-| 8 | 16 – 25 Nov | arXiv/Zenodo preprint; CV/SOP entry | |
+1. **Harnesses**: Kotlin 4-path harness (same NDJSON protocol as Dart); port the Dart pipeline into this repo; hand-characterization smoke test on Kotlin.
+2. **Agents**: probing agent and code-reading agent; knowledge-slot plumbing in the refinement loop.
+3. **Gate**: Kotlin shows ≥1 divergence pattern, and the probing agent runs end-to-end on Dart. If Kotlin fails, fall back to Dart-only RQ1–RQ2.
+4. **Experiments**: all arms (§6); analyses; Kotlin bug triage and upstream reports.
+5. **Paper**: draft, then revision.
+6. **Release**: artifact release, Zenodo DOI, preprint; CV/SOP entry.
 
 ## 9. Threats known up front
 
