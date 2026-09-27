@@ -44,7 +44,7 @@ REPLACE = [
 
 LEAK = re.compile(
     r"ziyad|mansy|ibrahim|zenodo|10\.5281|orcid|agentic-fuzzing|agentic-grammar|/Users/|"
-    r"AST 2027|FORGE|beyond sanitizers|paper [123]\b|\bPhD\b|3276",
+    r"AST 2027|FORGE|beyond sanitizers|paper [123]\b|\bPhD\b|#3276|issues/3276",
     re.IGNORECASE,
 )
 
