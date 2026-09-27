@@ -232,7 +232,7 @@ and others do not.
 Probe knowledge changes what the loop finds, not only how much. Pooled over
 all Kotlin runs, the Gson-only pattern \texttt{ARRR} rises from 35.4\% to
 51.6\% of documents and the unknown-key pattern \texttt{AARR} from 2.6\%
-to 6.1\%: both are behaviours the probe summaries describe. Conversely,
+to 6.1\%: both are behaviors the probe summaries describe. Conversely,
 \texttt{AAAR}, where Jackson alone rejects, falls from 3.6\% to 0.7\%. On
 inspection every \texttt{AAAR} document contains a raw control character
 in a string (Section~\ref{sec:triage}): the generators without knowledge
@@ -281,7 +281,7 @@ Kotlin sysprobe$-$none         & $+35.82$ & 0.016 & 0.095 & $+0.92$ \\
 Kotlin sysprobe$-$probe        & $+17.25$ & 0.095 & 0.381 & $+0.68$ \\
 \midrule
 Dart probe-gpt41$-$probe       & $+1.58$  & 0.151 & 0.151 & $+0.60$ \\
-Dart probe-gpt41$-$none        & $+10.63$ & 0.032 & 0.064 & $+0.84$ \\
+Dart probe-gpt41$-$none        & $+10.63$ & 0.032 & 0.063 & $+0.84$ \\
 \bottomrule
 \end{tabular}
 \end{table}
@@ -298,7 +298,7 @@ pre-registered threshold for a comparability claim. On Kotlin it reaches
 arm.
 
 \textbf{A larger prober.} With \texttt{gpt-4.1} as the probing agent, the
-Dart rate is 12.1\%. That is above none ($p \approx 0.032$, Holm 0.064)
+Dart rate is 12.1\%. That is above none ($p \approx 0.032$, Holm 0.063)
 and indistinguishable from the \texttt{gpt-4.1-mini} prober on the mean,
 but its distribution has no failures: its lowest run is 3.1\%, and every
 seed's probes observed a divergence.
@@ -332,7 +332,7 @@ documentation and issue tracker. No run produced a value divergence:
 whenever all four libraries accepted a document, they decoded the same
 value.
 
-Eleven behaviours are documented defaults or known limitations. They are
+Eleven behaviors are documented defaults or known limitations. They are
 Gson's null-safety bypass and its mapping of unknown enum constants to
 \texttt{null}; Gson and Jackson decoding a missing or \texttt{null}
 \texttt{id} as 0, which Jackson's Kotlin module documents as a caveat;
@@ -345,7 +345,7 @@ syntax; and two coercions of string values to \texttt{Long}: Jackson reading
 an empty string as 0, and Gson and Moshi accepting a numeric string with a
 fraction, such as the string \texttt{1.0}.
 
-One behaviour is a standards violation. kotlinx.serialization's
+One behavior is a standards violation. kotlinx.serialization's
 \emph{default}, non-lenient \texttt{Json} accepts raw control characters
 (U+0000--U+001F) inside strings, which RFC~8259 forbids and which Jackson
 and Dart's \texttt{jsonDecode} reject. We reproduced it outside the harness
@@ -379,13 +379,13 @@ costs a fraction of a cent to under one cent per seed.
 \textbf{RQ3.} Yes on Kotlin, where divergence is dense: +17 points over ten
 seeds. The known Gson null-safety bypass was rediscovered by every run with
 or without knowledge. No new bug was found in the libraries' documented
-behaviour; one standards violation in kotlinx.serialization's strict mode,
+behavior; one standards violation in kotlinx.serialization's strict mode,
 previously reported only generically, surfaced mostly in runs \emph{without}
 knowledge.
 
 \textbf{RQ4.} Both remedies help on Dart: systematic probing gains 18.8
 points over no knowledge ($p \approx 0.032$; Holm 0.159 across six tests),
-a larger prober 10.6 ($p \approx 0.032$; Holm 0.064), and both make
+a larger prober 10.6 ($p \approx 0.032$; Holm 0.063), and both make
 probing reliable, finding a divergence on every seed. Neither reaches the
 human arm's mean. What they learn is bounded by what their probes cover, and
 neither covered integer boundaries.

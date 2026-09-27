@@ -13,7 +13,7 @@ although probes were raw text precisely to allow that. Wrong types, unknown
 enum constants and extra keys never diverged on Dart; on Kotlin they are
 exactly where the libraries disagree. The difference between the targets is
 the density of divergence near the inputs the model finds natural, not the
-agent's behaviour. The extension supports this reading experimentally: an
+agent's behavior. The extension supports this reading experimentally: an
 agent told to remove fields and set them to null does so, observes
 divergence on every Dart seed, and passes it on. It also shows the limit.
 The agents concentrated on the checklist's first two items and spent the
@@ -51,7 +51,7 @@ divergent probes / seed  & 0--1 & 2--4 & 1--2 & 11--14 & 17--18 \\
 \end{tabular}
 \end{table}
 The agent's ability to characterize a target is therefore bounded by the
-same thing that bounds the fuzzer: the density of interesting behaviour near
+same thing that bounds the fuzzer: the density of interesting behavior near
 the inputs the model finds natural. This is the conditional result in our
 title question. Unguided, self-acquired knowledge helps when an unguided
 search would have found some divergence anyway, and gives little where
@@ -81,8 +81,8 @@ is reflective or compiler-generated.
 
 \textbf{Combining sources.} Code reading and probing fail differently. Code
 reading states what the implementation does wherever the logic is visible,
-but misses behaviour that lives outside its reading list, such as the SDK's
-number parsing. Probing observes behaviour end to end, including such
+but misses behavior that lives outside its reading list, such as the SDK's
+number parsing. Probing observes behavior end to end, including such
 interactions, but only where it looks. A natural combination, which we did
 not evaluate, is to let code reading propose where to probe, and probing
 confirm or refute what code reading claims. That would also address the
@@ -143,7 +143,7 @@ made within two days, and the model identifier is recorded in each
 manifest.
 
 \textbf{Answer keys and generality.} Pattern recall is measured against two
-known Dart patterns and one known Kotlin behaviour; a source could help in
+known Dart patterns and one known Kotlin behavior; a source could help in
 ways these keys do not capture. Both targets decode one small record schema
 from JSON, with four paths each. The conditional result, that probing helps
 where divergence is dense, is a hypothesis for other formats and schemas, not
@@ -152,11 +152,11 @@ a finding about them.
 \textbf{Harness fidelity.} The Dart arms reuse the previous study's harness
 binary and loop; a test rebuilds all 100 of its committed prompts byte for
 byte, and its committed results summarize identically under the ported
-code. The Kotlin harness is new; each behaviour the paper reports was
+code. The Kotlin harness is new; each behavior the paper reports was
 reproduced with a minimal hand-written document, and the control-character
-behaviour also in a standalone program outside the harness, on two library
+behavior also in a standalone program outside the harness, on two library
 versions.
 
 \textbf{Construct.} ``Divergence'' counts documents, and on Kotlin many of
-them express the same few documented behaviours. Pattern recall and the
+them express the same few documented behaviors. Pattern recall and the
 triage are reported alongside the rate for this reason.

@@ -74,7 +74,7 @@ so all four run on every input and syntax-level divergence counts. The known
 answer key is the Gson null-safety bypass~\cite{gsonissue1657}: Gson
 constructs objects without Kotlin's constructor checks, so a missing or
 \texttt{null} value for a non-null property is accepted as \texttt{null}.
-Divergence that follows from a documented default is labelled as such and
+Divergence that follows from a documented default is labeled as such and
 never called a bug.
 
 \subsection{The refinement loop}
@@ -109,7 +109,7 @@ which saturates for integer literals outside the 64-bit range.
 \textbf{Code} (Dart only). An agent reads a fixed, per-seed identical set
 of nine source files, about 17{,}000 characters: each path's model and its
 generated \texttt{*.g.dart} code. It then writes a numbered list of
-behavioural observations. For Kotlin no comparable source exists: Gson and
+behavioral observations. For Kotlin no comparable source exists: Gson and
 Jackson are reflective and kotlinx.serialization generates bytecode with a
 compiler plugin. That asymmetry is itself a practical argument for black-box
 probing.
@@ -140,7 +140,8 @@ any existing arm.
 agent, model, budget and cap are unchanged. Its prompt adds the checklist in
 Fig.~\ref{fig:checklist}, and its summary must end with a line listing the
 categories no probe covered. Every item is a standard, schema-independent
-category from category-partition testing and boundary-value analysis, and
+category from category-partition testing~\cite{ostrand1988category} and
+boundary-value analysis~\cite{myers2011art}, and
 none names a field, path or library; we disclose that it was written by an
 author who knew the answer key. The knowledge header is the same as for
 \emph{probe}, so only the body differs.

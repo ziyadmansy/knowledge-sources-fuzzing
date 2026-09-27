@@ -292,7 +292,7 @@ either. No further arms or seeds are added after these results without a new, ea
 - E1: Dart `sysprobe` vs `none` has p=0.032 and δ=+0.84, which meets the pre-registered rule (p < 0.05). The
   Holm-adjusted p across the declared family of six is 0.159; both are reported. Kotlin `sysprobe` vs `none` has
   p=0.016 (Holm 0.095).
-- E2: `probe-gpt41` vs `none` has p=0.032 (Holm 0.064); vs `probe`, p=0.151.
+- E2: `probe-gpt41` vs `none` has p=0.032 (Holm 0.063); vs `probe`, p=0.151.
 - One `sysprobe` refinement response was truncated at the 8,000-token limit.
 - The "Not tested:" line was lost to the cap cut in 3 of 5 Dart and 5 of 5 Kotlin summaries, because it comes last
   and the pre-registered cut removes trailing lines. This is a flaw in the extension's design; it is reported, not

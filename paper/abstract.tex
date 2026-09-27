@@ -1,28 +1,23 @@
 An LLM-guided refinement loop for differential testing of Dart JSON
-deserializers found divergence in 2.9\% of generated documents on its own,
-but in 28.8\% when a human gave it four observations from a manual
-characterization: the bottleneck was domain knowledge, and it came from a
-person. We ask whether the fuzzer can acquire that knowledge itself. Holding
-the loop fixed and varying only a 1{,}500-character knowledge slot, we
-compare sources in a pre-registered study: none, the human's observations,
-a summary written by an LLM agent that reads the deserializers' code, and a
-summary written by an agent that designs and runs 20 black-box probe
+deserializers found divergence in 2.9\% of generated documents on its own
+and in 28.8\% when given four observations from a human characterization:
+the bottleneck was domain knowledge. We ask whether the fuzzer can acquire
+that knowledge itself. Holding the loop fixed and varying only a
+1{,}500-character knowledge slot, a pre-registered study compares no
+knowledge, the human's observations, a summary by an agent that reads the
+deserializers' code, and a summary by an agent that runs 20 black-box probe
 documents. On Dart ($n{=}5$ seeds per arm), human knowledge reaches 30.9\%,
-code-read knowledge 11.6\% and no knowledge 1.5\% (each pair
-$p \approx 0.008$, Holm-adjusted $p \approx 0.048$). Unguided probing
-reaches 10.5\%, not detectably above no knowledge ($p \approx 0.69$): its
-probes never remove a required top-level field or leave the
-64-bit integer range, and it
-succeeds on one seed in five, by accident. A pre-registered extension tests
-two remedies. Requiring the agent to cover generic test categories first
-raises probing to 20.2\% ($p \approx 0.032$ against no knowledge;
-$0.16$ after correction across six tests), with the missing-field pattern
-found in every run; a larger model raises it to 12.1\%. Neither reaches
-the human arm's mean, and both still leave the integer-overflow pattern mostly
-unfound, because the probes never reach it. Across all arms, which known
-divergence patterns the loop finds tracks which facts the knowledge states.
-On Kotlin (Gson, Moshi, kotlinx.serialization, Jackson), where divergence is
-common, probing helps without guidance (67.1\% against 50.0\% over ten
-seeds, $p \approx 0.007$) and more with it (81.6\%). Self-characterization
-works where interesting behaviour is dense, and needs systematic coverage
-where it is narrow.
+code-read knowledge 11.6\% and none 1.5\% (Holm-adjusted $p \approx 0.048$
+for each pair). Unguided probing reaches 10.5\%, not detectably above none
+($p \approx 0.69$): its probes never remove a top-level field or leave the
+64-bit integer range, and it succeeds on one seed in five, by accident. In
+a pre-registered extension, requiring the agent to cover generic test
+categories raises probing to 20.2\% ($p \approx 0.032$ against none; 0.16
+after correction across six tests), and a larger model to 12.1\%; both
+still miss the integer-overflow pattern their probes never reach. Across
+arms, which known patterns the loop finds largely follows which facts the
+knowledge states. On Kotlin (Gson, Moshi, kotlinx.serialization, Jackson),
+where divergence is common, unguided probing already helps (67.1\% against
+50.0\% over ten seeds, $p \approx 0.007$) and systematic probing reaches
+81.6\%. Self-characterization works where interesting behavior is dense,
+and needs systematic coverage where it is narrow.
