@@ -245,3 +245,11 @@ $3/month org limit (resets 1 October). Actual spend is taken from the OpenAI das
   prompts and code are unchanged. Reporting will cover both the replication alone (n=5 vs 5) and the pooled data
   (n=10 vs 10), with the original n=5 result always reported alongside. No Dart replication is declared: Dart
   probe vs none was p=0.69, which is not the "suggestive" case.
+- **2026-09-28, AFTER data (secondary metric only): the Kotlin gate label is not RFC-strict.** During triage,
+  the harness's "strict reference" (`kotlinx…Json.parseToJsonElement`) turned out to accept raw U+0000–U+001F
+  inside strings, unquoted string values and `NaN`, all of which RFC 8259 forbids. So the Kotlin
+  `schema_evaluated` label over-counts valid JSON. The primary metric (divergence over all documents) does not
+  use the label and is unaffected. The gate split is re-derived post hoc in `scripts/analyze.py`
+  (`rfc_object`: strict UTF-8, Python `json` with strict=True, NaN/Infinity rejected, top-level object) and
+  reported as `rate_rfc_valid`. The harness is left unchanged so the committed runs stay reproducible. Original
+  seeds: none 39.51%, probe 49.36% over RFC-valid objects (vs 47.02% / 64.40% under the harness label).
