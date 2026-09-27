@@ -6,3 +6,6 @@ build/
 .gradle/
 *.class
 local.properties
+
+kotlin-harness/build/
+kotlin-harness/.kotlin/
