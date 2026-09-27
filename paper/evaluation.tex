@@ -3,7 +3,7 @@
 \subsection{RQ1 and RQ2: knowledge sources on Dart}
 
 Table~\ref{tab:dart} gives the divergence rate of every run.
-Human knowledge reproduces our previous result on fresh seeds (30.9\%,
+Human knowledge reproduces the previous study's result on fresh seeds (30.9\%,
 against 28.8\% before). Code-read knowledge sits between human and none, and
 every run in each of these three arms is ordered: all five human runs exceed
 all five code runs, which exceed all five \emph{none} runs.
@@ -61,11 +61,87 @@ knowledge. Summaries can also overgeneralize: one states that no
 implementation throws an undocumented exception, although three of the four
 paths throw Dart's private \texttt{\_TypeError} on the probes it ran.
 
+\textbf{Case study: seed 701.} The one successful probe run shows the whole
+chain, and how fragile it is. Probe 17 of seed 701 tested duplicate keys:
+its nested \texttt{child} contained \texttt{"tags": ["tag2"]} followed later
+by \texttt{"tags": null}. \texttt{jsonDecode} keeps the last value, so
+\texttt{tags} was \texttt{null}, and \texttt{built\_value} alone accepted.
+The summary turned this into an observation (Table~\ref{tab:excerpts}), and
+the first generator of the loop carried it over almost verbatim:
+
+\begin{center}
+\begin{minipage}{0.95\columnwidth}
+\scriptsize
+\begin{verbatim}
+# tags: array of strings normally, but built_value
+# accepts null for tags, others reject
+tags_val = draw(st.one_of(st.none(), st.lists(...)))
+\end{verbatim}
+\end{minipage}
+\end{center}
+
+\noindent That generator made 486 of its 500 documents diverge. The only
+Dart knowledge any probe produced was thus a side effect of a probe
+designed to test something else.
+
 \textbf{RQ2.} Human $>$ code $>$ none holds with the largest possible
 effect in every pair and survives the Holm correction. Code-read knowledge is
 the stable middle: it varies between 8.4\% and 16.0\% and never fails.
 Probe knowledge has a similar mean but the opposite profile. The two are not
 distinguishable at $n{=}5$.
+
+\begin{table}[t]
+\centering
+\caption{Excerpts from knowledge bodies, verbatim.}
+\label{tab:excerpts}
+\footnotesize
+\begin{tabularx}{\columnwidth}{@{}lX@{}}
+\toprule
+human & ``When the \texttt{tags} field is missing entirely, built\_value accepts the
+document and silently uses an empty list, while manual, json\_serializable
+and freezed reject it.'' \\
+code, 701 & ``Manual uses \texttt{as int} for \texttt{id}, rejecting floats (e.g.\ 1.0);
+json\_serializable/freezed cast \texttt{(num).toInt()}, accepting integral floats.'' \\
+probe, 701 & ``Built\_value uniquely accepts null for a field expected to be a
+non-null list if that field is explicitly null (Probe 17 [\ldots]).'' \\
+probe, 700 & ``Decoded values are consistent across all implementations when
+accepted; no evidence of differing decoded values.'' \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\begin{table}[t]
+\centering
+\caption{Mean divergence rate (\%) per iteration, over runs whose generator
+for that iteration was valid; in parentheses, the number of the five (Dart)
+or ten (Kotlin) runs whose generator failed validation.}
+\label{tab:iterations}
+\footnotesize
+\begin{tabular}{@{}lrrrrr@{}}
+\toprule
+Arm & it.\,1 & it.\,2 & it.\,3 & it.\,4 & it.\,5 \\
+\midrule
+Dart none   & 0.4 (0) & 4.5 (3) & 0.0 (4) & 2.4 (1) & 2.2 (3) \\
+Dart human  & -- (5) & 46.5 (1) & 32.6 (0) & 18.0 (2) & 12.0 (3) \\
+Dart code   & 8.8 (1) & 8.9 (1) & 8.0 (3) & 19.8 (1) & 10.9 (0) \\
+Dart probe  & 32.4 (2) & 1.3 (3) & 0.6 (2) & 12.2 (1) & 1.8 (1) \\
+Kotlin none & 46.2 (4) & 52.8 (5) & 51.3 (5) & 55.2 (5) & 41.5 (4) \\
+Kotlin probe & 62.7 (4) & 70.7 (3) & 71.3 (5) & 67.0 (3) & 64.3 (2) \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Table~\ref{tab:excerpts} shows what the arms' knowledge looks like, and
+Table~\ref{tab:iterations} how the loop uses it over five iterations. Two
+things stand out. First, generator failures are frequent in every arm, as in
+the previous study: 11 of 25 Dart iterations failed validation in the
+\emph{none} and \emph{human} arms, 6 in \emph{code} and 9 in
+\emph{probe}. All five human-arm generators failed in the first iteration,
+so its high rate starts in iteration 2. Second, knowledge is used early and
+then fades: the human arm peaks in iteration 2 (46.5\%) and declines over later
+iterations. The loop discards the
+previous generator every iteration by design, and the knowledge is the only
+persistent guidance it has.
 
 \begin{table}[t]
 \centering
@@ -101,7 +177,7 @@ The probe summaries are the mirror image: none mentions a non-integer
 \texttt{id}, and no probe run finds \texttt{RAAR}, not even the one at
 49\%, whose divergences are all \texttt{RRRA}. No arm found a Dart pattern
 outside the answer key. The loop exploits what it is told; it does not
-extend it, which is what our previous study observed for human knowledge.
+extend it, which is what the previous study observed for human knowledge.
 
 \textbf{Cost.} A \emph{none} or \emph{human} run takes five calls, about
 \$0.014 at list prices. Code knowledge adds two calls per seed (\$0.004) and
@@ -150,6 +226,18 @@ The effect shrinks ($\delta = +0.48$, $p \approx 0.075$): part of the
 probe arm's advantage comes from malformed input that some libraries accept
 and others do not.
 
+Probe knowledge changes what the loop finds, not only how much. Pooled over
+all Kotlin runs, the Gson-only pattern \texttt{ARRR} rises from 35.4\% to
+51.6\% of documents and the unknown-key pattern \texttt{AARR} from 2.6\%
+to 6.1\%: both are behaviours the probe summaries describe. Conversely,
+\texttt{AAAR}, where Jackson alone rejects, falls from 3.6\% to 0.7\%. On
+inspection every \texttt{AAAR} document contains a raw control character
+in a string (Section~\ref{sec:triage}): the generators without knowledge
+produced it 492 times while filling strings with arbitrary Unicode, the
+generators with probe knowledge 110 times. Knowledge focuses the search,
+and in doing so it crowds out incidental discoveries, including the only
+standards violation in our triage.
+
 Every Kotlin run in both arms, including all ten without knowledge,
 rediscovered the Gson null-safety bypass, in 114 to 970 documents per run.
 On Kotlin this answer key is too easy to separate the arms.
@@ -195,3 +283,23 @@ decodes as \texttt{1}~\cite{kotlinxissue3267}. Both are known and open. We
 do not credit them to the method: like \texttt{RAAR} for the probe arm,
 they sit in a narrow numeric region that neither the probes nor the
 generators visited.
+
+\subsection{Answers to the research questions}
+
+\textbf{RQ1.} Not on Dart. A probing agent with 20 probes did not produce
+knowledge that closes the gap: probe was not distinguishable from none and
+fell well short of human knowledge. It succeeded once in five seeds, by
+accident.
+
+\textbf{RQ2.} Human $>$ code $>$ none, each with the largest possible effect.
+Probe is as good as code on average and far less reliable. What each source
+states predicts which known patterns the loop finds. Knowledge acquisition
+costs a fraction of a cent to under one cent per seed.
+
+\textbf{RQ3.} Yes on Kotlin, where divergence is dense: +17 points over ten
+seeds. The known Gson null-safety bypass was rediscovered by every run with
+or without knowledge. No new bug was found in the libraries' documented
+behaviour; one standards violation in kotlinx.serialization's strict mode,
+previously reported only generically, surfaced mostly in runs \emph{without}
+knowledge.
+

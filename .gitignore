@@ -11,3 +11,6 @@ kotlin-harness/build/
 kotlin-harness/.kotlin/
 
 .hypothesis/
+
+# LaTeX output (build with: cd paper && tectonic main.tex / main-icst-submission.tex)
+paper/*.pdf

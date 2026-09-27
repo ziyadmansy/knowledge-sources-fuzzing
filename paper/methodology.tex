@@ -1,5 +1,39 @@
 \section{Method}
 
+Figure~\ref{fig:overview} shows the setup. Four knowledge sources feed one
+slot in the prompt of an otherwise fixed refinement loop; the loop's
+generators are scored by a differential harness over four deserialization
+paths.
+
+\begin{figure}[t]
+\centering
+\resizebox{\columnwidth}{!}{%
+\begin{tikzpicture}[
+  font=\footnotesize,
+  box/.style={draw, rounded corners=2pt, align=center, inner sep=3pt},
+  src/.style={box, minimum width=1.55cm, minimum height=0.9cm},
+  arr/.style={-{Stealth[length=4pt]}, thick}]
+\node[src] (none)  at (0,3.0)  {\textbf{none}\\empty};
+\node[src] (human) at (0,1.95) {\textbf{human}\\4 observations};
+\node[src] (code)  at (0,0.9)  {\textbf{code}\\agent reads\\source};
+\node[src] (probe) at (0,-0.25) {\textbf{probe}\\agent runs\\20 probes};
+\node[box, minimum width=1.5cm, minimum height=1.1cm] (slot) at (2.55,1.35) {knowledge\\slot\\$\le$1{,}500 chars};
+\node[box, minimum width=2.1cm, minimum height=1.9cm] (loop) at (4.95,1.35)
+  {\textbf{refinement loop}\\(fixed)\\[2pt]LLM writes a\\Hypothesis generator\\$\to$ 500 documents\\$\times$ 5 iterations};
+\node[box, minimum width=1.9cm, minimum height=1.9cm] (harness) at (8.05,1.35)
+  {\textbf{harness}\\4 paths\\[2pt]divergence\\oracle};
+\foreach \n in {none,human,code,probe} \draw[arr] (\n.east) -- (slot.west);
+\draw[arr] (slot) -- (loop);
+\draw[arr] ([yshift=4pt]loop.east) -- node[above, font=\scriptsize]{docs} ([yshift=4pt]harness.west);
+\draw[arr] ([yshift=-4pt]harness.west) -- node[below, font=\scriptsize]{score} ([yshift=-4pt]loop.east);
+\draw[arr, dashed] (probe.south) |- ++(0,-0.35) -| node[pos=0.25, below, font=\scriptsize]{probe documents and per-path outcomes} (harness.south);
+\end{tikzpicture}}
+\caption{Study design. Only the knowledge slot differs between arms. The
+probing agent runs its probes through the same harness the loop is scored
+by.}
+\label{fig:overview}
+\end{figure}
+
 \subsection{Targets and oracle}
 
 Both targets decode the same logical record: a non-null integer
@@ -9,10 +43,14 @@ Both targets decode the same logical record: a non-null integer
 document is run through four independent deserialization paths in one
 long-lived harness process. A document \emph{diverges} if one path accepts
 it and another rejects it, or if all accept but decode different values.
-The primary metric, as in our previous study, is the percentage of all
-generated documents that diverge.
+Values are compared through a canonical JSON rendering of the decoded
+object built only from primitives, so that the comparison itself cannot
+fail. The harness speaks newline-delimited JSON on standard input and output,
+with each document base64-encoded, so arbitrary bytes reach the paths
+unchanged. The primary metric, as in the previous study, is the percentage
+of all generated documents that diverge.
 
-\textbf{Dart} reuses our previous harness unchanged~\dartcite: hand-written
+\textbf{Dart} reuses the previous study's harness unchanged~\dartcite: hand-written
 parsing, \texttt{json\_serializable}~\cite{jsonserializable2026},
 \texttt{freezed}~\cite{freezed2026} and
 \texttt{built\_value}~\cite{builtvalue2026}, on Dart
@@ -41,7 +79,7 @@ never called a bug.
 
 \subsection{The refinement loop}
 
-The loop is our previous study's score-only loop~\dartcite, unchanged
+The loop is the previous study's score-only loop~\dartcite, unchanged
 except for one setting. Each of five iterations asks \texttt{gpt-4.1-mini}~\cite{openai2025gpt41}
 (temperature 0.2) for a Hypothesis generator of JSON documents, draws 500
 documents from it in a restricted sandbox, and reports back how many
@@ -61,7 +99,7 @@ the source, followed by a body of at most 1{,}500 characters.
 
 \textbf{None.} The slot is empty.
 
-\textbf{Human} (Dart only). The four observations from our previous study,
+\textbf{Human} (Dart only). The four observations from the previous study,
 verbatim (1{,}291 characters): that invalid JSON never reaches the paths;
 that \texttt{built\_value} alone accepts a missing \texttt{tags} and uses
 an empty list; that wrong types and nulls are rejected by all four in every
@@ -101,7 +139,7 @@ pilot change: both agents were given the refinement prompt's existing
 strategy hint, which the \emph{none} arm already sees.
 
 For each run, iterations whose generator failed validation contribute no
-documents, as in our previous study. We compare arms with an exact two-sided
+documents, as in the previous study. We compare arms with an exact two-sided
 Mann--Whitney U test and report the mean difference and Cliff's $\delta$.
 The primary test is \emph{probe} against \emph{none} on Dart, with
 \emph{probe} against \emph{human} co-primary; all six Dart pairs are reported

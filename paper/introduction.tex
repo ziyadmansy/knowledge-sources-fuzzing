@@ -2,7 +2,7 @@
 
 LLM-guided fuzzers are often described as bringing their own knowledge: a
 model trained on large amounts of code is expected to know what inputs
-stress a parser or a compiler~\cite{deng2023titanfuzz,xia2024fuzz4all}. Our
+stress a parser or a compiler~\cite{deng2023titanfuzz,xia2024fuzz4all}. A
 previous study of differential testing for Dart JSON
 deserialization~\dartcite{} found the opposite in a controlled setting. A
 bounded refinement loop, in which an LLM writes and rewrites a
@@ -23,13 +23,13 @@ implementations under test and summarize what it finds, as white-box LLM
 testing tools do~\cite{yang2024whitefox,yang2025kernelgpt,vadayath2026aijon}.
 Or an agent can \emph{run experiments}: design a small number of probe
 documents, observe how each implementation handles them, and write down what
-it learned. The second is what the human did in our previous study, and it
+it learned. The second is what the human did in that study, and it
 needs no source code, which matters when the implementations are closed,
 generated at compile time, or reflective. We call it \emph{black-box
 self-characterization}.
 
 We compare these sources under control. The refinement loop, model,
-sampling settings and feedback are those of our previous study, unchanged;
+sampling settings and feedback are those of that study, unchanged;
 the only thing that differs between arms is the text in a single knowledge
 slot of the prompt, capped at 1{,}500 characters. The four arms are
 \emph{none}, \emph{human} (the four observations, verbatim),

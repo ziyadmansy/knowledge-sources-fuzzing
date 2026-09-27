@@ -1,0 +1,57 @@
+% Double-blind review copy for ICST 2027 (Research Papers track, deadline 2 Nov 2026).
+% Shares every section file with main.tex; the only differences are the anonymous
+% author block, the anonymized self-citations and the anonymized artifact mirror.
+% Edit content in the shared section files, never here.
+\documentclass[10pt,conference,letterpaper]{IEEEtran}
+
+\usepackage{graphicx}
+\usepackage{amsmath}
+\usepackage{hyperref}
+\usepackage{booktabs}
+\usepackage{tabularx}
+\usepackage{multirow}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta,positioning,fit}
+
+% Anonymized self-citations -- citing mansy2026agentic/mansy2026beyond here
+% deanonymizes the submission.
+\newcommand{\grammarcite}{\cite{anon2026grammar}}
+\newcommand{\dartcite}{\cite{anon2026dart}}
+
+% Anonymized artifact mirror (anonymous.4open.science, mirrors the review-mirror branch).
+% TODO before submission: replace with the real mirror URL once it exists.
+\newcommand{\artifacturl}{https://anonymous.4open.science/r/knowledge-sources-fuzzing-XXXX/}
+
+\title{Where Does an LLM Fuzzer's Domain Knowledge Come From?\\
+Human, Code-Read, and Self-Acquired Knowledge for Differential Testing of Typed Deserializers}
+
+\author{
+\IEEEauthorblockN{Anonymous Author(s)}
+\IEEEauthorblockA{Submission under double-blind review}
+}
+
+\hypersetup{pdfauthor={},pdftitle={Where Does an LLM Fuzzer's Domain Knowledge Come From?}}
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+\input{abstract}
+\end{abstract}
+
+\begin{IEEEkeywords}
+fuzzing, differential testing, large language models, domain knowledge, black-box testing, JSON deserialization, Dart, Kotlin
+\end{IEEEkeywords}
+
+\input{introduction}
+\input{related_work}
+\input{methodology}
+\input{evaluation}
+\input{discussion}
+\input{conclusion}
+
+\bibliographystyle{IEEEtran}
+\bibliography{references}
+
+\end{document}
