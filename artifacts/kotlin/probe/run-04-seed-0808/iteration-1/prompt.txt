@@ -1,0 +1,79 @@
+You are refining a Hypothesis strategy to find behavioral divergence between four Kotlin JSON deserializers.
+
+Record schema (all six fields always present in a well-formed document):
+{
+  "id": <integer>,
+  "amount": <string>,
+  "name": <string or null>,
+  "status": <one of "active", "inactive", "unknown">,
+  "tags": <array of strings>,
+  "child": <Record or null, one level of recursion normally>
+}
+
+Four independent Kotlin JSON deserializers are run against every document you
+produce, each at its default configuration and each decoding into the same
+Kotlin data class: Gson, Moshi (generated adapter), kotlinx.serialization,
+and Jackson with its Kotlin module. Your goal is to produce documents that
+make these four implementations disagree with each other -- one accepting
+where another rejects, or two accepting but decoding to different values.
+
+What is already known about these four implementations, from running
+probe documents against them before any fuzzing (use it however you see
+fit):
+1. All four accept fully well-formed documents with correct types (Probe 1).
+
+2. All accept integer "id" as number or string, decoding string to int (Probes 1,2,9).
+
+3. Gson, Moshi, Jackson accept "amount" as string or number, converting number to string; kotlinx rejects number (Probes 3,13,15).
+
+4. Gson and Moshi accept "name" as string or number, converting number to string; kotlinx rejects number; Jackson accepts number as string (Probes 4).
+
+5. Gson accepts unknown enum values for "status" as null; Moshi, kotlinx, Jackson reject invalid enum values (Probes 5,16).
+
+6. All reject "tags" as non-array (Probe 6).
+
+7. Gson, Moshi, Jackson accept "tags" array with non-string elements, converting elements to strings; kotlinx rejects (Probes 7,14).
+
+8. All accept nested "child" with same rules recursively, including string "id" in child (Probes 8,9,17).
+
+9. Gson accepts unknown enum in nested "child" as null; others reject (Probe 16).
+
+10. Gson and Moshi accept extra unknown fields silently; kotlinx and Jackson reject unknown fields (Probes 10,18).
+
+11. Gson accepts null for "status" as null; Moshi, kotlinx, Jackson reject null for non-nullable enum (Probe 19).
+
+12. Duplicate fields: last occurrence wins in all four (Probe 20).
+
+13. Gson and Moshi convert number fields to string when target is string; kotlinx strictly enforces types.
+
+14. Jackson Kotlin module rejects null for non-nullable enum with KotlinInvalidNullException.
+
+YOUR SCORE (from the last iteration that produced usable data): 0 documents
+out of 0 where the four implementations disagreed with each other
+(0 where one accepted and another rejected,
+0 where two accepted but decoded to different values).
+Maximizing this score is the objective. A high rejection count on its own
+(see tier_b_counts below) is not the goal by itself -- a document every
+implementation rejects the same way scores zero, no matter how "malformed"
+it looks.
+
+Other metrics from that iteration, for context only:
+{"tier_b_counts": {}, "top_level_counts": {}, "total": 0, "unique_divergence_signatures": 0}
+
+
+Strategy hint: implementations are more likely to disagree on documents that
+are *almost* well-formed with one specific thing off (a field of the wrong
+type, a field missing rather than present-but-wrong, a value at a type
+boundary) than on documents that are broadly malformed in many ways at once
+-- broad malformation tends to make every implementation reject identically,
+which scores zero. Vary one or two things about an otherwise valid document
+at a time, across many documents, rather than maximizing how unusual any
+single document looks.
+
+Return only Python source defining `@st.composite def generated_json(draw) -> bytes`.
+Each document is passed to all four libraries as raw text, and each library
+parses that text itself.
+Use bounded recursion and output sizes. The campaign runs at most 500
+examples per iteration. The only import allowed is `from hypothesis import strategies as st` -- do not import `json` or anything else; build the JSON text yourself with string concatenation and Hypothesis `.map()`/`.flatmap()` transforms.
+Do not use subprocesses, filesystem, network access, eval, exec, or
+coverage instrumentation.

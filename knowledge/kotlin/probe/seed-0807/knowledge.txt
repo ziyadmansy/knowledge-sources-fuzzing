@@ -1,0 +1,29 @@
+1. All four accept fully well-formed documents with correct types (Probe 1).
+
+2. All accept integer `id` as number or string (Probes 1,2,9).
+
+3. Gson, Moshi, Jackson accept `amount` as number or string; kotlinx rejects number (Probe 3).
+
+4. Gson, Moshi, Jackson accept `name` as string or number (converted to string); kotlinx rejects non-string non-null (Probe 4).
+
+5. For invalid enum `status` values (e.g. "enabled", "ACTIVE", null), Gson accepts but sets null; others reject (Probes 5,15,16).
+
+6. All reject if `tags` is not an array (Probe 6).
+
+7. Gson, Moshi, Jackson accept arrays with non-string elements in `tags`, converting to strings or allowing null; kotlinx rejects (Probes 7,13,14).
+
+8. All accept nested `child` records with correct types (Probe 8).
+
+9. All accept nested `child` with string or integer `id` (Probe 9).
+
+10. Gson and Moshi ignore unknown fields; kotlinx and Jackson reject (Probe 10).
+
+11. Gson accepts empty object `{}` as `child`, filling missing fields with defaults or nulls; others reject missing required fields (Probe 12).
+
+12. Gson, Moshi, Jackson accept `tags` arrays containing null; kotlinx rejects (Probe 13).
+
+13. Gson accepts null or invalid enum `status` as null; Moshi, kotlinx, Jackson reject (Probes 5,15,16).
+
+14. Gson accepts null `amount` and null `tags` in nested `child`; others reject (Probes 18,19).
+
+15. Gson accepts empty object `{}` as nested `child` recursively, filling defaults/nulls; others reject (Probe 20).

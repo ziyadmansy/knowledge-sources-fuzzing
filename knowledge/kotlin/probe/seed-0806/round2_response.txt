@@ -1,0 +1,39 @@
+```probe
+{"id": 16, "amount": 1300, "name": "Nina", "status": "active", "tags": ["tag"], "child": null}
+```
+Tests if Gson and Moshi accept numeric `amount` like Jackson, and if kotlinx still rejects.
+
+```probe
+{"id": 17, "amount": "1400", "name": "Oscar", "status": null, "tags": ["tag"], "child": null}
+```
+Tests how each handles `status` explicitly set to null.
+
+```probe
+{"id": 18, "amount": "1500", "name": "Pam", "status": "active", "tags": ["tag", null], "child": null}
+```
+Tests how each handles null inside the `tags` array.
+
+```probe
+{"id": 19, "amount": "1600", "name": "Quinn", "status": "active", "tags": ["tag"], "child": {"id": 20, "amount": "1700", "name": "Child", "status": "active", "tags": ["tag"], "child": null}}
+```
+Tests nested child with all valid fields, confirming nested acceptance.
+
+```probe
+{"id": 21, "amount": "1800", "name": "Rita", "status": "active", "tags": ["tag"], "child": {"id": 22, "amount": "1900", "name": "Child", "status": "active", "tags": ["tag"], "child": null, "extra": "field"}}
+```
+Tests nested child with extra unknown field, to confirm rejection by kotlinx and Jackson, acceptance by Gson and Moshi.
+
+```probe
+{"id": 23, "amount": "2000", "name": "Sam", "status": "active", "tags": ["tag"], "child": {}}
+```
+Tests empty object as `child` to confirm how each handles missing required fields in nested object.
+
+```probe
+{"id": 24, "amount": "2100", "name": "Tina", "status": "active", "tags": ["tag"], "child": null, "extra": null}
+```
+Tests presence of unknown field with null value at root level.
+
+```probe
+{"id": 25, "amount": "2200", "name": "Uma", "status": "active", "tags": ["tag"], "child": null, "tags": null}
+```
+Tests `tags` field explicitly set to null instead of array.

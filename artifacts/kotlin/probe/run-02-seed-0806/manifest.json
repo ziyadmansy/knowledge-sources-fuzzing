@@ -1,0 +1,40 @@
+{
+  "arguments": {
+    "arm": "probe",
+    "artifact_dir": "None",
+    "examples": "500",
+    "executable": "None",
+    "iterations": "5",
+    "knowledge_file": "knowledge/kotlin/probe/seed-{seed:04d}/knowledge.txt",
+    "model": "gpt-4.1-mini",
+    "overwrite": "False",
+    "runs": "5",
+    "seed": "805",
+    "target": "kotlin",
+    "timeout": "5.0"
+  },
+  "arm": "probe",
+  "feedback_mode": null,
+  "harness_sha256": "fcad662d38398cfdd5f7ff654a8c3b15f999359fca097cf358b4cf3ea47ab441",
+  "hypothesis_version": "6.165.5",
+  "knowledge_section": "What is already known about these four implementations, from running\nprobe documents against them before any fuzzing (use it however you see\nfit):\n1. All four accept fully well-formed documents with correct types and no extras (Probes 1-3, 11-12, 16).\n\n2. Gson, Moshi, Jackson accept numeric \"id\" as string or number interchangeably, converting to int; kotlinx rejects if \"id\" is number but \"amount\" is number (Probe 5, 13).\n\n3. Gson, Moshi, Jackson accept numeric \"amount\" as number or string, converting to string; kotlinx rejects numeric \"amount\" (Probes 5, 13).\n\n4. Gson accepts unknown enum values for \"status\" by decoding as null; Moshi, kotlinx, Jackson reject unknown enum values (Probe 6).\n\n5. Gson and Moshi coerce non-string array elements in \"tags\" to strings; kotlinx rejects non-string elements; Jackson accepts non-string elements as-is (Probe 7).\n\n6. Gson, Moshi, Jackson accept null elements in \"tags\" array; kotlinx rejects null elements (Probe 15).\n\n7. Gson and Moshi accept unknown extra fields silently; kotlinx and Jackson reject unknown extra fields (Probes 9, 10, 17, 19).\n\n8. Gson accepts empty object for \"child\" by filling missing fields with defaults/nulls; Moshi, kotlinx, Jackson reject empty object for \"child\" (Probe 18).\n\n9. Gson accepts null for enum \"status\"; Moshi, kotlinx, Jackson reject null enum (Probe 14).\n\n10. Gson and Jackson accept null for \"tags\"; Moshi and kotlinx reject null \"tags\" (Probe 20).\n\n11. Gson accepts string or null for \"name\"; all accept null for \"name\" (Probe 2).\n\n12. Gson accepts string \"id\" and converts to int; all accept string \"id\" (Probe 4).",
+  "llm_usage": {
+    "calls": 5,
+    "input_tokens": 4996,
+    "output_tokens": 7351,
+    "truncated": 0
+  },
+  "model": "gpt-4.1-mini",
+  "path_order": [
+    "A_gson",
+    "B_moshi",
+    "C_kotlinx",
+    "D_jackson"
+  ],
+  "platform": "macOS-26.5.2-arm64-arm-64bit-Mach-O",
+  "python_implementation": "CPython",
+  "python_version": "3.14.7 (main, Aug  5 2026, 10:29:49) [Clang 21.0.0 (clang-2100.1.1.101)]",
+  "seed": 806,
+  "target": "kotlin",
+  "timestamp": "2026-09-27T10:11:11.440428+00:00"
+}

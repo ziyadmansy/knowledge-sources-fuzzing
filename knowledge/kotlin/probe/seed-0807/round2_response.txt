@@ -1,0 +1,39 @@
+```probe
+{"id": 1, "amount": "100.00", "name": null, "status": "active", "tags": ["tag1", null], "child": null}
+```
+Tests how null inside the tags array is handled (tags must be array of strings).
+
+```probe
+{"id": 1, "amount": "100.00", "name": null, "status": "active", "tags": ["tag1", 123.45], "child": null}
+```
+Tests if non-string numeric values inside tags array are accepted or rejected.
+
+```probe
+{"id": 1, "amount": "100.00", "name": null, "status": null, "tags": ["tag1"], "child": null}
+```
+Tests if status=null is accepted or rejected (status is enum, no null in round 1).
+
+```probe
+{"id": 1, "amount": "100.00", "name": null, "status": "ACTIVE", "tags": ["tag1"], "child": null}
+```
+Tests case sensitivity of the status enum values.
+
+```probe
+{"id": 1, "amount": "100.00", "name": null, "status": "active", "tags": ["tag1"], "child": {"id": 2, "amount": 50, "name": "Bob", "status": "inactive", "tags": [], "child": null}}
+```
+Tests nested child with amount as number (like probe 3 but nested).
+
+```probe
+{"id": 1, "amount": "100.00", "name": null, "status": "active", "tags": ["tag1"], "child": {"id": 2, "amount": null, "name": "Bob", "status": "inactive", "tags": [], "child": null}}
+```
+Tests nested child with amount=null (amount is string, null might be rejected).
+
+```probe
+{"id": 1, "amount": "100.00", "name": null, "status": "active", "tags": ["tag1"], "child": {"id": 2, "amount": "50", "name": "Bob", "status": "inactive", "tags": null, "child": null}}
+```
+Tests nested child with tags=null (tags is array, null might be rejected).
+
+```probe
+{"id": 1, "amount": "100.00", "name": null, "status": "active", "tags": ["tag1"], "child": {"id": 2, "amount": "50", "name": "Bob", "status": "inactive", "tags": [], "child": {}}}
+```
+Tests nested child with child as empty object (like probe 12 but nested).

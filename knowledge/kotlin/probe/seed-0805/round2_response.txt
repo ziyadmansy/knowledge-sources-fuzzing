@@ -1,0 +1,39 @@
+```probe
+{"id": 1, "amount": 100, "name": null, "status": "active", "tags": [], "child": null}
+```
+Test if kotlinx.serialization rejects numeric `amount` like in Probe 3.
+
+```probe
+{"id": 1, "amount": "100", "name": null, "status": "active", "tags": [true], "child": null}
+```
+Test how deserializers handle non-string boolean in `tags` array.
+
+```probe
+{"id": 1, "amount": "100", "name": null, "status": "active", "tags": ["tag1"], "child": {"id": 2, "amount": 50, "name": "Bob", "status": "inactive", "tags": ["tag2"], "child": null}}
+```
+Test if numeric `amount` in nested `child` causes rejection like top-level.
+
+```probe
+{"id": 1, "amount": "100", "name": null, "status": "active", "tags": ["tag1"], "child": {"id": 2, "amount": "50", "name": 123, "status": "inactive", "tags": ["tag2"], "child": null}}
+```
+Test if numeric `name` in nested `child` triggers rejection like top-level.
+
+```probe
+{"id": 1, "amount": "100", "name": null, "status": "active", "tags": ["tag1"], "child": {"id": 2, "amount": "50", "name": null, "status": "enabled", "tags": ["tag2"], "child": null}}
+```
+Test if invalid `status` in nested `child` triggers rejection like top-level.
+
+```probe
+{"id": 1, "amount": "100", "name": null, "status": "active", "tags": ["tag1"], "child": {"id": 2, "amount": "50", "name": null, "status": "inactive", "tags": ["tag2"], "child": {}}}
+```
+Test if empty object as nested `child.child` triggers rejection like empty `child` in Probe 12.
+
+```probe
+{"id": 1, "amount": "100", "name": null, "status": "active", "tags": ["tag1"], "child": {"id": 2, "amount": "50", "name": null, "status": "inactive", "tags": ["tag2"], "child": null, "extra": "field"}}
+```
+Test if extra field in nested `child` triggers rejection like top-level extra field in Probe 10.
+
+```probe
+{"id": 1, "amount": "100", "name": null, "status": "active", "tags": ["tag1"], "child": null, "id": 2}
+```
+Test if duplicate fields at top-level cause rejection or last wins behavior.

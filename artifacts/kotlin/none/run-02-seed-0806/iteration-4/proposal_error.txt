@@ -1,0 +1,1 @@
+ProposalError: generated_json must emit bytes

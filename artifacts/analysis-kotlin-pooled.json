@@ -1,0 +1,1098 @@
+{
+  "runs": {
+    "dart/code": [
+      {
+        "gson_null_bypass_docs": null,
+        "iterations_rejected": 1,
+        "llm_usage": {
+          "calls": 5,
+          "input_tokens": 5014,
+          "output_tokens": 8248,
+          "truncated": 0
+        },
+        "pattern_recall": 0.5,
+        "rate_rfc_valid": null,
+        "rate_schema": 22.74774774774775,
+        "rate_total": 10.1,
+        "rfc_valid": null,
+        "run": "run-01-seed-0700",
+        "schema_evaluated": 888,
+        "seed": 700,
+        "signatures": {
+          "RAAR": 202
+        },
+        "tier_c": 202,
+        "total": 2000
+      },
+      {
+        "gson_null_bypass_docs": null,
+        "iterations_rejected": 0,
+        "llm_usage": {
+          "calls": 5,
+          "input_tokens": 5063,
+          "output_tokens": 9204,
+          "truncated": 0
+        },
+        "pattern_recall": 0.5,
+        "rate_rfc_valid": null,
+        "rate_schema": 29.769858945805495,
+        "rate_total": 16.04,
+        "rfc_valid": null,
+        "run": "run-02-seed-0701",
+        "schema_evaluated": 1347,
+        "seed": 701,
+        "signatures": {
+          "RAAR": 401
+        },
+        "tier_c": 401,
+        "total": 2500
+      },
+      {
+        "gson_null_bypass_docs": null,
+        "iterations_rejected": 1,
+        "llm_usage": {
+          "calls": 5,
+          "input_tokens": 4924,
+          "output_tokens": 8819,
+          "truncated": 0
+        },
+        "pattern_recall": 1.0,
+        "rate_rfc_valid": null,
+        "rate_schema": 11.374407582938389,
+        "rate_total": 8.4,
+        "rfc_valid": null,
+        "run": "run-03-seed-0702",
+        "schema_evaluated": 1477,
+        "seed": 702,
+        "signatures": {
+          "RAAR": 156,
+          "RRRA": 12
+        },
+        "tier_c": 168,
+        "total": 2000
+      },
+      {
+        "gson_null_bypass_docs": null,
+        "iterations_rejected": 3,
+        "llm_usage": {
+          "calls": 5,
+          "input_tokens": 5089,
+          "output_tokens": 10129,
+          "truncated": 0
+        },
+        "pattern_recall": 0.5,
+        "rate_rfc_valid": null,
+        "rate_schema": 18.926553672316384,
+        "rate_total": 13.4,
+        "rfc_valid": null,
+        "run": "run-04-seed-0703",
+        "schema_evaluated": 708,
+        "seed": 703,
+        "signatures": {
+          "RAAR": 134
+        },
+        "tier_c": 134,
+        "total": 1000
+      },
+      {
+        "gson_null_bypass_docs": null,
+        "iterations_rejected": 1,
+        "llm_usage": {
+          "calls": 5,
+          "input_tokens": 5108,
+          "output_tokens": 7779,
+          "truncated": 0
+        },
+        "pattern_recall": 0.5,
+        "rate_rfc_valid": null,
+        "rate_schema": 15.730337078651685,
+        "rate_total": 9.8,
+        "rfc_valid": null,
+        "run": "run-05-seed-0704",
+        "schema_evaluated": 1246,
+        "seed": 704,
+        "signatures": {
+          "RAAR": 196
+        },
+        "tier_c": 196,
+        "total": 2000
+      }
+    ],
+    "dart/human": [
+      {
+        "gson_null_bypass_docs": null,
+        "iterations_rejected": 4,
+        "llm_usage": {
+          "calls": 5,
+          "input_tokens": 5017,
+          "output_tokens": 8034,
+          "truncated": 0
+        },
+        "pattern_recall": 1.0,
+        "rate_rfc_valid": null,
+        "rate_schema": 47.161572052401745,
+        "rate_total": 21.6,
+        "rfc_valid": null,
+        "run": "run-01-seed-0700",
+        "schema_evaluated": 229,
+        "seed": 700,
+        "signatures": {
+          "RAAR": 32,
+          "RRRA": 76
+        },
+        "tier_c": 108,
+        "total": 500
+      },
+      {
+        "gson_null_bypass_docs": null,
+        "iterations_rejected": 1,
+        "llm_usage": {
+          "calls": 5,
+          "input_tokens": 4884,
+          "output_tokens": 5911,
+          "truncated": 0
+        },
+        "pattern_recall": 1.0,
+        "rate_rfc_valid": null,
+        "rate_schema": 39.95956873315364,
+        "rate_total": 29.65,
+        "rfc_valid": null,
+        "run": "run-02-seed-0701",
+        "schema_evaluated": 1484,
+        "seed": 701,
+        "signatures": {
+          "RAAR": 332,
+          "RRRA": 261
+        },
+        "tier_c": 593,
+        "total": 2000
+      },
+      {
+        "gson_null_bypass_docs": null,
+        "iterations_rejected": 3,
+        "llm_usage": {
+          "calls": 5,
+          "input_tokens": 4953,
+          "output_tokens": 7955,
+          "truncated": 0
+        },
+        "pattern_recall": 1.0,
+        "rate_rfc_valid": null,
+        "rate_schema": 48.3,
+        "rate_total": 48.3,
+        "rfc_valid": null,
+        "run": "run-03-seed-0702",
+        "schema_evaluated": 1000,
+        "seed": 702,
+        "signatures": {
+          "RAAR": 260,
+          "RRRA": 223
+        },
+        "tier_c": 483,
+        "total": 1000
+      },
+      {
+        "gson_null_bypass_docs": null,
+        "iterations_rejected": 2,
+        "llm_usage": {
+          "calls": 5,
+          "input_tokens": 4943,
+          "output_tokens": 6852,
+          "truncated": 0
+        },
+        "pattern_recall": 1.0,
+        "rate_rfc_valid": null,
+        "rate_schema": 48.60956618464961,
+        "rate_total": 29.133333333333333,
+        "rfc_valid": null,
+        "run": "run-04-seed-0703",
+        "schema_evaluated": 899,
+        "seed": 703,
+        "signatures": {
+          "RAAR": 329,
+          "RRRA": 108
+        },
+        "tier_c": 437,
+        "total": 1500
+      },
+      {
+        "gson_null_bypass_docs": null,
+        "iterations_rejected": 1,
+        "llm_usage": {
+          "calls": 5,
+          "input_tokens": 4951,
+          "output_tokens": 8049,
+          "truncated": 0
+        },
+        "pattern_recall": 1.0,
+        "rate_rfc_valid": null,
+        "rate_schema": 34.128561961563946,
+        "rate_total": 25.75,
+        "rfc_valid": null,
+        "run": "run-05-seed-0704",
+        "schema_evaluated": 1509,
+        "seed": 704,
+        "signatures": {
+          "RAAR": 240,
+          "RRRA": 275
+        },
+        "tier_c": 515,
+        "total": 2000
+      }
+    ],
+    "dart/none": [
+      {
+        "gson_null_bypass_docs": null,
+        "iterations_rejected": 2,
+        "llm_usage": {
+          "calls": 5,
+          "input_tokens": 3221,
+          "output_tokens": 8138,
+          "truncated": 0
+        },
+        "pattern_recall": 1.0,
+        "rate_rfc_valid": null,
+        "rate_schema": 4.427083333333333,
+        "rate_total": 3.4,
+        "rfc_valid": null,
+        "run": "run-01-seed-0700",
+        "schema_evaluated": 1152,
+        "seed": 700,
+        "signatures": {
+          "RAAR": 49,
+          "RRRA": 2
+        },
+        "tier_c": 51,
+        "total": 1500
+      },
+      {
+        "gson_null_bypass_docs": null,
+        "iterations_rejected": 4,
+        "llm_usage": {
+          "calls": 5,
+          "input_tokens": 3309,
+          "output_tokens": 6358,
+          "truncated": 0
+        },
+        "pattern_recall": 0.0,
+        "rate_rfc_valid": null,
+        "rate_schema": 0.0,
+        "rate_total": 0.0,
+        "rfc_valid": null,
+        "run": "run-02-seed-0701",
+        "schema_evaluated": 306,
+        "seed": 701,
+        "signatures": {},
+        "tier_c": 0,
+        "total": 500
+      },
+      {
+        "gson_null_bypass_docs": null,
+        "iterations_rejected": 2,
+        "llm_usage": {
+          "calls": 5,
+          "input_tokens": 3256,
+          "output_tokens": 8261,
+          "truncated": 0
+        },
+        "pattern_recall": 1.0,
+        "rate_rfc_valid": null,
+        "rate_schema": 0.9328358208955224,
+        "rate_total": 0.6666666666666666,
+        "rfc_valid": null,
+        "run": "run-03-seed-0702",
+        "schema_evaluated": 1072,
+        "seed": 702,
+        "signatures": {
+          "RAAR": 8,
+          "RRRA": 2
+        },
+        "tier_c": 10,
+        "total": 1500
+      },
+      {
+        "gson_null_bypass_docs": null,
+        "iterations_rejected": 1,
+        "llm_usage": {
+          "calls": 5,
+          "input_tokens": 3205,
+          "output_tokens": 9358,
+          "truncated": 0
+        },
+        "pattern_recall": 1.0,
+        "rate_rfc_valid": null,
+        "rate_schema": 4.441360166551006,
+        "rate_total": 3.2,
+        "rfc_valid": null,
+        "run": "run-04-seed-0703",
+        "schema_evaluated": 1441,
+        "seed": 703,
+        "signatures": {
+          "RAAR": 63,
+          "RRRA": 1
+        },
+        "tier_c": 64,
+        "total": 2000
+      },
+      {
+        "gson_null_bypass_docs": null,
+        "iterations_rejected": 2,
+        "llm_usage": {
+          "calls": 5,
+          "input_tokens": 3226,
+          "output_tokens": 6535,
+          "truncated": 0
+        },
+        "pattern_recall": 0.0,
+        "rate_rfc_valid": null,
+        "rate_schema": 0.0,
+        "rate_total": 0.0,
+        "rfc_valid": null,
+        "run": "run-05-seed-0704",
+        "schema_evaluated": 1004,
+        "seed": 704,
+        "signatures": {},
+        "tier_c": 0,
+        "total": 1500
+      }
+    ],
+    "dart/probe": [
+      {
+        "gson_null_bypass_docs": null,
+        "iterations_rejected": 2,
+        "llm_usage": {
+          "calls": 5,
+          "input_tokens": 5022,
+          "output_tokens": 12936,
+          "truncated": 0
+        },
+        "pattern_recall": 0.5,
+        "rate_rfc_valid": null,
+        "rate_schema": 1.4981273408239701,
+        "rate_total": 1.0666666666666667,
+        "rfc_valid": null,
+        "run": "run-01-seed-0700",
+        "schema_evaluated": 1068,
+        "seed": 700,
+        "signatures": {
+          "RRRA": 16
+        },
+        "tier_c": 16,
+        "total": 1500
+      },
+      {
+        "gson_null_bypass_docs": null,
+        "iterations_rejected": 2,
+        "llm_usage": {
+          "calls": 5,
+          "input_tokens": 5008,
+          "output_tokens": 8893,
+          "truncated": 0
+        },
+        "pattern_recall": 0.5,
+        "rate_rfc_valid": null,
+        "rate_schema": 65.1101321585903,
+        "rate_total": 49.266666666666666,
+        "rfc_valid": null,
+        "run": "run-02-seed-0701",
+        "schema_evaluated": 1135,
+        "seed": 701,
+        "signatures": {
+          "RRRA": 739
+        },
+        "tier_c": 739,
+        "total": 1500
+      },
+      {
+        "gson_null_bypass_docs": null,
+        "iterations_rejected": 2,
+        "llm_usage": {
+          "calls": 5,
+          "input_tokens": 5286,
+          "output_tokens": 9944,
+          "truncated": 0
+        },
+        "pattern_recall": 0.5,
+        "rate_rfc_valid": null,
+        "rate_schema": 2.0320855614973263,
+        "rate_total": 1.2666666666666666,
+        "rfc_valid": null,
+        "run": "run-03-seed-0702",
+        "schema_evaluated": 935,
+        "seed": 702,
+        "signatures": {
+          "RRRA": 19
+        },
+        "tier_c": 19,
+        "total": 1500
+      },
+      {
+        "gson_null_bypass_docs": null,
+        "iterations_rejected": 2,
+        "llm_usage": {
+          "calls": 5,
+          "input_tokens": 5205,
+          "output_tokens": 10625,
+          "truncated": 0
+        },
+        "pattern_recall": 0.5,
+        "rate_rfc_valid": null,
+        "rate_schema": 0.9333333333333333,
+        "rate_total": 0.9333333333333333,
+        "rfc_valid": null,
+        "run": "run-04-seed-0703",
+        "schema_evaluated": 1500,
+        "seed": 703,
+        "signatures": {
+          "RRRA": 14
+        },
+        "tier_c": 14,
+        "total": 1500
+      },
+      {
+        "gson_null_bypass_docs": null,
+        "iterations_rejected": 1,
+        "llm_usage": {
+          "calls": 5,
+          "input_tokens": 5090,
+          "output_tokens": 11212,
+          "truncated": 0
+        },
+        "pattern_recall": 0.0,
+        "rate_rfc_valid": null,
+        "rate_schema": 0.0,
+        "rate_total": 0.0,
+        "rfc_valid": null,
+        "run": "run-05-seed-0704",
+        "schema_evaluated": 1386,
+        "seed": 704,
+        "signatures": {},
+        "tier_c": 0,
+        "total": 2000
+      }
+    ],
+    "kotlin/none": [
+      {
+        "gson_null_bypass_docs": 649,
+        "iterations_rejected": 1,
+        "llm_usage": {
+          "calls": 5,
+          "input_tokens": 2939,
+          "output_tokens": 8292,
+          "truncated": 0
+        },
+        "pattern_recall": 1.0,
+        "rate_rfc_valid": 34.322373696872496,
+        "rate_schema": 49.794238683127574,
+        "rate_total": 49.7,
+        "rfc_valid": 1247,
+        "run": "run-01-seed-0800",
+        "schema_evaluated": 1944,
+        "seed": 800,
+        "signatures": {
+          "AAAR": 56,
+          "AARA": 38,
+          "AARR": 49,
+          "ARRA": 32,
+          "ARRR": 781,
+          "RRRA": 38
+        },
+        "tier_c": 994,
+        "total": 2000
+      },
+      {
+        "gson_null_bypass_docs": 668,
+        "iterations_rejected": 1,
+        "llm_usage": {
+          "calls": 5,
+          "input_tokens": 2915,
+          "output_tokens": 6641,
+          "truncated": 0
+        },
+        "pattern_recall": 1.0,
+        "rate_rfc_valid": 45.88457899716178,
+        "rate_schema": 44.35,
+        "rate_total": 44.35,
+        "rfc_valid": 1057,
+        "run": "run-01-seed-0805",
+        "schema_evaluated": 2000,
+        "seed": 805,
+        "signatures": {
+          "AAAR": 4,
+          "AARA": 61,
+          "AARR": 56,
+          "ARRA": 30,
+          "ARRR": 720,
+          "RRRA": 16
+        },
+        "tier_c": 887,
+        "total": 2000
+      },
+      {
+        "gson_null_bypass_docs": 219,
+        "iterations_rejected": 2,
+        "llm_usage": {
+          "calls": 5,
+          "input_tokens": 2954,
+          "output_tokens": 9391,
+          "truncated": 0
+        },
+        "pattern_recall": 1.0,
+        "rate_rfc_valid": 20.226843100189036,
+        "rate_schema": 30.466666666666665,
+        "rate_total": 30.466666666666665,
+        "rfc_valid": 1058,
+        "run": "run-02-seed-0801",
+        "schema_evaluated": 1500,
+        "seed": 801,
+        "signatures": {
+          "AAAR": 55,
+          "AARA": 22,
+          "AARR": 23,
+          "ARRA": 44,
+          "ARRR": 300,
+          "RRRA": 13
+        },
+        "tier_c": 457,
+        "total": 1500
+      },
+      {
+        "gson_null_bypass_docs": 453,
+        "iterations_rejected": 3,
+        "llm_usage": {
+          "calls": 5,
+          "input_tokens": 2967,
+          "output_tokens": 8593,
+          "truncated": 0
+        },
+        "pattern_recall": 1.0,
+        "rate_rfc_valid": 48.47512038523274,
+        "rate_schema": 65.4308617234469,
+        "rate_total": 65.3,
+        "rfc_valid": 623,
+        "run": "run-02-seed-0806",
+        "schema_evaluated": 998,
+        "seed": 806,
+        "signatures": {
+          "AAAR": 40,
+          "AARA": 36,
+          "AARR": 9,
+          "ARRA": 12,
+          "ARRR": 556
+        },
+        "tier_c": 653,
+        "total": 1000
+      },
+      {
+        "gson_null_bypass_docs": 395,
+        "iterations_rejected": 3,
+        "llm_usage": {
+          "calls": 5,
+          "input_tokens": 2977,
+          "output_tokens": 7278,
+          "truncated": 0
+        },
+        "pattern_recall": 1.0,
+        "rate_rfc_valid": 47.032967032967036,
+        "rate_schema": 73.25819672131148,
+        "rate_total": 71.5,
+        "rfc_valid": 455,
+        "run": "run-03-seed-0802",
+        "schema_evaluated": 976,
+        "seed": 802,
+        "signatures": {
+          "AAAR": 154,
+          "AARA": 43,
+          "AARR": 60,
+          "ARRA": 42,
+          "ARRR": 415,
+          "RRRA": 1
+        },
+        "tier_c": 715,
+        "total": 1000
+      },
+      {
+        "gson_null_bypass_docs": 444,
+        "iterations_rejected": 3,
+        "llm_usage": {
+          "calls": 5,
+          "input_tokens": 2975,
+          "output_tokens": 6905,
+          "truncated": 0
+        },
+        "pattern_recall": 1.0,
+        "rate_rfc_valid": 54.817275747508305,
+        "rate_schema": 55.11892450879007,
+        "rate_total": 53.3,
+        "rfc_valid": 602,
+        "run": "run-03-seed-0807",
+        "schema_evaluated": 967,
+        "seed": 807,
+        "signatures": {
+          "AAAR": 5,
+          "AARA": 45,
+          "AARR": 3,
+          "ARRA": 21,
+          "ARRR": 458,
+          "RRRA": 1
+        },
+        "tier_c": 533,
+        "total": 1000
+      },
+      {
+        "gson_null_bypass_docs": 495,
+        "iterations_rejected": 2,
+        "llm_usage": {
+          "calls": 5,
+          "input_tokens": 2976,
+          "output_tokens": 7763,
+          "truncated": 0
+        },
+        "pattern_recall": 1.0,
+        "rate_rfc_valid": 52.6046986721144,
+        "rate_schema": 43.46666666666667,
+        "rate_total": 43.46666666666667,
+        "rfc_valid": 979,
+        "run": "run-04-seed-0803",
+        "schema_evaluated": 1500,
+        "seed": 803,
+        "signatures": {
+          "AAAR": 1,
+          "AARA": 75,
+          "AARR": 15,
+          "ARRA": 46,
+          "ARRR": 503,
+          "RRRA": 12
+        },
+        "tier_c": 652,
+        "total": 1500
+      },
+      {
+        "gson_null_bypass_docs": 402,
+        "iterations_rejected": 2,
+        "llm_usage": {
+          "calls": 5,
+          "input_tokens": 2939,
+          "output_tokens": 7794,
+          "truncated": 0
+        },
+        "pattern_recall": 1.0,
+        "rate_rfc_valid": 43.21808510638298,
+        "rate_schema": 61.46666666666667,
+        "rate_total": 61.46666666666667,
+        "rfc_valid": 752,
+        "run": "run-04-seed-0808",
+        "schema_evaluated": 1500,
+        "seed": 808,
+        "signatures": {
+          "AAAR": 136,
+          "AARA": 111,
+          "AARR": 122,
+          "ARRA": 52,
+          "ARRR": 501
+        },
+        "tier_c": 922,
+        "total": 1500
+      },
+      {
+        "gson_null_bypass_docs": 114,
+        "iterations_rejected": 3,
+        "llm_usage": {
+          "calls": 5,
+          "input_tokens": 2982,
+          "output_tokens": 7501,
+          "truncated": 0
+        },
+        "pattern_recall": 1.0,
+        "rate_rfc_valid": 43.38358458961474,
+        "rate_schema": 38.12217194570136,
+        "rate_total": 33.7,
+        "rfc_valid": 597,
+        "run": "run-05-seed-0804",
+        "schema_evaluated": 884,
+        "seed": 804,
+        "signatures": {
+          "AAAR": 1,
+          "AARA": 127,
+          "AARR": 3,
+          "ARRA": 27,
+          "ARRR": 179
+        },
+        "tier_c": 337,
+        "total": 1000
+      },
+      {
+        "gson_null_bypass_docs": 314,
+        "iterations_rejected": 3,
+        "llm_usage": {
+          "calls": 5,
+          "input_tokens": 2955,
+          "output_tokens": 6749,
+          "truncated": 0
+        },
+        "pattern_recall": 1.0,
+        "rate_rfc_valid": 35.55992141453831,
+        "rate_schema": 46.3,
+        "rate_total": 46.3,
+        "rfc_valid": 509,
+        "run": "run-05-seed-0809",
+        "schema_evaluated": 1000,
+        "seed": 809,
+        "signatures": {
+          "AAAR": 40,
+          "AARA": 18,
+          "AARR": 10,
+          "ARRA": 18,
+          "ARRR": 366,
+          "RRRA": 11
+        },
+        "tier_c": 463,
+        "total": 1000
+      }
+    ],
+    "kotlin/probe": [
+      {
+        "gson_null_bypass_docs": 375,
+        "iterations_rejected": 3,
+        "llm_usage": {
+          "calls": 5,
+          "input_tokens": 4898,
+          "output_tokens": 10467,
+          "truncated": 0
+        },
+        "pattern_recall": 1.0,
+        "rate_rfc_valid": 39.87068965517241,
+        "rate_schema": 56.58291457286432,
+        "rate_total": 56.3,
+        "rfc_valid": 464,
+        "run": "run-01-seed-0800",
+        "schema_evaluated": 995,
+        "seed": 800,
+        "signatures": {
+          "AAAR": 3,
+          "AARA": 10,
+          "AARR": 75,
+          "ARRA": 11,
+          "ARRR": 464
+        },
+        "tier_c": 563,
+        "total": 1000
+      },
+      {
+        "gson_null_bypass_docs": 758,
+        "iterations_rejected": 2,
+        "llm_usage": {
+          "calls": 5,
+          "input_tokens": 4859,
+          "output_tokens": 10091,
+          "truncated": 0
+        },
+        "pattern_recall": 1.0,
+        "rate_rfc_valid": 72.71487039563438,
+        "rate_schema": 86.41891891891892,
+        "rate_total": 85.26666666666667,
+        "rfc_valid": 733,
+        "run": "run-01-seed-0805",
+        "schema_evaluated": 1480,
+        "seed": 805,
+        "signatures": {
+          "AAAR": 4,
+          "AARA": 81,
+          "AARR": 83,
+          "ARRA": 116,
+          "ARRR": 995
+        },
+        "tier_c": 1279,
+        "total": 1500
+      },
+      {
+        "gson_null_bypass_docs": 572,
+        "iterations_rejected": 3,
+        "llm_usage": {
+          "calls": 5,
+          "input_tokens": 5107,
+          "output_tokens": 10654,
+          "truncated": 0
+        },
+        "pattern_recall": 1.0,
+        "rate_rfc_valid": 70.98674521354934,
+        "rate_schema": 80.3,
+        "rate_total": 80.3,
+        "rfc_valid": 679,
+        "run": "run-02-seed-0801",
+        "schema_evaluated": 1000,
+        "seed": 801,
+        "signatures": {
+          "AAAR": 3,
+          "AARA": 32,
+          "AARR": 18,
+          "ARRA": 65,
+          "ARRR": 685
+        },
+        "tier_c": 803,
+        "total": 1000
+      },
+      {
+        "gson_null_bypass_docs": 559,
+        "iterations_rejected": 2,
+        "llm_usage": {
+          "calls": 5,
+          "input_tokens": 4996,
+          "output_tokens": 7351,
+          "truncated": 0
+        },
+        "pattern_recall": 1.0,
+        "rate_rfc_valid": 40.503432494279174,
+        "rate_schema": 47.86096256684492,
+        "rate_total": 47.733333333333334,
+        "rfc_valid": 874,
+        "run": "run-02-seed-0806",
+        "schema_evaluated": 1496,
+        "seed": 806,
+        "signatures": {
+          "AAAR": 10,
+          "AARA": 32,
+          "AARR": 22,
+          "ARRA": 24,
+          "ARRR": 628
+        },
+        "tier_c": 716,
+        "total": 1500
+      },
+      {
+        "gson_null_bypass_docs": 452,
+        "iterations_rejected": 2,
+        "llm_usage": {
+          "calls": 5,
+          "input_tokens": 4972,
+          "output_tokens": 11933,
+          "truncated": 0
+        },
+        "pattern_recall": 1.0,
+        "rate_rfc_valid": 36.25806451612903,
+        "rate_schema": 61.8,
+        "rate_total": 61.8,
+        "rfc_valid": 775,
+        "run": "run-03-seed-0802",
+        "schema_evaluated": 1500,
+        "seed": 802,
+        "signatures": {
+          "AAAR": 7,
+          "AARA": 26,
+          "AARR": 191,
+          "ARRA": 9,
+          "ARRR": 694
+        },
+        "tier_c": 927,
+        "total": 1500
+      },
+      {
+        "gson_null_bypass_docs": 970,
+        "iterations_rejected": 0,
+        "llm_usage": {
+          "calls": 5,
+          "input_tokens": 4980,
+          "output_tokens": 12897,
+          "truncated": 0
+        },
+        "pattern_recall": 1.0,
+        "rate_rfc_valid": 66.44640234948605,
+        "rate_schema": 72.61663286004057,
+        "rate_total": 71.6,
+        "rfc_valid": 1362,
+        "run": "run-03-seed-0807",
+        "schema_evaluated": 2465,
+        "seed": 807,
+        "signatures": {
+          "AAAR": 31,
+          "AARA": 189,
+          "AARR": 161,
+          "ARRA": 15,
+          "ARRR": 1394
+        },
+        "tier_c": 1790,
+        "total": 2500
+      },
+      {
+        "gson_null_bypass_docs": 725,
+        "iterations_rejected": 2,
+        "llm_usage": {
+          "calls": 5,
+          "input_tokens": 4653,
+          "output_tokens": 7209,
+          "truncated": 0
+        },
+        "pattern_recall": 1.0,
+        "rate_rfc_valid": 52.17391304347826,
+        "rate_schema": 65.73333333333333,
+        "rate_total": 65.73333333333333,
+        "rfc_valid": 1012,
+        "run": "run-04-seed-0803",
+        "schema_evaluated": 1500,
+        "seed": 803,
+        "signatures": {
+          "AAAR": 9,
+          "AARA": 45,
+          "AARR": 91,
+          "ARRA": 8,
+          "ARRR": 833
+        },
+        "tier_c": 986,
+        "total": 1500
+      },
+      {
+        "gson_null_bypass_docs": 830,
+        "iterations_rejected": 1,
+        "llm_usage": {
+          "calls": 5,
+          "input_tokens": 4875,
+          "output_tokens": 10369,
+          "truncated": 0
+        },
+        "pattern_recall": 1.0,
+        "rate_rfc_valid": 66.64270309130123,
+        "rate_schema": 76.37474541751527,
+        "rate_total": 75.0,
+        "rfc_valid": 1391,
+        "run": "run-04-seed-0808",
+        "schema_evaluated": 1964,
+        "seed": 808,
+        "signatures": {
+          "AAAR": 22,
+          "AARA": 265,
+          "AARR": 133,
+          "ARRA": 67,
+          "ARRR": 1013
+        },
+        "tier_c": 1500,
+        "total": 2000
+      },
+      {
+        "gson_null_bypass_docs": 790,
+        "iterations_rejected": 0,
+        "llm_usage": {
+          "calls": 5,
+          "input_tokens": 4847,
+          "output_tokens": 11761,
+          "truncated": 0
+        },
+        "pattern_recall": 1.0,
+        "rate_rfc_valid": 47.535505430242274,
+        "rate_schema": 57.56,
+        "rate_total": 57.56,
+        "rfc_valid": 1197,
+        "run": "run-05-seed-0804",
+        "schema_evaluated": 2500,
+        "seed": 804,
+        "signatures": {
+          "AAAR": 16,
+          "AARA": 31,
+          "AARR": 141,
+          "ARRA": 25,
+          "ARRR": 1226
+        },
+        "tier_c": 1439,
+        "total": 2500
+      },
+      {
+        "gson_null_bypass_docs": 485,
+        "iterations_rejected": 2,
+        "llm_usage": {
+          "calls": 5,
+          "input_tokens": 4935,
+          "output_tokens": 13095,
+          "truncated": 0
+        },
+        "pattern_recall": 1.0,
+        "rate_rfc_valid": 71.7680608365019,
+        "rate_schema": 70.75471698113208,
+        "rate_total": 70.0,
+        "rfc_valid": 1052,
+        "run": "run-05-seed-0809",
+        "schema_evaluated": 1484,
+        "seed": 809,
+        "signatures": {
+          "AAAR": 5,
+          "AARA": 351,
+          "AARR": 84,
+          "ARRA": 20,
+          "ARRR": 586,
+          "RRRA": 4
+        },
+        "tier_c": 1050,
+        "total": 1500
+      }
+    ]
+  },
+  "tests": {
+    "RQ1 co-primary: probe-human": {
+      "cliffs_delta": -0.6,
+      "mean_a": 10.506666666666666,
+      "mean_b": 30.886666666666667,
+      "mean_diff": -20.380000000000003,
+      "p": 0.15079365079365079
+    },
+    "RQ1 primary: dart probe-none": {
+      "cliffs_delta": 0.2,
+      "mean_a": 10.506666666666666,
+      "mean_b": 1.4533333333333334,
+      "mean_diff": 9.053333333333333,
+      "p": 0.6904761904761905
+    },
+    "RQ2 dart code-human": {
+      "cliffs_delta": -1.0,
+      "mean_a": 11.548,
+      "mean_b": 30.886666666666667,
+      "mean_diff": -19.33866666666667,
+      "p": 0.007936507936507936,
+      "p_holm": 0.047619047619047616
+    },
+    "RQ2 dart code-none": {
+      "cliffs_delta": 1.0,
+      "mean_a": 11.548,
+      "mean_b": 1.4533333333333334,
+      "mean_diff": 10.094666666666667,
+      "p": 0.007936507936507936,
+      "p_holm": 0.047619047619047616
+    },
+    "RQ2 dart human-none": {
+      "cliffs_delta": 1.0,
+      "mean_a": 30.886666666666667,
+      "mean_b": 1.4533333333333334,
+      "mean_diff": 29.433333333333334,
+      "p": 0.007936507936507936,
+      "p_holm": 0.047619047619047616
+    },
+    "RQ2 dart probe-code": {
+      "cliffs_delta": -0.6,
+      "mean_a": 10.506666666666666,
+      "mean_b": 11.548,
+      "mean_diff": -1.041333333333334,
+      "p": 0.15079365079365079,
+      "p_holm": 0.45238095238095233
+    },
+    "RQ2 dart probe-human": {
+      "cliffs_delta": -0.6,
+      "mean_a": 10.506666666666666,
+      "mean_b": 30.886666666666667,
+      "mean_diff": -20.380000000000003,
+      "p": 0.15079365079365079,
+      "p_holm": 0.45238095238095233
+    },
+    "RQ2 dart probe-none": {
+      "cliffs_delta": 0.2,
+      "mean_a": 10.506666666666666,
+      "mean_b": 1.4533333333333334,
+      "mean_diff": 9.053333333333333,
+      "p": 0.6904761904761905,
+      "p_holm": 0.6904761904761905
+    },
+    "RQ3 primary: kotlin probe-none": {
+      "cliffs_delta": 0.7,
+      "mean_a": 67.12933333333334,
+      "mean_b": 49.955,
+      "mean_diff": 17.174333333333337,
+      "p": 0.006841455757864427
+    }
+  }
+}

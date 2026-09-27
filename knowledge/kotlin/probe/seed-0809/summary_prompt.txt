@@ -1,0 +1,186 @@
+You are characterizing four Kotlin JSON deserializers by experiment, before a fuzzing campaign.
+
+Record schema (all six fields always present in a well-formed document):
+{
+  "id": <integer>,
+  "amount": <string>,
+  "name": <string or null>,
+  "status": <one of "active", "inactive", "unknown">,
+  "tags": <array of strings>,
+  "child": <Record or null, one level of recursion normally>
+}
+
+Four independent Kotlin JSON deserializers are run against every document you
+produce, each at its default configuration and each decoding into the same
+Kotlin data class: Gson, Moshi (generated adapter), kotlinx.serialization,
+and Jackson with its Kotlin module. Your goal is to produce documents that
+make these four implementations disagree with each other -- one accepting
+where another rejects, or two accepting but decoding to different values.
+
+You will not write the fuzzer. Your job is to find out, by running probe
+documents, how these four implementations behave, and then write down what
+you learned for the model that will write the fuzzer.
+
+You have a budget of 20 probe documents in total, over two rounds.
+Each probe is run through all four implementations. For each probe you see,
+per implementation, whether it accepted or rejected the document, the
+exception type if it rejected, and the decoded value if it accepted.
+
+Strategy hint: implementations are more likely to disagree on documents that
+are *almost* well-formed with one specific thing off (a field of the wrong
+type, a field missing rather than present-but-wrong, a value at a type
+boundary) than on documents that are broadly malformed in many ways at once
+-- broad malformation tends to make every implementation reject identically,
+which scores zero. Vary one or two things about an otherwise valid document
+at a time, across many documents, rather than maximizing how unusual any
+single document looks.
+
+All probes and their results:
+
+Probe 1:
+{"id": 1, "amount": "100", "name": "Alice", "status": "active", "tags": ["x"], "child": null}
+  A_gson: accepted, decoded as {"id":1,"amount":"100","name":"Alice","status":"active","tags":["x"],"child":null}
+  B_moshi: accepted, decoded as {"id":1,"amount":"100","name":"Alice","status":"active","tags":["x"],"child":null}
+  C_kotlinx: accepted, decoded as {"id":1,"amount":"100","name":"Alice","status":"active","tags":["x"],"child":null}
+  D_jackson: accepted, decoded as {"id":1,"amount":"100","name":"Alice","status":"active","tags":["x"],"child":null}
+
+Probe 2:
+{"id": "1", "amount": "100", "name": "Alice", "status": "active", "tags": ["x"], "child": null}
+  A_gson: accepted, decoded as {"id":1,"amount":"100","name":"Alice","status":"active","tags":["x"],"child":null}
+  B_moshi: accepted, decoded as {"id":1,"amount":"100","name":"Alice","status":"active","tags":["x"],"child":null}
+  C_kotlinx: accepted, decoded as {"id":1,"amount":"100","name":"Alice","status":"active","tags":["x"],"child":null}
+  D_jackson: accepted, decoded as {"id":1,"amount":"100","name":"Alice","status":"active","tags":["x"],"child":null}
+
+Probe 3:
+{"id": 1, "amount": 100, "name": "Alice", "status": "active", "tags": ["x"], "child": null}
+  A_gson: accepted, decoded as {"id":1,"amount":"100","name":"Alice","status":"active","tags":["x"],"child":null}
+  B_moshi: accepted, decoded as {"id":1,"amount":"100","name":"Alice","status":"active","tags":["x"],"child":null}
+  C_kotlinx: rejected (kotlinx.serialization.json.JsonDecodingException)
+  D_jackson: accepted, decoded as {"id":1,"amount":"100","name":"Alice","status":"active","tags":["x"],"child":null}
+
+Probe 4:
+{"id": 1, "amount": "100", "name": 123, "status": "active", "tags": ["x"], "child": null}
+  A_gson: accepted, decoded as {"id":1,"amount":"100","name":"123","status":"active","tags":["x"],"child":null}
+  B_moshi: accepted, decoded as {"id":1,"amount":"100","name":"123","status":"active","tags":["x"],"child":null}
+  C_kotlinx: rejected (kotlinx.serialization.json.JsonDecodingException)
+  D_jackson: accepted, decoded as {"id":1,"amount":"100","name":"123","status":"active","tags":["x"],"child":null}
+
+Probe 5:
+{"id": 1, "amount": "100", "name": null, "status": "enabled", "tags": ["x"], "child": null}
+  A_gson: accepted, decoded as {"id":1,"amount":"100","name":null,"status":null,"tags":["x"],"child":null}
+  B_moshi: rejected (com.squareup.moshi.JsonDataException)
+  C_kotlinx: rejected (kotlinx.serialization.SerializationException)
+  D_jackson: rejected (com.fasterxml.jackson.databind.exc.InvalidFormatException)
+
+Probe 6:
+{"id": 1, "amount": "100", "name": null, "status": "active", "tags": "x", "child": null}
+  A_gson: rejected (com.google.gson.JsonSyntaxException)
+  B_moshi: rejected (com.squareup.moshi.JsonDataException)
+  C_kotlinx: rejected (kotlinx.serialization.json.JsonDecodingException)
+  D_jackson: rejected (com.fasterxml.jackson.databind.exc.MismatchedInputException)
+
+Probe 7:
+{"id": 1, "amount": "100", "name": null, "status": "active", "tags": [1,2], "child": null}
+  A_gson: accepted, decoded as {"id":1,"amount":"100","name":null,"status":"active","tags":["1","2"],"child":null}
+  B_moshi: accepted, decoded as {"id":1,"amount":"100","name":null,"status":"active","tags":["1","2"],"child":null}
+  C_kotlinx: rejected (kotlinx.serialization.json.JsonDecodingException)
+  D_jackson: accepted, decoded as {"id":1,"amount":"100","name":null,"status":"active","tags":["1","2"],"child":null}
+
+Probe 8:
+{"id": 1, "amount": "100", "name": null, "status": "active", "tags": [], "child": {"id": 2, "amount": "50", "name": "Bob", "status": "inactive", "tags": [], "child": null}}
+  A_gson: accepted, decoded as {"id":1,"amount":"100","name":null,"status":"active","tags":[],"child":{"id":2,"amount":"50","name":"Bob","status":"inactive","tags":[],"child":null}}
+  B_moshi: accepted, decoded as {"id":1,"amount":"100","name":null,"status":"active","tags":[],"child":{"id":2,"amount":"50","name":"Bob","status":"inactive","tags":[],"child":null}}
+  C_kotlinx: accepted, decoded as {"id":1,"amount":"100","name":null,"status":"active","tags":[],"child":{"id":2,"amount":"50","name":"Bob","status":"inactive","tags":[],"child":null}}
+  D_jackson: accepted, decoded as {"id":1,"amount":"100","name":null,"status":"active","tags":[],"child":{"id":2,"amount":"50","name":"Bob","status":"inactive","tags":[],"child":null}}
+
+Probe 9:
+{"id": 1, "amount": "100", "name": null, "status": "active", "tags": [], "child": {"id": "2", "amount": "50", "name": "Bob", "status": "inactive", "tags": [], "child": null}}
+  A_gson: accepted, decoded as {"id":1,"amount":"100","name":null,"status":"active","tags":[],"child":{"id":2,"amount":"50","name":"Bob","status":"inactive","tags":[],"child":null}}
+  B_moshi: accepted, decoded as {"id":1,"amount":"100","name":null,"status":"active","tags":[],"child":{"id":2,"amount":"50","name":"Bob","status":"inactive","tags":[],"child":null}}
+  C_kotlinx: accepted, decoded as {"id":1,"amount":"100","name":null,"status":"active","tags":[],"child":{"id":2,"amount":"50","name":"Bob","status":"inactive","tags":[],"child":null}}
+  D_jackson: accepted, decoded as {"id":1,"amount":"100","name":null,"status":"active","tags":[],"child":{"id":2,"amount":"50","name":"Bob","status":"inactive","tags":[],"child":null}}
+
+Probe 10:
+{"id": 1, "amount": "100", "name": null, "status": "active", "tags": [], "child": null, "extra": 123}
+  A_gson: accepted, decoded as {"id":1,"amount":"100","name":null,"status":"active","tags":[],"child":null}
+  B_moshi: accepted, decoded as {"id":1,"amount":"100","name":null,"status":"active","tags":[],"child":null}
+  C_kotlinx: rejected (kotlinx.serialization.json.JsonDecodingException)
+  D_jackson: rejected (com.fasterxml.jackson.databind.exc.UnrecognizedPropertyException)
+
+Probe 11:
+{"id": 1, "amount": "100", "name": null, "status": "active", "tags": [], "child": {}}
+  A_gson: accepted, decoded as {"id":1,"amount":"100","name":null,"status":"active","tags":[],"child":{"id":0,"amount":null,"name":null,"status":null,"tags":null,"child":null}}
+  B_moshi: rejected (com.squareup.moshi.JsonDataException)
+  C_kotlinx: rejected (kotlinx.serialization.MissingFieldException)
+  D_jackson: rejected (com.fasterxml.jackson.module.kotlin.KotlinInvalidNullException)
+
+Probe 12:
+{"id": 1, "amount": "100", "name": null, "status": "active", "tags": [], "child": null}
+  A_gson: accepted, decoded as {"id":1,"amount":"100","name":null,"status":"active","tags":[],"child":null}
+  B_moshi: accepted, decoded as {"id":1,"amount":"100","name":null,"status":"active","tags":[],"child":null}
+  C_kotlinx: accepted, decoded as {"id":1,"amount":"100","name":null,"status":"active","tags":[],"child":null}
+  D_jackson: accepted, decoded as {"id":1,"amount":"100","name":null,"status":"active","tags":[],"child":null}
+
+Probe 13:
+{"id": 1, "amount": "100", "name": null, "status": null, "tags": [], "child": null}
+  A_gson: accepted, decoded as {"id":1,"amount":"100","name":null,"status":null,"tags":[],"child":null}
+  B_moshi: rejected (com.squareup.moshi.JsonDataException)
+  C_kotlinx: rejected (kotlinx.serialization.json.JsonDecodingException)
+  D_jackson: rejected (com.fasterxml.jackson.module.kotlin.KotlinInvalidNullException)
+
+Probe 14:
+{"id": 1, "amount": "100", "name": null, "status": "active", "tags": ["x", null], "child": null}
+  A_gson: accepted, decoded as {"id":1,"amount":"100","name":null,"status":"active","tags":["x",null],"child":null}
+  B_moshi: accepted, decoded as {"id":1,"amount":"100","name":null,"status":"active","tags":["x",null],"child":null}
+  C_kotlinx: rejected (kotlinx.serialization.json.JsonDecodingException)
+  D_jackson: accepted, decoded as {"id":1,"amount":"100","name":null,"status":"active","tags":["x",null],"child":null}
+
+Probe 15:
+{"id": 1, "amount": "100", "name": null, "status": "active", "tags": ["x", 2], "child": null}
+  A_gson: accepted, decoded as {"id":1,"amount":"100","name":null,"status":"active","tags":["x","2"],"child":null}
+  B_moshi: accepted, decoded as {"id":1,"amount":"100","name":null,"status":"active","tags":["x","2"],"child":null}
+  C_kotlinx: rejected (kotlinx.serialization.json.JsonDecodingException)
+  D_jackson: accepted, decoded as {"id":1,"amount":"100","name":null,"status":"active","tags":["x","2"],"child":null}
+
+Probe 16:
+{"id": 1, "amount": "100", "name": null, "status": "active", "tags": [], "child": {"id": 2, "amount": 50, "name": "Bob", "status": "inactive", "tags": [], "child": null}}
+  A_gson: accepted, decoded as {"id":1,"amount":"100","name":null,"status":"active","tags":[],"child":{"id":2,"amount":"50","name":"Bob","status":"inactive","tags":[],"child":null}}
+  B_moshi: accepted, decoded as {"id":1,"amount":"100","name":null,"status":"active","tags":[],"child":{"id":2,"amount":"50","name":"Bob","status":"inactive","tags":[],"child":null}}
+  C_kotlinx: rejected (kotlinx.serialization.json.JsonDecodingException)
+  D_jackson: accepted, decoded as {"id":1,"amount":"100","name":null,"status":"active","tags":[],"child":{"id":2,"amount":"50","name":"Bob","status":"inactive","tags":[],"child":null}}
+
+Probe 17:
+{"id": 1, "amount": "100", "name": null, "status": "active", "tags": [], "child": {"id": 2, "amount": "50", "name": "Bob", "status": "enabled", "tags": [], "child": null}}
+  A_gson: accepted, decoded as {"id":1,"amount":"100","name":null,"status":"active","tags":[],"child":{"id":2,"amount":"50","name":"Bob","status":null,"tags":[],"child":null}}
+  B_moshi: rejected (com.squareup.moshi.JsonDataException)
+  C_kotlinx: rejected (kotlinx.serialization.SerializationException)
+  D_jackson: rejected (com.fasterxml.jackson.databind.exc.InvalidFormatException)
+
+Probe 18:
+{"id": 1, "amount": "100", "name": null, "status": "active", "tags": [], "child": {"id": 2, "amount": "50", "name": "Bob", "status": "inactive", "tags": ["x"], "child": {}}}
+  A_gson: accepted, decoded as {"id":1,"amount":"100","name":null,"status":"active","tags":[],"child":{"id":2,"amount":"50","name":"Bob","status":"inactive","tags":["x"],"child":{"id":0,"amount":null,"name":null,"status":null,"tags":null,"child":null}}}
+  B_moshi: rejected (com.squareup.moshi.JsonDataException)
+  C_kotlinx: rejected (kotlinx.serialization.MissingFieldException)
+  D_jackson: rejected (com.fasterxml.jackson.module.kotlin.KotlinInvalidNullException)
+
+Probe 19:
+{"id": 1, "amount": "100", "name": null, "status": "active", "tags": [], "child": {"id": 2, "amount": "50", "name": "Bob", "status": "inactive", "tags": ["x"], "child": null, "extra": 123}}
+  A_gson: accepted, decoded as {"id":1,"amount":"100","name":null,"status":"active","tags":[],"child":{"id":2,"amount":"50","name":"Bob","status":"inactive","tags":["x"],"child":null}}
+  B_moshi: accepted, decoded as {"id":1,"amount":"100","name":null,"status":"active","tags":[],"child":{"id":2,"amount":"50","name":"Bob","status":"inactive","tags":["x"],"child":null}}
+  C_kotlinx: rejected (kotlinx.serialization.json.JsonDecodingException)
+  D_jackson: rejected (com.fasterxml.jackson.databind.exc.UnrecognizedPropertyException)
+
+Probe 20:
+{"id": 1, "amount": "100", "name": null, "status": "active", "tags": [], "child": null, "extra": null}
+  A_gson: accepted, decoded as {"id":1,"amount":"100","name":null,"status":"active","tags":[],"child":null}
+  B_moshi: accepted, decoded as {"id":1,"amount":"100","name":null,"status":"active","tags":[],"child":null}
+  C_kotlinx: rejected (kotlinx.serialization.json.JsonDecodingException)
+  D_jackson: rejected (com.fasterxml.jackson.databind.exc.UnrecognizedPropertyException)
+
+Write down what you learned, for the model that will write a generator to
+make these four implementations disagree. Rules:
+- At most 1500 characters in total.
+- A numbered list of observations about behaviour: which implementations
+  accept or reject what, and how they decode it.
+- State only what the evidence above shows. No generator code.
+Return only the list.

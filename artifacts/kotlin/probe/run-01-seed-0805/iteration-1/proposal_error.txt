@@ -1,0 +1,1 @@
+ProposalError: generated_json is not a Hypothesis strategy: Expected a SearchStrategy, such as st.sampled_from(...), but got ('"id":0', '"amount":""') (type=tuple)

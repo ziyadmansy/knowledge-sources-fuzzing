@@ -1,0 +1,29 @@
+1. All four accept fully well-formed documents with correct types and no extras (Probes 1-3, 11-12, 16).
+
+2. Gson, Moshi, Jackson accept numeric "id" as string or number interchangeably, converting to int; kotlinx rejects if "id" is number but "amount" is number (Probe 5, 13).
+
+3. Gson, Moshi, Jackson accept numeric "amount" as number or string, converting to string; kotlinx rejects numeric "amount" (Probes 5, 13).
+
+4. Gson accepts unknown enum values for "status" by decoding as null; Moshi, kotlinx, Jackson reject unknown enum values (Probe 6).
+
+5. Gson and Moshi coerce non-string array elements in "tags" to strings; kotlinx rejects non-string elements; Jackson accepts non-string elements as-is (Probe 7).
+
+6. Gson, Moshi, Jackson accept null elements in "tags" array; kotlinx rejects null elements (Probe 15).
+
+7. Gson and Moshi accept unknown extra fields silently; kotlinx and Jackson reject unknown extra fields (Probes 9, 10, 17, 19).
+
+8. Gson accepts empty object for "child" by filling missing fields with defaults/nulls; Moshi, kotlinx, Jackson reject empty object for "child" (Probe 18).
+
+9. Gson accepts null for enum "status"; Moshi, kotlinx, Jackson reject null enum (Probe 14).
+
+10. Gson and Jackson accept null for "tags"; Moshi and kotlinx reject null "tags" (Probe 20).
+
+11. Gson accepts string or null for "name"; all accept null for "name" (Probe 2).
+
+12. Gson accepts string "id" and converts to int; all accept string "id" (Probe 4).
+
+13. Moshi throws JsonDataException on enum or type mismatches; kotlinx throws JsonDecodingException or MissingFieldException; Jackson throws InvalidFormatException, KotlinInvalidNullException, or UnrecognizedPropertyException accordingly.
+
+14. Gson coerces some types leniently (numeric to string, unknown enum to null, missing nested fields); kotlinx is strictest, rejecting most deviations.
+
+15. Jackson is strict on unknown fields and null enums but accepts numeric-string coercions and null tags.

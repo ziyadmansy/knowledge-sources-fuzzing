@@ -1,0 +1,39 @@
+```probe
+{"id": 1, "amount": 100, "name": null, "status": "active", "tags": [], "child": null}
+```
+Tests if kotlinx.serialization rejects numeric `amount` while others accept.
+
+```probe
+{"id": 1, "amount": "100", "name": null, "status": "active", "tags": ["tag1", 2], "child": null}
+```
+Tests if Moshi and Gson accept mixed-type array elements in `tags` (string + number).
+
+```probe
+{"id": 1, "amount": "100", "name": null, "status": "active", "tags": [], "child": {"id": 2, "amount": 50, "name": "Bob", "status": "inactive", "tags": ["tag2"], "child": null}}
+```
+Tests if kotlinx rejects numeric `amount` in nested `child` while others accept.
+
+```probe
+{"id": 1, "amount": "100", "name": null, "status": "active", "tags": [], "child": {"id": 2, "amount": "50", "name": "Bob", "status": "enabled", "tags": ["tag2"], "child": null}}
+```
+Tests if all reject invalid enum value `enabled` in nested `child`.
+
+```probe
+{"id": 1, "amount": "100", "name": null, "status": "active", "tags": [], "child": {"id": 2, "amount": "50", "name": "Bob", "status": "inactive", "tags": ["tag2"], "child": {"id": 3, "amount": "25", "name": null, "status": "unknown", "tags": [], "child": null}}}
+```
+Tests if recursion beyond one level in `child` is accepted or rejected.
+
+```probe
+{"id": 1, "amount": "100", "name": null, "status": "active", "tags": [], "child": null, "extra1": 1, "extra2": "x"}
+```
+Tests if Gson and Moshi accept multiple unknown fields, and if kotlinx and Jackson reject.
+
+```probe
+{"id": 1, "amount": "100", "name": null, "status": null, "tags": [], "child": null}
+```
+Tests if Gson accepts null for enum `status` (like in Probe 5), others reject.
+
+```probe
+{"id": 1, "amount": "100", "name": null, "status": "active", "tags": [], "child": null, "name": "Bob"}
+```
+Tests if duplicate keys cause rejection or last wins (two `name` fields).

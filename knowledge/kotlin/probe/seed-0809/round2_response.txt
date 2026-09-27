@@ -1,0 +1,39 @@
+```probe
+{"id": 1, "amount": "100", "name": null, "status": null, "tags": [], "child": null}
+```
+Test how each handles `status` explicitly set to null (vs missing or invalid string).
+
+```probe
+{"id": 1, "amount": "100", "name": null, "status": "active", "tags": ["x", null], "child": null}
+```
+Test how each handles null element inside the `tags` array.
+
+```probe
+{"id": 1, "amount": "100", "name": null, "status": "active", "tags": ["x", 2], "child": null}
+```
+Test how each handles mixed string and integer elements inside `tags`.
+
+```probe
+{"id": 1, "amount": "100", "name": null, "status": "active", "tags": [], "child": {"id": 2, "amount": 50, "name": "Bob", "status": "inactive", "tags": [], "child": null}}
+```
+Test nested `child` with `amount` as integer (like probe 3 but nested).
+
+```probe
+{"id": 1, "amount": "100", "name": null, "status": "active", "tags": [], "child": {"id": 2, "amount": "50", "name": "Bob", "status": "enabled", "tags": [], "child": null}}
+```
+Test nested `child` with invalid `status` string.
+
+```probe
+{"id": 1, "amount": "100", "name": null, "status": "active", "tags": [], "child": {"id": 2, "amount": "50", "name": "Bob", "status": "inactive", "tags": ["x"], "child": {}}}
+```
+Test nested `child` with empty object as `child` field (like probe 11 nested).
+
+```probe
+{"id": 1, "amount": "100", "name": null, "status": "active", "tags": [], "child": {"id": 2, "amount": "50", "name": "Bob", "status": "inactive", "tags": ["x"], "child": null, "extra": 123}}
+```
+Test nested `child` with extra unknown field.
+
+```probe
+{"id": 1, "amount": "100", "name": null, "status": "active", "tags": [], "child": null, "extra": null}
+```
+Test top-level with extra field set to null (vs extra field with number in probe 10).

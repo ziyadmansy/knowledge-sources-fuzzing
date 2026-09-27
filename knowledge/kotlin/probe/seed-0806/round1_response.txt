@@ -1,0 +1,59 @@
+```probe
+{"id": 1, "amount": "100.50", "name": "Alice", "status": "active", "tags": ["tag1", "tag2"], "child": null}
+```
+Baseline well-formed document, all fields present and valid.
+
+```probe
+{"id": 2, "amount": "200", "name": null, "status": "inactive", "tags": [], "child": null}
+```
+Test null `name` and empty `tags` array.
+
+```probe
+{"id": 3, "amount": "300", "name": "Bob", "status": "unknown", "tags": ["tag"], "child": {"id": 4, "amount": "50", "name": "Child", "status": "active", "tags": [], "child": null}}
+```
+Test nested `child` record with all valid fields.
+
+```probe
+{"id": "5", "amount": "400", "name": "Eve", "status": "active", "tags": ["tag"], "child": null}
+```
+Test `id` as string instead of integer.
+
+```probe
+{"id": 6, "amount": 500, "name": "Frank", "status": "inactive", "tags": ["tag"], "child": null}
+```
+Test `amount` as number instead of string.
+
+```probe
+{"id": 7, "amount": "600", "name": "Grace", "status": "enabled", "tags": ["tag"], "child": null}
+```
+Test invalid `status` value (not one of the enum values).
+
+```probe
+{"id": 8, "amount": "700", "name": "Heidi", "status": "active", "tags": ["tag", 123], "child": null}
+```
+Test `tags` array containing a non-string element.
+
+```probe
+{"id": 9, "amount": "800", "name": "Ivan", "status": "inactive", "tags": ["tag"], "child": {"id": 10, "amount": "50", "name": null, "status": "unknown", "tags": [], "child": {}}}
+```
+Test `child` with empty object as nested `child` (should be null or record).
+
+```probe
+{"id": 11, "amount": "900", "name": "Judy", "status": "active", "tags": ["tag"], "child": {"id": 12, "amount": "100", "name": "Child", "status": "active", "tags": ["tag"], "child": null, "extra": "field"}}
+```
+Test `child` with extra unexpected field.
+
+```probe
+{"id": 13, "amount": "1000", "name": "Ken", "status": "inactive", "tags": ["tag"], "child": null, "extra": "field"}
+```
+Test root object with extra unexpected field.
+
+```probe
+{"id": 14, "amount": "1100", "name": "Leo", "status": "active", "tags": ["tag"], "child": null}
+```
+Test repeated field `amount` (e.g., `"amount": "1100", "amount": "1200"`).
+
+```probe
+{"id": 15, "amount": "1200", "name": "Mia", "status": "active", "tags": ["tag"], "child": null}
+```
+Test missing field `name` (remove `name` field entirely).

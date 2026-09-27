@@ -1,0 +1,37 @@
+1. All four accept fully well-formed documents with correct types (Probe 1).
+
+2. All four accept integer "id" as number or string, decoding string to int (Probes 1,2,9).
+
+3. Gson, Moshi, Jackson accept "amount" as string or number, converting number to string; kotlinx rejects number (Probes 3,13,15).
+
+4. Gson and Moshi accept "name" as string or number, converting number to string; kotlinx rejects number; Jackson accepts number as string (Probes 4).
+
+5. Gson accepts unknown enum values for "status" as null; Moshi, kotlinx, Jackson reject invalid enum values (Probes 5,16).
+
+6. All reject "tags" as non-array (Probe 6).
+
+7. Gson, Moshi, Jackson accept "tags" array with non-string elements, converting elements to strings; kotlinx rejects (Probes 7,14).
+
+8. All accept nested "child" with same rules recursively, including string "id" in child (Probes 8,9,17).
+
+9. Gson accepts unknown enum in nested "child" as null; others reject (Probe 16).
+
+10. Gson and Moshi accept extra unknown fields silently; kotlinx and Jackson reject unknown fields (Probes 10,18).
+
+11. Gson accepts null for "status" as null; Moshi, kotlinx, Jackson reject null for non-nullable enum (Probe 19).
+
+12. Duplicate fields: last occurrence wins in all four (Probe 20).
+
+13. Gson and Moshi convert number fields to string when target is string; kotlinx strictly enforces types.
+
+14. Jackson Kotlin module rejects null for non-nullable enum with KotlinInvalidNullException.
+
+15. Overall, kotlinx.serialization is strictest, rejecting type mismatches and unknown fields.
+
+16. Gson is most permissive, silently converting types and ignoring unknown fields.
+
+17. Moshi is stricter than Gson but allows some conversions and unknown fields.
+
+18. Jackson is strict on unknown fields and enum values, but accepts number-to-string conversions.
+
+19. Disagreements arise mainly on enum invalid values, type mismatches (string vs number), unknown fields, and array element types.

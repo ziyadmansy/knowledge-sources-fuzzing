@@ -1,0 +1,37 @@
+1. All four accept fully well-formed documents with correct types (Probe 1).
+
+2. All four accept numeric "id" as either integer or string convertible to integer (Probes 2, 9).
+
+3. Gson, Moshi, and Jackson accept "amount" as string or number, converting number to string; kotlinx rejects number (Probes 3, 13, 15).
+
+4. Gson and Moshi accept "name" as string or number (converted to string); kotlinx rejects number; Jackson accepts number converted to string (Probes 4, 16).
+
+5. For "name": null is accepted by all (Probes 1, 5).
+
+6. For "status", only exact enum strings "active", "inactive", "unknown" accepted; Moshi, kotlinx, Jackson reject others; Gson accepts but decodes invalid as null (Probes 5, 17).
+
+7. "tags" must be an array; string instead causes rejection by all (Probe 6).
+
+8. "tags" array elements must be strings or convertible; Gson, Moshi, Jackson accept numbers (Moshi rejects booleans); kotlinx rejects non-string elements (Probes 7, 14).
+
+9. "child" can be null or full Record; empty object {} accepted only by Gson (with defaults), rejected by others (Probe 12).
+
+10. Extra fields cause rejection by kotlinx and Jackson, acceptance by Gson and Moshi (Probes 10, 19).
+
+11. Missing fields inside nested "child" cause rejection by Moshi, kotlinx, Jackson; Gson fills with defaults (Probe 12).
+
+12. Duplicate keys: last occurrence wins for all (Probe 20).
+
+13. Gson and Moshi are lenient on type mismatches, converting numbers to strings; kotlinx is strict and rejects mismatches; Jackson mostly lenient but rejects invalid enums and extra fields.
+
+14. kotlinx.serialization is strictest: rejects type mismatches, extra fields, invalid enums, missing required fields.
+
+15. Jackson rejects unknown properties and invalid enums but accepts number-to-string conversions and nulls where allowed.
+
+16. Gson is most permissive, accepting invalid enums as null and extra fields silently.
+
+17. Moshi rejects invalid enums and extra fields, but accepts number-to-string conversions in some cases.
+
+18. Nested "child" fields behave similarly to top-level fields in acceptance and rejection.
+
+19. Disagreements mainly on type coercion (number vs string), enum validation, extra fields, and empty nested objects.

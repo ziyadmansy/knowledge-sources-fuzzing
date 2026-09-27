@@ -1,0 +1,40 @@
+{
+  "arguments": {
+    "arm": "probe",
+    "artifact_dir": "None",
+    "examples": "500",
+    "executable": "None",
+    "iterations": "5",
+    "knowledge_file": "knowledge/kotlin/probe/seed-{seed:04d}/knowledge.txt",
+    "model": "gpt-4.1-mini",
+    "overwrite": "False",
+    "runs": "5",
+    "seed": "805",
+    "target": "kotlin",
+    "timeout": "5.0"
+  },
+  "arm": "probe",
+  "feedback_mode": null,
+  "harness_sha256": "fcad662d38398cfdd5f7ff654a8c3b15f999359fca097cf358b4cf3ea47ab441",
+  "hypothesis_version": "6.165.5",
+  "knowledge_section": "What is already known about these four implementations, from running\nprobe documents against them before any fuzzing (use it however you see\nfit):\n1. All four accept fully well-formed documents with correct types (Probe 1).\n\n2. All accept integer \"id\" as number or string, decoding string to int (Probes 1,2,9).\n\n3. Gson, Moshi, Jackson accept \"amount\" as string or number, converting number to string; kotlinx rejects number (Probes 3,13,15).\n\n4. Gson and Moshi accept \"name\" as string or number, converting number to string; kotlinx rejects number; Jackson accepts number as string (Probes 4).\n\n5. Gson accepts unknown enum values for \"status\" as null; Moshi, kotlinx, Jackson reject invalid enum values (Probes 5,16).\n\n6. All reject \"tags\" as non-array (Probe 6).\n\n7. Gson, Moshi, Jackson accept \"tags\" array with non-string elements, converting elements to strings; kotlinx rejects (Probes 7,14).\n\n8. All accept nested \"child\" with same rules recursively, including string \"id\" in child (Probes 8,9,17).\n\n9. Gson accepts unknown enum in nested \"child\" as null; others reject (Probe 16).\n\n10. Gson and Moshi accept extra unknown fields silently; kotlinx and Jackson reject unknown fields (Probes 10,18).\n\n11. Gson accepts null for \"status\" as null; Moshi, kotlinx, Jackson reject null for non-nullable enum (Probe 19).\n\n12. Duplicate fields: last occurrence wins in all four (Probe 20).\n\n13. Gson and Moshi convert number fields to string when target is string; kotlinx strictly enforces types.\n\n14. Jackson Kotlin module rejects null for non-nullable enum with KotlinInvalidNullException.",
+  "llm_usage": {
+    "calls": 5,
+    "input_tokens": 4875,
+    "output_tokens": 10369,
+    "truncated": 0
+  },
+  "model": "gpt-4.1-mini",
+  "path_order": [
+    "A_gson",
+    "B_moshi",
+    "C_kotlinx",
+    "D_jackson"
+  ],
+  "platform": "macOS-26.5.2-arm64-arm-64bit-Mach-O",
+  "python_implementation": "CPython",
+  "python_version": "3.14.7 (main, Aug  5 2026, 10:29:49) [Clang 21.0.0 (clang-2100.1.1.101)]",
+  "seed": 808,
+  "target": "kotlin",
+  "timestamp": "2026-09-27T10:14:22.006185+00:00"
+}

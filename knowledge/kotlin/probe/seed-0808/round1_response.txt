@@ -1,0 +1,103 @@
+```probe
+{"id": 1, "amount": "100", "name": "Alice", "status": "active", "tags": ["tag1"], "child": null}
+```
+Control: a fully valid, well-formed document.
+
+```probe
+{"id": "1", "amount": "100", "name": "Alice", "status": "active", "tags": ["tag1"], "child": null}
+```
+Test id as string instead of integer.
+
+```probe
+{"id": 1, "amount": 100, "name": "Alice", "status": "active", "tags": ["tag1"], "child": null}
+```
+Test amount as number instead of string.
+
+```probe
+{"id": 1, "amount": "100", "name": 123, "status": "active", "tags": ["tag1"], "child": null}
+```
+Test name as number instead of string or null.
+
+```probe
+{"id": 1, "amount": "100", "name": null, "status": "enabled", "tags": ["tag1"], "child": null}
+```
+Test status with invalid enum value.
+
+```probe
+{"id": 1, "amount": "100", "name": null, "status": "active", "tags": "tag1", "child": null}
+```
+Test tags as string instead of array.
+
+```probe
+{"id": 1, "amount": "100", "name": null, "status": "active", "tags": [123], "child": null}
+```
+Test tags array with number instead of string.
+
+```probe
+{"id": 1, "amount": "100", "name": null, "status": "active", "tags": [], "child": {"id": 2, "amount": "50", "name": "Bob", "status": "inactive", "tags": ["tag2"], "child": null}}
+```
+Test valid nested child record.
+
+```probe
+{"id": 1, "amount": "100", "name": null, "status": "active", "tags": [], "child": {"id": "2", "amount": "50", "name": "Bob", "status": "inactive", "tags": ["tag2"], "child": null}}
+```
+Test nested child with id as string instead of integer.
+
+```probe
+{"id": 1, "amount": "100", "name": null, "status": "active", "tags": [], "child": null, "extra": "field"}
+```
+Test extra unexpected field at root level.
+
+```probe
+{"id": 1, "amount": "100", "name": null, "status": "active", "tags": [], "child": null}
+```
+Test missing optional fields? (Actually all fields are required, so test missing field)
+
+```probe
+{"id": 1, "amount": "100", "name": null, "status": "active", "tags": [], "child": null}
+```
+Test missing field "name" (remove it).
+
+```probe
+{"id": 1, "amount": "100", "name": null, "status": "active", "tags": [], "child": null}
+```
+Test missing field "child" (remove it).
+```
+
+I realized I repeated the last three probes as the same document. I will fix that and rewrite the last three probes properly:
+
+```probe
+{"id": 1, "amount": "100", "status": "active", "tags": [], "child": null}
+```
+Test missing field "name".
+
+```probe
+{"id": 1, "amount": "100", "name": null, "status": "active", "tags": []}
+```
+Test missing field "child".
+
+```probe
+{"id": 1, "amount": "100", "name": null, "status": "active", "tags": [], "child": null, "id": 2}
+```
+Test duplicate field "id" with different value.
+```
+
+Summary of probes:
+
+1. Valid document (control)
+2. id as string
+3. amount as number
+4. name as number
+5. invalid enum status
+6. tags as string
+7. tags array with number
+8. valid nested child
+9. nested child id as string
+10. extra unexpected field
+11. missing name
+12. missing child
+13. duplicate id field
+
+I have 13 probes, but the instruction said at most 12 for round 1. I will remove the duplicate id probe (13) to keep 12 probes.
+
+Final 12 probes above.

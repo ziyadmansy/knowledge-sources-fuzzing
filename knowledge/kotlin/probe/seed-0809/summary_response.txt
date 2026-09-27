@@ -1,0 +1,39 @@
+1. All four accept fully well-formed documents with correct types (Probe 1).
+
+2. All accept integer fields given as strings if convertible (e.g., "id": "1") and decode correctly (Probe 2).
+
+3. Gson, Moshi, and Jackson accept "amount" as a number and coerce to string; kotlinx.serialization rejects (Probe 3).
+
+4. Gson, Moshi, and Jackson accept "name" as a number and coerce to string; kotlinx.serialization rejects (Probe 4).
+
+5. Invalid enum values for "status" cause Moshi, kotlinx, Jackson to reject; Gson accepts but sets status to null (Probe 5).
+
+6. All reject "tags" as a string instead of array (Probe 6).
+
+7. Gson, Moshi, Jackson accept numeric elements in "tags" array, coercing them to strings; kotlinx rejects (Probe 7).
+
+8. All accept nested "child" objects with correct types, including recursive one-level nesting (Probe 8).
+
+9. All accept nested "child" with "id" as string convertible to int (Probe 9).
+
+10. Gson and Moshi accept extra unknown fields at root level; kotlinx and Jackson reject (Probe 10).
+
+11. Gson accepts empty object for "child", filling missing fields with defaults or nulls; others reject missing required fields or nulls (Probe 11).
+
+12. All accept "child": null (Probe 12).
+
+13. Null "status" causes Moshi, kotlinx, Jackson to reject; Gson accepts with status=null (Probe 13).
+
+14. Gson, Moshi, Jackson accept null elements inside "tags" array; kotlinx rejects (Probe 14).
+
+15. Gson, Moshi, Jackson accept mixed-type elements in "tags" array, coercing non-strings to strings; kotlinx rejects (Probe 15).
+
+16. Nested "child" with "amount" as number is accepted by Gson, Moshi, Jackson; rejected by kotlinx (Probe 16).
+
+17. Nested "child" with invalid enum "status" causes Moshi, kotlinx, Jackson to reject; Gson accepts with status=null (Probe 17).
+
+18. Nested "child" with empty object for "child" accepted by Gson with defaults; others reject missing fields or nulls (Probe 18).
+
+19. Nested "child" with extra unknown fields accepted by Gson, Moshi; rejected by kotlinx, Jackson (Probe 19).
+
+20. Extra unknown fields with null values at root accepted by Gson, Moshi; rejected by kotlinx, Jackson (Probe 20).

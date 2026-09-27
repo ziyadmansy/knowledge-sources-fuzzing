@@ -1,0 +1,59 @@
+```probe
+{"id": 1, "amount": "100", "name": "Alice", "status": "active", "tags": ["x"], "child": null}
+```
+Baseline well-formed document, all fields present and correct types.
+
+```probe
+{"id": "1", "amount": "100", "name": "Alice", "status": "active", "tags": ["x"], "child": null}
+```
+id as string instead of integer.
+
+```probe
+{"id": 1, "amount": 100, "name": "Alice", "status": "active", "tags": ["x"], "child": null}
+```
+amount as integer instead of string.
+
+```probe
+{"id": 1, "amount": "100", "name": 123, "status": "active", "tags": ["x"], "child": null}
+```
+name as integer instead of string or null.
+
+```probe
+{"id": 1, "amount": "100", "name": null, "status": "enabled", "tags": ["x"], "child": null}
+```
+status with invalid enum value.
+
+```probe
+{"id": 1, "amount": "100", "name": null, "status": "active", "tags": "x", "child": null}
+```
+tags as string instead of array.
+
+```probe
+{"id": 1, "amount": "100", "name": null, "status": "active", "tags": [1,2], "child": null}
+```
+tags array with integers instead of strings.
+
+```probe
+{"id": 1, "amount": "100", "name": null, "status": "active", "tags": [], "child": {"id": 2, "amount": "50", "name": "Bob", "status": "inactive", "tags": [], "child": null}}
+```
+child as nested valid record.
+
+```probe
+{"id": 1, "amount": "100", "name": null, "status": "active", "tags": [], "child": {"id": "2", "amount": "50", "name": "Bob", "status": "inactive", "tags": [], "child": null}}
+```
+child.id as string instead of integer.
+
+```probe
+{"id": 1, "amount": "100", "name": null, "status": "active", "tags": [], "child": null, "extra": 123}
+```
+Extra unknown field at root level.
+
+```probe
+{"id": 1, "amount": "100", "name": null, "status": "active", "tags": [], "child": {}}
+```
+child as empty object instead of null or full record.
+
+```probe
+{"id": 1, "amount": "100", "name": null, "status": "active", "tags": [], "child": null}
+```
+Repeat baseline to check consistency after other probes.
