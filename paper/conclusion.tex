@@ -7,10 +7,15 @@ characterization was best, a summary written from reading the code was a
 reliable second, and a summary written from 20 black-box probes was
 all-or-nothing on Dart, where divergence is rare, and clearly helpful on
 Kotlin, where it is common. Across arms, the divergence patterns found
-matched the facts the knowledge stated, and no arm went beyond them.
-Self-characterization is therefore not a substitute for knowledge where
-knowledge matters most; making it one will need probing that is
-systematic about what it covers and honest about what it did not.
+largely followed the facts the knowledge stated, and no arm found a pattern
+outside the known ones.
+A pre-registered extension showed why and how far that can be fixed: an
+agent required to cover generic test categories probes where the unguided
+agent did not, learns what those probes reveal, and nearly doubles the
+unguided probing rate on Dart; a larger model helps less. Both still miss
+what their budget never reached. Self-characterization is therefore not yet a
+substitute for knowledge where knowledge matters most; it becomes one only
+as far as its probes are made to reach the narrow behaviours that matter.
 
 \section*{Data Availability}
 

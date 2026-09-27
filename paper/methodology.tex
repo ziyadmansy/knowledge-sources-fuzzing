@@ -129,6 +129,57 @@ under the cap; the cut applied in 19 of 20 acquisitions (mean body 1{,}422
 characters). Knowledge is acquired once per seed, so its quality varies
 across seeds, and that variance is part of the result.
 
+\subsection{Extension: two remedies for probing}
+\label{sec:extension}
+
+After the main results, we declared an extension in the deviations log and
+published it before any of its runs, with two new arms and no new seeds for
+any existing arm.
+
+\textbf{Systematic probing} (\emph{sysprobe}; Dart and Kotlin). The probing
+agent, model, budget and cap are unchanged. Its prompt adds the checklist in
+Fig.~\ref{fig:checklist}, and its summary must end with a line listing the
+categories no probe covered. Every item is a standard, schema-independent
+category from category-partition testing and boundary-value analysis, and
+none names a field, path or library; we disclose that it was written by an
+author who knew the answer key. The knowledge header is the same as for
+\emph{probe}, so only the body differs.
+
+\textbf{A larger prober} (\emph{probe-gpt41}; Dart). The unchanged probing
+agent and prompts, with \texttt{gpt-4.1} for knowledge acquisition only; the
+loop stays \texttt{gpt-4.1-mini}.
+
+Both arms use the seeds of the corresponding \emph{probe} arm. The declared
+tests are systematic probing against none on Dart (primary), against unguided
+probing, human and code on Dart, and against none and unguided probing on
+Kotlin, with a Holm correction across these six; and the larger prober
+against unguided probing and against none, with a Holm correction across
+the two.
+
+\begin{figure}[t]
+\centering
+\fbox{\begin{minipage}{0.94\columnwidth}
+\footnotesize
+Probe systematically. Spend your probes on these categories first; they apply
+to any JSON schema, and each probe should change one thing in an otherwise
+valid document:
+(1) a required field missing;
+(2) a non-nullable field set to null;
+(3) a field with a value of the wrong JSON type;
+(4) a numeric field at a representation boundary: a fraction, an exponent
+form, and integers just beyond the 32-, 53- and 64-bit ranges;
+(5) an enum-like field with an unknown value, and with a case variant;
+(6) an extra unknown key, and a duplicate key;
+(7) the same kinds of change inside a nested object;
+(8) text that is not strict JSON: single quotes, an unquoted value, a
+trailing comma, NaN, and a raw control character inside a string.
+Prefer breadth across categories over repetition.
+\end{minipage}}
+\caption{The checklist added to the systematic probing agent's prompt
+(abridged; the full text is in the artifact).}
+\label{fig:checklist}
+\end{figure}
+
 \subsection{Design and analysis}
 
 The study was pre-registered in a design document committed before any code

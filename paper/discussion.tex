@@ -4,56 +4,69 @@
 learns only what its probes reveal. On Dart, where divergence requires a
 specific field to be absent or an integer literal to leave the 64-bit range,
 20 probes chosen by the model's prior found a divergence on one seed in five.
-Table~\ref{tab:coverage} classifies all 300 probes by what they change
-relative to a valid record. The agents probed the same way on both targets:
-mostly valid documents, then one wrong type, an unknown enum constant or an
-extra key. On neither target did any probe remove a required top-level field,
-use an \texttt{id} near a 53- or 64-bit boundary, or send text that is not
-JSON, although probes were raw text precisely to allow that. Wrong types,
-unknown enum constants and extra keys never diverged on Dart; on Kotlin they
-are exactly where the libraries disagree. The difference between the targets is the density of
-divergence near the inputs the model finds natural, not the agent's
-behaviour.
+Table~\ref{tab:coverage} classifies every probe by what it changes
+relative to a valid record. Unguided, the agents probed the same way on both
+targets: mostly valid documents, then one wrong type, an unknown enum
+constant or an extra key. None of their 300 probes removed a field, used an
+\texttt{id} near a 53- or 64-bit boundary, or sent text that is not JSON,
+although probes were raw text precisely to allow that. Wrong types, unknown
+enum constants and extra keys never diverged on Dart; on Kotlin they are
+exactly where the libraries disagree. The difference between the targets is
+the density of divergence near the inputs the model finds natural, not the
+agent's behaviour. The extension supports this reading experimentally: an
+agent told to remove fields and set them to null does so, observes
+divergence on every Dart seed, and passes it on. It also shows the limit.
+The agents concentrated on the checklist's first two items and spent the
+budget before reaching its numeric-boundary and syntax items, so the
+integer-overflow pattern remained mostly out of reach.
 
 \begin{table}[t]
 \centering
-\caption{What the probes changed, relative to a valid record (a probe can
-be in several rows). Seeds: on how many seeds at least one probe did it.}
+\caption{What the probes changed, relative to a valid record (number of
+probes; a probe can be in several rows). Kotlin unguided probing has 200
+probes (ten seeds), the others 100. Last row: probes that observed a
+divergence, per seed.}
 \label{tab:coverage}
 \footnotesize
-\begin{tabular}{@{}lrrrr@{}}
+\setlength{\tabcolsep}{3pt}
+\begin{tabular}{@{}lrrrrr@{}}
 \toprule
-& \multicolumn{2}{c}{Dart (100 probes)} & \multicolumn{2}{c}{Kotlin (200)} \\
-Change & probes & seeds & probes & seeds \\
+& \multicolumn{3}{c}{Dart (100 probes each)} & \multicolumn{2}{c}{Kotlin} \\
+\cmidrule(lr){2-4}\cmidrule(l){5-6}
+Change & probe & sys. & gpt-4.1 & probe & sys. \\
 \midrule
-nothing at top level     & 68 & 5/5 & 117 & 10/10 \\
-wrong type               & 19 & 5/5 & 48 & 10/10 \\
-unknown enum constant    & 6  & 5/5 & 11 & 10/10 \\
-extra key                & 6  & 5/5 & 14 & 9/10 \\
-null for non-null field  & 1  & 1/5 & 10 & 8/10 \\
-nested \texttt{child} changed & 19 & 5/5 & 42 & 10/10 \\
-missing required field   & 0  & 0/5 & 0  & 0/10 \\
-\texttt{id} near 53/64-bit boundary & 0 & 0/5 & 0 & 0/10 \\
-not JSON                 & 0  & 0/5 & 0  & 0/10 \\
+nothing at top level     & 68 & 29 & 40 & 117 & 34 \\
+field missing            & 0  & 30 & 17 & 0   & 30 \\
+non-nullable field null  & 1  & 21 & 9  & 10  & 20 \\
+wrong type               & 19 & 6  & 22 & 48  & 5 \\
+unknown enum constant    & 6  & 9  & 9  & 11  & 9 \\
+extra key                & 6  & 5  & 3  & 14  & 2 \\
+nested \texttt{child} changed & 19 & 11 & 10 & 42 & 20 \\
+fractional \texttt{id}  & 0  & 2  & 0  & 0   & 0 \\
+\texttt{id} near 53/64-bit bound & 0 & 0 & 0 & 0 & 0 \\
+not JSON                 & 0  & 0  & 0  & 0   & 0 \\
+\midrule
+divergent probes / seed  & 0--1 & 2--4 & 1--2 & 11--14 & 17--18 \\
 \bottomrule
 \end{tabular}
 \end{table}
 The agent's ability to characterize a target is therefore bounded by the
 same thing that bounds the fuzzer: the density of interesting behaviour near
 the inputs the model finds natural. This is the conditional result in our
-title question. Self-acquired knowledge helps when an unguided search would
-have found some divergence anyway, and gives nothing where knowledge is most
-needed.
+title question. Unguided, self-acquired knowledge helps when an unguided
+search would have found some divergence anyway, and gives little where
+knowledge is most needed.
 
 \textbf{Negative evidence is misleading.} A probe summary that observed no
 divergence does not say ``I did not look at missing fields''; it says that
 the implementations behave identically, sometimes with an overgeneralization
-that is false. The loop then receives confident but empty knowledge. A
-practical probing agent should report what it did \emph{not} test, or be
-required to cover categories of perturbation, such as each field missing,
-each field null and each numeric boundary, before summarizing. Such a checklist
-is itself domain knowledge, so it moves the question rather than removing
-it, but it is generic across schemas and cheap to write once.
+that is false. The loop then receives confident but empty knowledge. We tested
+both natural fixes. Requiring coverage of generic categories worked where the
+agent reached them. Requiring a ``Not tested'' line did not help in our
+design, because a trailing line is the first thing a length cap removes; it
+should be stored outside the capped body or placed first. The checklist is
+itself domain knowledge, so it moves the question rather than removing it,
+but it is generic across schemas and cheap to write once.
 
 \textbf{Code reading is reliable but incomplete.} The code arm never failed,
 because the facts are in the code whether or not the agent thinks to test
@@ -79,9 +92,12 @@ to name the probes that support it.
 \textbf{For practitioners.} Where a human characterization exists, use it:
 it was the best source by a wide margin and costs nothing at run time. Where
 source is available, a code-reading summary gives a dependable improvement
-for a few cents. A probing agent is worth running first to learn whether
-disagreement is common; if its probes find none, treat its summary as
-uninformative, not as evidence of agreement.
+for a few cents. Where neither exists, probe systematically: give the
+agent a category checklist, put the categories most likely to matter for the
+target's types first (for integer fields, the representation boundaries),
+and give it a budget large enough to reach them. If its probes still find no
+divergence, treat its summary as uninformative, not as evidence of
+agreement.
 
 \subsection{Threats to validity}
 
@@ -92,16 +108,25 @@ would most likely estimate how often probing hits, not remove the
 variance. The Kotlin result relies on a pre-declared replication and is
 weaker on RFC-valid documents alone ($p \approx 0.075$).
 
+\textbf{Multiple tests in the extension.} The systematic-probing primary
+test meets the pre-registered $p < 0.05$ rule but not a Holm correction
+across its declared family of six ($p_{\mathrm{Holm}} = 0.159$). The
+checklist was written by an author who knew the answer key; every item is a
+standard, schema-independent category, but a checklist written without that
+knowledge might order or phrase items differently, and order mattered.
+
 \textbf{Knowledge quality is uncontrolled.} Summaries are capped at the
-same length but differ in accuracy, which is the variable under study. The
-cap was applied by cutting in 19 of 20 acquisitions, which drops the last
+same length but differ in accuracy, which is the variable under study. In the
+main study the cap was applied by cutting in 19 of 20 acquisitions, which drops the last
 observations; a different enforcement rule could change individual
 summaries.
 
-\textbf{One model family and one probe budget.} All agents and the loop use
-\texttt{gpt-4.1-mini}, and the probe budget of 20 is a choice. A stronger
-model or a larger budget might probe more widely; the previous study found
-that a larger model alone did not close the gap.
+\textbf{One model family and one probe budget.} The loop always uses
+\texttt{gpt-4.1-mini}; only the extension's larger prober uses
+\texttt{gpt-4.1}, from the same family. The probe budget of 20 is a choice,
+and the extension suggests it is binding: the systematic agents ran out of
+probes before the checklist's later items. A larger budget is the most
+direct next test.
 
 \textbf{Post-data change.} The Kotlin harness's validity label was found to
 be lenient after the data existed. It affects only a secondary metric, which

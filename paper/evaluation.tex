@@ -158,13 +158,16 @@ none  & --   & 3/5 & --   & 3/5 \\
 human & 5/5  & 5/5 & 5/5  & 5/5 \\
 code  & 5/5  & 5/5 & 0/5  & 1/5 \\
 probe & 0/5  & 0/5 & 1/5$^{*}$ & 4/5 \\
+\midrule
+sysprobe    & 1/5 & 1/5 & 5/5 & 5/5 \\
+probe-gpt41 & 0/5 & 2/5 & 4/5 & 5/5 \\
 \bottomrule
 \end{tabular}\\[2pt]
 {\footnotesize $^{*}$Seed 701 states that \texttt{built\_value} accepts
 \texttt{tags: null}: related, but not the missing-field fact.}
 \end{table}
 
-\textbf{What the knowledge contains decides what is found.}
+\textbf{What the knowledge contains largely decides what is found.}
 Table~\ref{tab:recall} compares, for each Dart pattern, whether an arm's
 knowledge states the fact behind it with how many runs found it. Every
 code summary states that two paths accept a non-integer \texttt{id} through
@@ -182,8 +185,8 @@ extend it, which is what the previous study observed for human knowledge.
 \textbf{Cost.} A \emph{none} or \emph{human} run takes five calls, about
 \$0.014 at list prices. Code knowledge adds two calls per seed (\$0.004) and
 probing four (\$0.006), plus 20 harness executions. Knowledge acquisition is
-cheap compared with the loop; the whole study, including pilots, cost less
-than one US dollar.
+cheap compared with the loop; the whole study, including pilots and the
+extension, cost about two US dollars.
 
 \subsection{RQ3: Kotlin}
 
@@ -242,6 +245,83 @@ Every Kotlin run in both arms, including all ten without knowledge,
 rediscovered the Gson null-safety bypass, in 114 to 970 documents per run.
 On Kotlin this answer key is too easy to separate the arms.
 
+\subsection{RQ4: remedies for probing}
+
+Table~\ref{tab:remedies} gives the two extension arms. Both change the
+Dart result. Every systematic-probing seed and every larger-model seed
+observed divergence during probing (2--4 and 1--2 of 20 probes
+respectively), against one unguided seed in five, and every run of both
+arms found \texttt{RRRA}.
+
+\begin{table}[t]
+\centering
+\caption{Extension arms (pre-registered, $n{=}5$): divergence rate per run
+and tests. $p_{\mathrm{Holm}}$ is across the six declared systematic-probing
+tests or the two larger-prober tests.}
+\label{tab:remedies}
+\footnotesize
+\begin{tabular}{@{}lrl@{}}
+\toprule
+Arm & Mean & Per seed \\
+\midrule
+Dart sysprobe     & 20.21 & 15.75, 2.13, 33.85, 39.00, 10.30 \\
+Dart probe-gpt41  & 12.09 & 5.70, 11.60, 13.80, 26.20, 3.13 \\
+Kotlin sysprobe   & 81.59 & 73.50, 61.60, 93.90, 85.80, 93.15 \\
+\bottomrule
+\end{tabular}\\[4pt]
+\begin{tabular}{@{}lrrrr@{}}
+\toprule
+Comparison & $\Delta$ & $p$ & $p_{\mathrm{Holm}}$ & $\delta$ \\
+\midrule
+Dart sysprobe$-$none (prim.) & $+18.75$ & 0.032 & 0.159 & $+0.84$ \\
+Dart sysprobe$-$probe          & $+9.70$  & 0.151 & 0.452 & $+0.60$ \\
+Dart sysprobe$-$human          & $-10.68$ & 0.421 & 0.841 & $-0.36$ \\
+Dart sysprobe$-$code           & $+8.66$  & 0.421 & 0.841 & $+0.36$ \\
+Kotlin sysprobe$-$none         & $+35.82$ & 0.016 & 0.095 & $+0.92$ \\
+Kotlin sysprobe$-$probe        & $+17.25$ & 0.095 & 0.381 & $+0.68$ \\
+\midrule
+Dart probe-gpt41$-$probe       & $+1.58$  & 0.151 & 0.151 & $+0.60$ \\
+Dart probe-gpt41$-$none        & $+10.63$ & 0.032 & 0.064 & $+0.84$ \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\textbf{Systematic probing.} Against no knowledge on Dart, systematic
+probing gains 18.8 points ($p \approx 0.032$, $\delta = +0.84$), which
+meets the pre-registered rule; across the declared family of six tests the
+Holm-adjusted value is 0.159, so we read it as consistent evidence rather
+than a settled result. Its lowest run (2.1\%) is above four of the five
+unguided runs. It is not distinguishable from code-read or human knowledge,
+and at $|\delta| = 0.36$ against human it narrowly misses the
+pre-registered threshold for a comparability claim. On Kotlin it reaches
+81.6\%, and 80.2\% even over RFC-valid documents alone, the highest of any
+arm.
+
+\textbf{A larger prober.} With \texttt{gpt-4.1} as the probing agent, the
+Dart rate is 12.1\%. That is above none ($p \approx 0.032$, Holm 0.064)
+and indistinguishable from the \texttt{gpt-4.1-mini} prober on the mean,
+but its distribution has no failures: its lowest run is 3.1\%, and every
+seed's probes observed a divergence.
+
+\textbf{Coverage decides what is learned.} Both remedies change what the
+probes do (Table~\ref{tab:coverage}): the systematic agent removed a
+top-level field 30 times and set a non-nullable one to null 21 times, and the
+larger model 17 and 9 times, against 0 and 1 without either. Neither reached the
+checklist's later items. No probe in either arm used an \texttt{id} beyond
+the 53- or 64-bit range or sent non-JSON text, and only one systematic seed
+tried a fractional \texttt{id}. The summaries follow the probes. Nine of the
+ten state that \texttt{built\_value} accepts a missing or null
+\texttt{tags} (the tenth attributes it to a missing \texttt{status}), and
+all ten runs found \texttt{RRRA}. One systematic summary states that
+two paths accept a fractional \texttt{id}, and one systematic run found
+\texttt{RAAR}; no larger-model summary states it, and two of its runs found
+\texttt{RAAR} anyway (Table~\ref{tab:recall}). One larger-model summary
+even states that fractional \texttt{id} values are rejected by all four
+paths, which none of its probes tested. The ``Not tested'' line that was
+meant to expose such gaps comes last in the summary and was removed by the
+length cap in eight of ten summaries, a flaw in our extension design that
+we report rather than repair after the fact.
+
 \subsection{Triage of Kotlin divergences}
 \label{sec:triage}
 
@@ -286,7 +366,7 @@ generators visited.
 
 \subsection{Answers to the research questions}
 
-\textbf{RQ1.} Not on Dart. A probing agent with 20 probes did not produce
+\textbf{RQ1.} Not on Dart. An unguided probing agent with 20 probes did not produce
 knowledge that closes the gap: probe was not distinguishable from none and
 fell well short of human knowledge. It succeeded once in five seeds, by
 accident.
@@ -303,3 +383,9 @@ behaviour; one standards violation in kotlinx.serialization's strict mode,
 previously reported only generically, surfaced mostly in runs \emph{without}
 knowledge.
 
+\textbf{RQ4.} Both remedies help on Dart: systematic probing gains 18.8
+points over no knowledge ($p \approx 0.032$; Holm 0.159 across six tests),
+a larger prober 10.6 ($p \approx 0.032$; Holm 0.064), and both make
+probing reliable, finding a divergence on every seed. Neither reaches the
+human arm's mean. What they learn is bounded by what their probes cover, and
+neither covered integer boundaries.

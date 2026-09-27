@@ -50,6 +50,10 @@ cost?
 characterization, Kotlin with four widely used JSON libraries, does probing
 knowledge help, does it rediscover a known behaviour, and does it find
 anything new?
+\item \textbf{RQ4 (remedies, pre-registered extension).} If unguided
+probing fails, is it because the probes miss the relevant inputs or because
+the model is too weak? We test a probing agent told to cover generic test
+categories first, and the unchanged agent with a larger model.
 \end{itemize}
 
 Our findings are:
@@ -69,6 +73,14 @@ values, and no probe run finds the \texttt{id} pattern.
 \item On Kotlin, where 11--14 of 20 probes diverge on every seed, probing
 knowledge helps: 67.1\% against 50.0\% over ten seeds ($p \approx 0.007$),
 using a replication declared before it ran.
+\item Both remedies help on Dart. Systematic probing reaches 20.2\%
+($p \approx 0.032$ against none; $0.16$ after Holm correction across the
+six declared tests), and every one of its runs finds the missing-field
+pattern; a larger model reaches 12.1\%. Neither reaches the human arm's mean.
+The agents covered the first checklist items thoroughly and never reached
+the 64-bit boundary items, so the integer-overflow pattern stayed mostly
+unfound: coverage decides what is learned, and a budget of 20 probes does not
+cover enough.
 \item Triage of every Kotlin divergence class found documented defaults and
 known issues, including the Gson null-safety bypass that served as our
 answer key, and one standards violation in kotlinx.serialization's strict
@@ -76,7 +88,7 @@ mode, for which we prepared a focused report.
 \end{itemize}
 
 The overall lesson is conditional. Black-box self-characterization works
-when the behaviours worth knowing are easy to stumble on, and fails when they
-are narrow. Unfortunately, narrow behaviours are exactly where an unguided
-fuzzer also fails, so they are where knowledge matters most. The data,
+when the behaviours worth knowing are easy to stumble on. When they are
+narrow, which is where an unguided fuzzer also fails and knowledge matters
+most, it works only as far as its probes are made to reach them. The data,
 agents, prompts and analysis are available at \url{\artifacturl}.
