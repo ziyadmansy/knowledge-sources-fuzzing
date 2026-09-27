@@ -239,3 +239,9 @@ $3/month org limit (resets 1 October). Actual spend is taken from the OpenAI das
   because the host went to sleep, which delayed them but did not change any result. Results are in
   `artifacts/analysis.json`. Kotlin probe vs none came out suggestive but not significant (p=0.095). Any
   replication on fresh seeds would have to be declared here before it runs (§6).
+- **2026-09-28, declared before it runs: Kotlin replication (§6 rule).** The RQ3 primary (Kotlin probe vs none,
+  n=5) came out p=0.095, δ=+0.68, which is suggestive but not significant. Both Kotlin arms are re-run on fresh
+  seeds 805–809 with everything else identical: probe knowledge is acquired anew for each new seed, and the
+  prompts and code are unchanged. Reporting will cover both the replication alone (n=5 vs 5) and the pooled data
+  (n=10 vs 10), with the original n=5 result always reported alongside. No Dart replication is declared: Dart
+  probe vs none was p=0.69, which is not the "suggestive" case.
