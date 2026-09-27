@@ -1,0 +1,38 @@
+\section{Related Work}
+
+\textbf{LLM-driven fuzzing and test generation.} LLMs have been used as
+zero-shot input generators for deep-learning libraries~\cite{deng2023titanfuzz},
+as universal fuzzers across languages~\cite{xia2024fuzz4all}, and to escape
+coverage plateaus in search-based test generation~\cite{lemieux2023codamosa}.
+These systems draw on what the model already knows from pre-training. Our
+earlier studies put such a model inside a bounded, coverage-free refinement
+loop, first against C parsers~\grammarcite{} and then against Dart
+deserializers with a differential oracle~\dartcite{}; the second is where
+the knowledge gap studied here was measured.
+
+\textbf{Knowledge from reading code.} WhiteFox~\cite{yang2024whitefox} has
+an LLM agent read compiler optimization source code and write requirements
+for test programs that trigger it. KernelGPT~\cite{yang2025kernelgpt}
+infers syscall specifications from kernel source for Syzkaller.
+DiffSpec~\cite{rao2024diffspec} generates differential tests from natural-language
+specifications and code artifacts. AIJon~\cite{vadayath2026aijon} generates
+IJON annotations from source and finds them roughly on par with human-written
+ones in a coverage-guided fuzzer. All of these derive knowledge by reading
+code or specifications, for coverage or for test requirements. None compares
+knowledge sources under control, and none acquires knowledge by running the
+target. Our \emph{code} arm is a small, controlled instance of this family;
+our \emph{probe} arm is the black-box alternative.
+
+\textbf{Differential testing of JSON processing.} Differential
+testing~\cite{mckeeman1998differential} of JSON parsers across languages has
+found many semantic discrepancies at the parsing level, text to
+tree~\cite{moller2024crosslanguage}. JsonATG~\cite{wang2025jsonatg} uses a
+multi-agent LLM pipeline to generate bug-triggering tests for Java JSON
+libraries. We test \emph{typed binding}, tree to class, where divergences
+come from how each library maps JSON onto a language's types and
+null-safety rules, and we compare four libraries on one class in two
+ecosystems.
+
+\textbf{Known Kotlin behaviour.} That Gson bypasses Kotlin null-safety is a
+long-standing known issue~\cite{gsonissue1657}, which we use as an answer
+key: a behaviour the agents should rediscover without being told.

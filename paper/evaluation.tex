@@ -1,0 +1,197 @@
+\section{Results}
+
+\subsection{RQ1 and RQ2: knowledge sources on Dart}
+
+Table~\ref{tab:dart} gives the divergence rate of every run.
+Human knowledge reproduces our previous result on fresh seeds (30.9\%,
+against 28.8\% before). Code-read knowledge sits between human and none, and
+every run in each of these three arms is ordered: all five human runs exceed
+all five code runs, which exceed all five \emph{none} runs.
+
+\begin{table}[t]
+\centering
+\caption{Dart divergence rate per run (\% of all generated documents),
+seeds 700--704 in order.}
+\label{tab:dart}
+\begin{tabular}{lrl}
+\toprule
+Arm & Mean & Per seed \\
+\midrule
+none  & 1.45  & 3.40, 0.00, 0.67, 3.20, 0.00 \\
+human & 30.89 & 21.60, 29.65, 48.30, 29.13, 25.75 \\
+code  & 11.55 & 10.10, 16.04, 8.40, 13.40, 9.80 \\
+probe & 10.51 & 1.07, \textbf{49.27}, 1.27, 0.93, 0.00 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[t]
+\centering
+\caption{Pairwise Dart comparisons: difference in mean rate (percentage
+points), exact two-sided Mann--Whitney U, Holm-adjusted $p$, Cliff's
+$\delta$. $n{=}5$ per arm.}
+\label{tab:dart-tests}
+\begin{tabular}{lrrrr}
+\toprule
+Comparison & $\Delta$ & $p$ & $p_{\mathrm{Holm}}$ & $\delta$ \\
+\midrule
+probe$-$none (primary) & $+9.05$  & 0.690 & 0.690 & $+0.20$ \\
+probe$-$human (co-prim.) & $-20.38$ & 0.151 & 0.452 & $-0.60$ \\
+human$-$none & $+29.43$ & 0.008 & 0.048 & $+1.00$ \\
+code$-$none & $+10.09$ & 0.008 & 0.048 & $+1.00$ \\
+code$-$human & $-19.34$ & 0.008 & 0.048 & $-1.00$ \\
+probe$-$code & $-1.04$  & 0.151 & 0.452 & $-0.60$ \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\textbf{RQ1.} Probe knowledge is not detectably better than none
+(Table~\ref{tab:dart-tests}, $p \approx 0.69$, $\delta = +0.20$). By the
+pre-registered rule this is ``not detected at $n{=}5$'', and the claim of
+comparability to human knowledge is not supported ($\delta = -0.60$).
+The mean hides the shape of the distribution. Four probe runs stay at or
+below 1.3\%, in the range of \emph{none}; one, seed 701, reaches 49.3\%,
+above every human run. Seed 701 is the only seed whose probing phase
+observed a divergence at all: one of its 100 probes across five seeds
+diverged (\texttt{built\_value} accepting a nested \texttt{tags: null}), and
+its summary reported it. The probes of the other four seeds diverged on
+none of their 20 documents. When probing sees nothing, its summary is a
+confident description of agreement, and the loop behaves as if it had no
+knowledge. Summaries can also overgeneralize: one states that no
+implementation throws an undocumented exception, although three of the four
+paths throw Dart's private \texttt{\_TypeError} on the probes it ran.
+
+\textbf{RQ2.} Human $>$ code $>$ none holds with the largest possible
+effect in every pair and survives the Holm correction. Code-read knowledge is
+the stable middle: it varies between 8.4\% and 16.0\% and never fails.
+Probe knowledge has a similar mean but the opposite profile. The two are not
+distinguishable at $n{=}5$.
+
+\begin{table}[t]
+\centering
+\caption{Dart pattern recall. \emph{Stated}: summaries (of five) that state
+the fact behind the pattern. \emph{Found}: runs (of five) that found the
+pattern at least once.}
+\label{tab:recall}
+\begin{tabular}{lcccc}
+\toprule
+& \multicolumn{2}{c}{\texttt{RAAR} (\texttt{id})} & \multicolumn{2}{c}{\texttt{RRRA} (\texttt{tags})} \\
+Arm & stated & found & stated & found \\
+\midrule
+none  & --   & 3/5 & --   & 3/5 \\
+human & 5/5  & 5/5 & 5/5  & 5/5 \\
+code  & 5/5  & 5/5 & 0/5  & 1/5 \\
+probe & 0/5  & 0/5 & 1/5$^{*}$ & 4/5 \\
+\bottomrule
+\end{tabular}\\[2pt]
+{\footnotesize $^{*}$Seed 701 states that \texttt{built\_value} accepts
+\texttt{tags: null}: related, but not the missing-field fact.}
+\end{table}
+
+\textbf{What the knowledge contains decides what is found.}
+Table~\ref{tab:recall} compares, for each Dart pattern, whether an arm's
+knowledge states the fact behind it with how many runs found it. Every
+code summary states that two paths accept a non-integer \texttt{id} through
+\texttt{num.toInt()}; every code run finds \texttt{RAAR}. None of them
+mentions large integers or overflow, which is the other half of the
+mechanism, but a generator that varies \texttt{id} types reaches it anyway.
+No code summary states that \texttt{built\_value} substitutes an empty
+list for a missing \texttt{tags}, and one code run finds \texttt{RRRA}.
+The probe summaries are the mirror image: none mentions a non-integer
+\texttt{id}, and no probe run finds \texttt{RAAR}, not even the one at
+49\%, whose divergences are all \texttt{RRRA}. No arm found a Dart pattern
+outside the answer key. The loop exploits what it is told; it does not
+extend it, which is what our previous study observed for human knowledge.
+
+\textbf{Cost.} A \emph{none} or \emph{human} run takes five calls, about
+\$0.014 at list prices. Code knowledge adds two calls per seed (\$0.004) and
+probing four (\$0.006), plus 20 harness executions. Knowledge acquisition is
+cheap compared with the loop; the whole study, including pilots, cost less
+than one US dollar.
+
+\subsection{RQ3: Kotlin}
+
+On Kotlin the picture is reversed. The probing agents observed divergence
+on 11 to 14 of their 20 probes on every seed: the four libraries disagree
+about wrong types, nulls, unknown keys, unknown enum constants and lenient
+syntax. The summaries record these disagreements, and the loop uses them
+(Table~\ref{tab:kotlin}).
+
+\begin{table}[t]
+\centering
+\caption{Kotlin divergence rate (\% of all documents), probe vs.\ none.
+The replication on seeds 805--809 was declared before it ran.}
+\label{tab:kotlin}
+\begin{tabular}{lrrrr}
+\toprule
+Seeds & none & probe & $p$ & $\delta$ \\
+\midrule
+800--804 (pre-registered) & 45.77 & 64.34 & 0.095 & $+0.68$ \\
+805--809 (replication)    & 54.14 & 69.92 & 0.056 & $+0.76$ \\
+pooled, $n{=}10$ per arm  & 49.95 & 67.13 & \textbf{0.007} & $+0.70$ \\
+\midrule
+pooled, RFC 8259-valid only & 42.55 & 56.49 & 0.075 & $+0.48$ \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+The pre-registered comparison on seeds 800--804 had a large effect but did
+not reach significance ($p \approx 0.095$). As the design allowed, we
+declared a replication on fresh seeds before running it; it showed the same
+direction and size ($+15.8$ points, $\delta = +0.76$), and the pooled
+comparison over ten seeds per arm is significant ($p \approx 0.007$). We
+report all three rows: neither half is significant alone.
+
+The last row restricts both arms to documents that are valid JSON under
+RFC~8259~\cite{rfc8259}. The harness's own validity label turned out to be
+too lenient during triage (Section~\ref{sec:triage}), so this row uses a
+strict parser applied after the fact, as recorded in the deviations log.
+The effect shrinks ($\delta = +0.48$, $p \approx 0.075$): part of the
+probe arm's advantage comes from malformed input that some libraries accept
+and others do not.
+
+Every Kotlin run in both arms, including all ten without knowledge,
+rediscovered the Gson null-safety bypass, in 114 to 970 documents per run.
+On Kotlin this answer key is too easy to separate the arms.
+
+\subsection{Triage of Kotlin divergences}
+\label{sec:triage}
+
+We grouped every divergent Kotlin document by pattern and exception types,
+reproduced each group by hand with a minimal document that changes one
+field of a valid record, and checked the result against each library's
+documentation and issue tracker. No run produced a value divergence:
+whenever all four libraries accepted a document, they decoded the same
+value.
+
+Eleven behaviours are documented defaults or known limitations. They are
+Gson's null-safety bypass and its mapping of unknown enum constants to
+\texttt{null}; Gson and Jackson decoding a missing or \texttt{null}
+\texttt{id} as 0, which Jackson's Kotlin module documents as a caveat;
+Gson, Moshi and Jackson accepting \texttt{null} elements in a
+\texttt{List<String>} (strict null checks are opt-in for Jackson); the coercion
+of numbers and booleans to strings; kotlinx.serialization and Jackson rejecting
+unknown keys; kotlinx.serialization requiring a nullable property with no
+default; Jackson truncating \texttt{1.9} to \texttt{1}; and Gson's lenient
+syntax; and two coercions of string values to \texttt{Long}: Jackson reading
+an empty string as 0, and Gson and Moshi accepting a numeric string with a
+fraction, such as the string \texttt{1.0}.
+
+One behaviour is a standards violation. kotlinx.serialization's
+\emph{default}, non-lenient \texttt{Json} accepts raw control characters
+(U+0000--U+001F) inside strings, which RFC~8259 forbids and which Jackson
+and Dart's \texttt{jsonDecode} reject. We reproduced it outside the harness
+on version 1.11.0 and on the latest release candidate, 1.12.0-RC. It had
+been reported only inside a generic benchmark issue that was closed as not
+planned without comment~\cite{kotlinxissue3273}, and we have prepared a
+focused report. The same leniency is why the harness's validity label,
+which used kotlinx.serialization's parser, was not RFC-strict.
+
+Two more defects surfaced only in our manual reproductions, not in any run
+or probe: Gson saturating an integer literal just above $2^{63}$ to
+\texttt{Long.MAX\_VALUE}~\cite{gsonissue1727}, and kotlinx.serialization
+wrapping integers modulo $2^{64}$, so that \texttt{18446744073709551617}
+decodes as \texttt{1}~\cite{kotlinxissue3267}. Both are known and open. We
+do not credit them to the method: like \texttt{RAAR} for the probe arm,
+they sit in a narrow numeric region that neither the probes nor the
+generators visited.

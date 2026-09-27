@@ -1,0 +1,74 @@
+\section{Discussion}
+
+\textbf{Probing is a search problem with a small budget.} A probing agent
+learns only what its probes reveal. On Dart, where divergence requires a
+specific field to be absent or an integer literal to leave the 64-bit range,
+20 probes chosen by the model's prior found a divergence on one seed in five.
+Under the same generic hint, the probes varied one field at a time, but
+none of the 100 Dart probes removed a required top-level field or used a
+non-integer or out-of-range \texttt{id}. On Kotlin, where most one-field changes separate at
+least one library from the others, every seed found a dozen divergences.
+The agent's ability to characterize a target is therefore bounded by the
+same thing that bounds the fuzzer: the density of interesting behaviour near
+the inputs the model finds natural. This is the conditional result in our
+title question. Self-acquired knowledge helps when an unguided search would
+have found some divergence anyway, and gives nothing where knowledge is most
+needed.
+
+\textbf{Negative evidence is misleading.} A probe summary that observed no
+divergence does not say ``I did not look at missing fields''; it says that
+the implementations behave identically, sometimes with an overgeneralization
+that is false. The loop then receives confident but empty knowledge. A
+practical probing agent should report what it did \emph{not} test, or be
+required to cover categories of perturbation, such as each field missing,
+each field null and each numeric boundary, before summarizing. Such a checklist
+is itself domain knowledge, so it moves the question rather than removing
+it, but it is generic across schemas and cheap to write once.
+
+\textbf{Code reading is reliable but incomplete.} The code arm never failed,
+because the facts are in the code whether or not the agent thinks to test
+them. It stated the \texttt{num.toInt()} difference in every summary and
+found \texttt{RAAR} in every run. It missed \texttt{built\_value}'s
+empty-list default, which lives in generated builder code rather than in
+the decoding call, and it never connected \texttt{toInt()} to
+\texttt{jsonDecode}'s treatment of large literals, which lives in the SDK and
+was not in its reading list. Reading more code would help, at the cost of the
+fixed budget. On Kotlin the arm could not be run at all: the equivalent logic
+is reflective or compiler-generated.
+
+\textbf{For practitioners.} Where a human characterization exists, use it:
+it was the best source by a wide margin and costs nothing at run time. Where
+source is available, a code-reading summary gives a dependable improvement
+for a few cents. A probing agent is worth running first to learn whether
+disagreement is common; if its probes find none, treat its summary as
+uninformative, not as evidence of agreement.
+
+\subsection{Threats to validity}
+
+\textbf{Sample size.} Each arm has five seeds, the smallest size at which an
+exact Mann--Whitney test can reach $p < 0.05$. The primary Dart result is a
+non-detection, and the bimodal probe distribution means a larger sample
+would most likely estimate how often probing hits, not remove the
+variance. The Kotlin result relies on a pre-declared replication and is
+weaker on RFC-valid documents alone ($p \approx 0.075$).
+
+\textbf{Knowledge quality is uncontrolled.} Summaries are capped at the
+same length but differ in accuracy, which is the variable under study. The
+cap was applied by cutting in 19 of 20 acquisitions, which drops the last
+observations; a different enforcement rule could change individual
+summaries.
+
+\textbf{One model family and one probe budget.} All agents and the loop use
+\texttt{gpt-4.1-mini}, and the probe budget of 20 is a choice. A stronger
+model or a larger budget might probe more widely; our previous study found
+that a larger model alone did not close the gap.
+
+\textbf{Post-data change.} The Kotlin harness's validity label was found to
+be lenient after the data existed. It affects only a secondary metric, which
+we recompute with a strict parser; the harness is unchanged so that the
+committed runs stay reproducible. The output-token limit was raised before
+any experiment data, for every arm.
+
+\textbf{Construct.} ``Divergence'' counts documents, and on Kotlin many of
+them express the same few documented behaviours. Pattern recall and the
+triage are reported alongside the rate for this reason.

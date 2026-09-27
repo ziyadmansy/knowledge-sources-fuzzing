@@ -1,0 +1,114 @@
+\section{Method}
+
+\subsection{Targets and oracle}
+
+Both targets decode the same logical record: a non-null integer
+\texttt{id}, a string \texttt{amount}, a nullable string \texttt{name}, a
+\texttt{status} enum with three values, a non-null list of strings
+\texttt{tags}, and a nullable recursive \texttt{child}. Each generated
+document is run through four independent deserialization paths in one
+long-lived harness process. A document \emph{diverges} if one path accepts
+it and another rejects it, or if all accept but decode different values.
+The primary metric, as in our previous study, is the percentage of all
+generated documents that diverge.
+
+\textbf{Dart} reuses our previous harness unchanged~\dartcite: hand-written
+parsing, \texttt{json\_serializable}~\cite{jsonserializable2026},
+\texttt{freezed}~\cite{freezed2026} and
+\texttt{built\_value}~\cite{builtvalue2026}, on Dart
+3.13.2~\cite{dart2026lang}. All four receive the output of one shared
+\texttt{jsonDecode}, so invalid JSON is rejected identically before any
+path runs. Two divergence patterns are known (written in path order):
+\texttt{RAAR}, where the two paths that decode \texttt{id} through
+\texttt{num.toInt()} accept a large integer literal that
+\texttt{jsonDecode} has turned into a double, and saturate it; and
+\texttt{RRRA}, where \texttt{built\_value} alone accepts a document with
+\texttt{tags} missing and substitutes an empty list.
+
+\textbf{Kotlin} uses a new harness with the same protocol and four libraries
+at their documented defaults: Gson~\cite{gson2026},
+Moshi with its generated adapter~\cite{moshi2026},
+kotlinx.serialization~\cite{kotlinxserialization2026} and Jackson with its
+Kotlin module~\cite{jacksonkotlin2026}. The record is an idiomatic data
+class with no default values and no configuration beyond the annotations each
+library needs to run. Unlike Dart, each library parses the raw text itself,
+so all four run on every input and syntax-level divergence counts. The known
+answer key is the Gson null-safety bypass~\cite{gsonissue1657}: Gson
+constructs objects without Kotlin's constructor checks, so a missing or
+\texttt{null} value for a non-null property is accepted as \texttt{null}.
+Divergence that follows from a documented default is labelled as such and
+never called a bug.
+
+\subsection{The refinement loop}
+
+The loop is our previous study's score-only loop~\dartcite, unchanged
+except for one setting. Each of five iterations asks \texttt{gpt-4.1-mini}~\cite{openai2025gpt41}
+(temperature 0.2) for a Hypothesis generator of JSON documents, draws 500
+documents from it in a restricted sandbox, and reports back how many
+diverged. The prompt describes the schema and the four paths, gives the
+score and a generic strategy hint (vary one thing at a time: a wrong type, a
+missing field, a boundary value), and asks for a new generator. A test
+rebuilds all 100 prompts committed by the previous study's score-only and
+knowledge arms byte for byte. The one change is the output-token limit,
+raised from 2{,}500 to 8{,}000 for every arm before any experiment data, after
+a pilot lost four of five generators to truncation; no experiment response
+was truncated.
+
+\subsection{Knowledge arms}
+
+Each arm fills one knowledge slot in the prompt: a one-sentence header naming
+the source, followed by a body of at most 1{,}500 characters.
+
+\textbf{None.} The slot is empty.
+
+\textbf{Human} (Dart only). The four observations from our previous study,
+verbatim (1{,}291 characters): that invalid JSON never reaches the paths;
+that \texttt{built\_value} alone accepts a missing \texttt{tags} and uses
+an empty list; that wrong types and nulls are rejected by all four in every
+case tried; and that two paths decode \texttt{id} as \texttt{num.toInt()},
+which saturates for integer literals outside the 64-bit range.
+
+\textbf{Code} (Dart only). An agent reads a fixed, per-seed identical set
+of nine source files, about 17{,}000 characters: each path's model and its
+generated \texttt{*.g.dart} code. It then writes a numbered list of
+behavioural observations. For Kotlin no comparable source exists: Gson and
+Jackson are reflective and kotlinx.serialization generates bytecode with a
+compiler plugin. That asymmetry is itself a practical argument for black-box
+probing.
+
+\textbf{Probe.} An agent designs up to 20 probe documents in two rounds, at
+most 12 then the rest, written as raw text so that non-JSON probes are
+possible. Each probe runs through the real harness, and the agent sees, per
+path, whether it accepted or rejected the document, the exception type, and
+the decoded value. After the second round it writes a numbered list of
+observations.
+
+Both agents use the same model and settings as the loop and see the same
+target description and strategy hint as the \emph{none} arm, so each starts
+from exactly the \emph{none} arm's a priori information. If a summary is
+over the cap, one shortening call follows, then a cut at the last line break
+under the cap; the cut applied in 19 of 20 acquisitions (mean body 1{,}422
+characters). Knowledge is acquired once per seed, so its quality varies
+across seeds, and that variance is part of the result.
+
+\subsection{Design and analysis}
+
+The study was pre-registered in a design document committed before any code
+or API spend; later changes are listed in a dated deviations log. Dart arms
+run on seeds 700--704 and Kotlin arms on 800--804. Pilots used seeds outside
+these ranges, and the probing and code agents' prompts were frozen after one
+pilot change: both agents were given the refinement prompt's existing
+strategy hint, which the \emph{none} arm already sees.
+
+For each run, iterations whose generator failed validation contribute no
+documents, as in our previous study. We compare arms with an exact two-sided
+Mann--Whitney U test and report the mean difference and Cliff's $\delta$.
+The primary test is \emph{probe} against \emph{none} on Dart, with
+\emph{probe} against \emph{human} co-primary; all six Dart pairs are reported
+with a Holm correction alongside raw $p$-values. The Kotlin primary is
+\emph{probe} against \emph{none}. A $p \geq 0.05$ is reported as ``not
+detected at $n{=}5$'', not as ``no effect''. A claim of comparability to
+human knowledge requires $|\delta| < 0.33$ in addition to $p \geq 0.05$.
+Replication on fresh seeds was allowed only if declared in the log before
+it ran. Secondary measures are pattern recall (the fraction of runs that
+find each known pattern at least once) and cost in calls and tokens.

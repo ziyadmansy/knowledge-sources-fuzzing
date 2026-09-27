@@ -1,0 +1,82 @@
+\section{Introduction}
+
+LLM-guided fuzzers are often described as bringing their own knowledge: a
+model trained on large amounts of code is expected to know what inputs
+stress a parser or a compiler~\cite{deng2023titanfuzz,xia2024fuzz4all}. Our
+previous study of differential testing for Dart JSON
+deserialization~\dartcite{} found the opposite in a controlled setting. A
+bounded refinement loop, in which an LLM writes and rewrites a
+Hypothesis~\cite{maciver2019hypothesis} generator from a score-only
+feedback signal, found cross-implementation divergence in only 2.9\% of
+generated documents, against 22.2\% for a hand-built static generator.
+Richer feedback, incremental mutation and a larger model did not close the
+gap. Four observations taken from a thirteen-case manual characterization
+did: with them in the prompt, the same loop reached 28.8\%. But it never
+found a divergence it had not been told about. The bottleneck was domain
+knowledge, and it came from a human.
+
+This paper asks where else that knowledge can come from. A human
+characterization is slow and requires an expert; if a fuzzer is to be
+applied to a new ecosystem, the knowledge has to be obtained some other way.
+Two automated sources are natural. An agent can \emph{read the code} of the
+implementations under test and summarize what it finds, as white-box LLM
+testing tools do~\cite{yang2024whitefox,yang2025kernelgpt,vadayath2026aijon}.
+Or an agent can \emph{run experiments}: design a small number of probe
+documents, observe how each implementation handles them, and write down what
+it learned. The second is what the human did in our previous study, and it
+needs no source code, which matters when the implementations are closed,
+generated at compile time, or reflective. We call it \emph{black-box
+self-characterization}.
+
+We compare these sources under control. The refinement loop, model,
+sampling settings and feedback are those of our previous study, unchanged;
+the only thing that differs between arms is the text in a single knowledge
+slot of the prompt, capped at 1{,}500 characters. The four arms are
+\emph{none}, \emph{human} (the four observations, verbatim),
+\emph{code} (a summary written after reading the four paths'
+deserialization code) and \emph{probe} (a summary written after running 20
+probe documents in two rounds). The design, seeds, tests and decision rules
+were fixed and committed before any code or API spend, and every later
+change is recorded in a deviations log with its reason. We ask:
+
+\begin{itemize}
+\item \textbf{RQ1 (acquisition).} Can a probing agent acquire knowledge
+that closes the refinement gap as well as human knowledge does? We answer
+this on Dart, where the answer key is known.
+\item \textbf{RQ2 (sources).} How do the four knowledge sources compare in
+divergence rate, in which known divergence patterns they lead to, and in
+cost?
+\item \textbf{RQ3 (transfer and discovery).} On an ecosystem with no human
+characterization, Kotlin with four widely used JSON libraries, does probing
+knowledge help, does it rediscover a known behaviour, and does it find
+anything new?
+\end{itemize}
+
+Our findings are:
+
+\begin{itemize}
+\item On Dart, knowledge sources are clearly ordered: human (30.9\%) above
+code-read (11.6\%) above none (1.5\%), each difference significant after
+correction. Probing reaches 10.5\% on average but is not distinguishable
+from no knowledge ($p \approx 0.69$). It is all-or-nothing: 49\% on the one
+seed whose probes hit a divergence, at most 1.3\% on the others.
+\item The divergence patterns each arm finds follow the facts its summary
+states. Every code summary states that two paths accept a non-integer
+\texttt{id}, and every code run finds the \texttt{id} pattern; no code
+summary states that one path substitutes an empty list for a missing
+\texttt{tags} field, and one code run in five finds that pattern. No probe summary mentions non-integer \texttt{id}
+values, and no probe run finds the \texttt{id} pattern.
+\item On Kotlin, where 11--14 of 20 probes diverge on every seed, probing
+knowledge helps: 67.1\% against 50.0\% over ten seeds ($p \approx 0.007$),
+using a replication declared before it ran.
+\item Triage of every Kotlin divergence class found documented defaults and
+known issues, including the Gson null-safety bypass that served as our
+answer key, and one standards violation in kotlinx.serialization's strict
+mode, for which we prepared a focused report.
+\end{itemize}
+
+The overall lesson is conditional. Black-box self-characterization works
+when the behaviours worth knowing are easy to stumble on, and fails when they
+are narrow. Unfortunately, narrow behaviours are exactly where an unguided
+fuzzer also fails, so they are where knowledge matters most. The data,
+agents, prompts and analysis are available at \url{\artifacturl}.

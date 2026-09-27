@@ -1,0 +1,51 @@
+\documentclass[conference]{IEEEtran}
+
+\usepackage{graphicx}
+\usepackage{amsmath}
+\usepackage{hyperref}
+\usepackage{booktabs}
+\usepackage{tabularx}
+\usepackage{multirow}
+
+% Companion papers (see references.bib).
+\newcommand{\grammarcite}{\cite{mansy2026agentic}}
+\newcommand{\dartcite}{\cite{mansy2026beyond}}
+
+% Repository for this paper (to be published with the artifact release, step 6).
+\newcommand{\artifacturl}{https://github.com/ziyadmansy/knowledge-sources-fuzzing}
+
+\title{Where Does an LLM Fuzzer's Domain Knowledge Come From?\\
+Human, Code-Read, and Self-Acquired Knowledge for Differential Testing of Typed Deserializers}
+
+\author{
+\IEEEauthorblockN{Ziyad Mohammad Mansy Ibrahim}
+\IEEEauthorblockA{
+Independent Researcher \\
+\texttt{ziyadmohammad37@gmail.com} \\
+ORCID: \href{https://orcid.org/0009-0008-3499-3828}{0009-0008-3499-3828}
+}
+}
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+\input{abstract}
+\end{abstract}
+
+\begin{IEEEkeywords}
+fuzzing, differential testing, large language models, domain knowledge, black-box testing, JSON deserialization, Dart, Kotlin
+\end{IEEEkeywords}
+
+\input{introduction}
+\input{related_work}
+\input{methodology}
+\input{evaluation}
+\input{discussion}
+\input{conclusion}
+
+\bibliographystyle{IEEEtran}
+\bibliography{references}
+
+\end{document}

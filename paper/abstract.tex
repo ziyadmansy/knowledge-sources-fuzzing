@@ -1,0 +1,26 @@
+An LLM-guided refinement loop for differential testing of Dart JSON
+deserializers found divergence in 2.9\% of generated documents on its own,
+but in 28.8\% when a human gave it four observations from a manual
+characterization: the bottleneck was domain knowledge, and it came from a
+person. We ask whether the fuzzer can acquire that knowledge itself. Holding
+the loop fixed and varying only a 1{,}500-character knowledge slot, we
+compare four sources in a pre-registered study: none, the human's
+observations, a summary written by an LLM agent that reads the
+deserializers' code, and a summary written by an agent that designs and runs
+20 black-box probe documents. On Dart ($n{=}5$ seeds per arm), human
+knowledge reaches 30.9\%, code-read knowledge 11.6\%, and no knowledge
+1.5\% (each pair $p \approx 0.008$, Holm-adjusted $p \approx 0.048$).
+Probing reaches 10.5\% on average, but not detectably above no knowledge
+($p \approx 0.69$): it is all-or-nothing, 49\% on the one seed whose probes
+happened to hit a divergence and at most 1.3\% on the other four. Which
+known divergence patterns each arm finds tracks exactly which facts its
+summary states. On a second ecosystem with no human characterization
+(Kotlin: Gson, Moshi, kotlinx.serialization, Jackson), where divergence is
+common, probing does help: 67.1\% against 50.0\% over ten seeds
+($p \approx 0.007$, with a replication declared before it ran). Black-box
+self-characterization works when the behaviours worth knowing are easy to
+stumble on and fails when they are narrow, which is where knowledge matters
+most. Triage of the Kotlin divergences found no new bug in the libraries'
+documented defaults, and one standards violation in
+kotlinx.serialization's strict mode that had been reported only
+generically before.

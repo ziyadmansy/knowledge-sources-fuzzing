@@ -1,0 +1,19 @@
+\section{Conclusion}
+
+An LLM refinement loop for differential testing depends on domain knowledge
+it does not have. We compared four sources of that knowledge under control,
+changing nothing but a 1{,}500-character slot in the prompt. A human
+characterization was best, a summary written from reading the code was a
+reliable second, and a summary written from 20 black-box probes was
+all-or-nothing on Dart, where divergence is rare, and clearly helpful on
+Kotlin, where it is common. Across arms, the divergence patterns found
+matched the facts the knowledge stated, and no arm went beyond them.
+Self-characterization is therefore not a substitute for knowledge where
+knowledge matters most; making it one will need probing that is
+systematic about what it covers and honest about what it did not.
+
+\section*{Data Availability}
+
+The design and deviations log, harnesses, agents, prompts, every generated
+document and summary, and the analysis scripts are available at
+\url{\artifacturl}.
