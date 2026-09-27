@@ -1,0 +1,5 @@
+# Seeding is coupled to Hypothesis internals (src/ksfuzz/seeding.py); re-verify before bumping.
+hypothesis==6.165.5
+pytest==9.1.1
+openai==3.8.0
+scipy==1.18.1

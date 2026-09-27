@@ -9,3 +9,5 @@ local.properties
 
 kotlin-harness/build/
 kotlin-harness/.kotlin/
+
+.hypothesis/

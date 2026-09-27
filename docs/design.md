@@ -175,3 +175,20 @@ $3/month org limit (resets 1 October). Actual spend is taken from the OpenAI das
   every library maps them by name with zero configuration. Documented library behaviour that follows
   from this (e.g. kotlinx.serialization requiring a default for an *optional* nullable field) counts as
   divergence, but is labelled "documented default", never "bug".
+- **2026-09-27, before any data: knowledge-slot framing.** Each arm's slot is a one-sentence header
+  naming the source ("from a hand-run characterization", "from reading their deserialization code",
+  "from running probe documents"), then the body. The 1,500-character cap applies to the body. The human
+  section is paper 2's, verbatim with its header (body: 1,291 characters), so the Dart `human` arm is
+  paper 2's knowledge-parity prompt exactly. A test (`tests/test_prompt_parity.py`) rebuilds every
+  committed paper 2 prompt for the score-only and knowledge-parity arms (20 runs, 100 prompts) byte for byte.
+- **2026-09-27, before any data: Kotlin prompt text.** It uses the same prompt skeleton, schema and
+  strategy hint as Dart. Two Dart-specific sentences are replaced with harness facts only: the path list
+  (Gson, Moshi generated adapter, kotlinx.serialization, Jackson with its Kotlin module, each at defaults
+  and decoding into the same data class), and "each library parses the raw text itself" in place of
+  Dart's "invalid JSON is rejected identically before any path runs" (false for Kotlin, see the first
+  entry). The Dart goal sentence's clause about private exception types is dropped for Kotlin, because
+  the JVM has no equivalent (Tier B is always empty there). No behavioural claim about any library
+  appears in the Kotlin `none` prompt.
+- **2026-09-27, before any data: paper 2's ablation flags are not ported.** `allow_json`,
+  `category_feedback` and `mutate_source` belong to no arm in §4. Divergence signatures counted per
+  run (for pattern recall) and LLM token usage per run (for cost) are recorded in each run's artifacts.
