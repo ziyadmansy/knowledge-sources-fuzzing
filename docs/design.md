@@ -233,19 +233,19 @@ $3/month org limit (resets 1 October). Actual spend is taken from the OpenAI das
   (the parity test still passes). Re-pilot (`artifacts/pilot/dart/probe-8k/`): 0 of 5 truncated. The two
   remaining failures were ordinary generator bugs, and one iteration found `RRRA`. Whether each response
   was truncated is now recorded per call and reported per arm. Decided by the author on 2026-09-27.
-- **2026-09-28, step 4 run log (not a deviation).** All 30 runs finished as pre-registered (Dart 700–704 ×
+- **2026-09-27, step 4 run log (not a deviation).** All 30 runs finished as pre-registered (Dart 700–704 ×
   4 arms, Kotlin 800–804 × 2 arms); no truncated responses. Summaries hit the hard cap cut in 14 of 15
   knowledge acquisitions, and the cut was recorded in each `agent.json`. Some iterations stalled for hours
   because the host went to sleep, which delayed them but did not change any result. Results are in
   `artifacts/analysis.json`. Kotlin probe vs none came out suggestive but not significant (p=0.095). Any
   replication on fresh seeds would have to be declared here before it runs (§6).
-- **2026-09-28, declared before it runs: Kotlin replication (§6 rule).** The RQ3 primary (Kotlin probe vs none,
+- **2026-09-27, declared before it runs: Kotlin replication (§6 rule).** The RQ3 primary (Kotlin probe vs none,
   n=5) came out p=0.095, δ=+0.68, which is suggestive but not significant. Both Kotlin arms are re-run on fresh
   seeds 805–809 with everything else identical: probe knowledge is acquired anew for each new seed, and the
   prompts and code are unchanged. Reporting will cover both the replication alone (n=5 vs 5) and the pooled data
   (n=10 vs 10), with the original n=5 result always reported alongside. No Dart replication is declared: Dart
   probe vs none was p=0.69, which is not the "suggestive" case.
-- **2026-09-28, AFTER data (secondary metric only): the Kotlin gate label is not RFC-strict.** During triage,
+- **2026-09-27, AFTER data (secondary metric only): the Kotlin gate label is not RFC-strict.** During triage,
   the harness's "strict reference" (`kotlinx…Json.parseToJsonElement`) turned out to accept raw U+0000–U+001F
   inside strings, unquoted string values and `NaN`, all of which RFC 8259 forbids. So the Kotlin
   `schema_evaluated` label over-counts valid JSON. The primary metric (divergence over all documents) does not
@@ -254,7 +254,7 @@ $3/month org limit (resets 1 October). Actual spend is taken from the OpenAI das
   reported as `rate_rfc_valid`. The harness is left unchanged so the committed runs stay reproducible. Original
   seeds: none 39.51%, probe 49.36% over RFC-valid objects (vs 47.02% / 64.40% under the harness label).
 
-### 10.1 Extension study (declared 2026-09-28, pushed to GitHub before any run)
+### 10.1 Extension study (declared 2026-09-27, pushed to GitHub before any run)
 
 The main study (§4–§7) is complete and its analysis is unchanged by this extension. The extension tests two
 explanations for why unguided probing failed on Dart (paper §V), with new arms only; **no seed is added to any

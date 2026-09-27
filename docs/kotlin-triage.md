@@ -3,7 +3,7 @@
 Libraries at documented defaults (design §5.2): Gson 2.14.0, Moshi 1.15.2 codegen,
 kotlinx.serialization 1.11.0, Jackson 2.22.3 + jackson-module-kotlin. Every row was
 reproduced by hand through the harness with a minimal document (valid Record with one
-thing changed). Pattern order: Gson, Moshi, kotlinx, Jackson. Checked 2026-09-28.
+thing changed). Pattern order: Gson, Moshi, kotlinx, Jackson. Checked 2026-09-27.
 
 **Found by** says where the behaviour showed up: *runs* = refinement loop artifacts
 (Kotlin arms, seeds 800–804), *probes* = probing-agent documents, *hand* = only in
