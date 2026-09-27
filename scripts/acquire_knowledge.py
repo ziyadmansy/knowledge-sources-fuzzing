@@ -50,7 +50,7 @@ def dart_code_sources() -> list[tuple[str, str]]:
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__.splitlines()[0])
     parser.add_argument("--target", choices=sorted(TARGETS), required=True)
-    parser.add_argument("--arm", choices=("probe", "code"), required=True)
+    parser.add_argument("--arm", choices=("probe", "sysprobe", "code"), required=True)
     parser.add_argument("--executable")
     parser.add_argument("--out-dir", type=Path)
     parser.add_argument("--model", default="gpt-4.1-mini")
@@ -65,7 +65,7 @@ def main() -> None:
     if args.arm == "code" and target is not DART:
         raise SystemExit("the code arm is Dart-only (docs/design.md §4.2)")
     sources = dart_code_sources() if args.arm == "code" else None
-    if args.arm == "probe" and not Path(executable).is_file():
+    if args.arm != "code" and not Path(executable).is_file():
         raise SystemExit(f"harness not found: {executable}")
     seed_dirs = [out_root / f"seed-{args.seed + i:04d}" for i in range(args.runs)]
     for d in seed_dirs:
@@ -83,13 +83,13 @@ def main() -> None:
         out_dir.mkdir(parents=True, exist_ok=True)
         manifest = build_manifest(seed, resolved_arguments(args), model=args.model)
         manifest.update(target=target.name, arm=args.arm)
-        if args.arm == "probe":
+        if args.arm != "code":
             manifest["harness_sha256"] = target.harness_sha256(executable)
         write_manifest(out_dir / "manifest.json", manifest)
         # The API call is not seedable; the seed only labels the run (§4.1: knowledge
         # quality varies across seeds, and that variance is part of the result).
-        if args.arm == "probe":
-            body = run_probe_agent(target, executable, llm, out_dir)
+        if args.arm != "code":
+            body = run_probe_agent(target, executable, llm, out_dir, systematic=args.arm == "sysprobe")
         else:
             body = run_code_agent(target, llm, sources, out_dir)
         print(f"== {out_dir} ({len(body)} chars)\n{body}\n")

@@ -55,7 +55,36 @@ def format_result(number: int, document: str, response: dict[str, Any]) -> str:
     return "\n".join(lines)
 
 
-def _probe_intro(target: Target) -> str:
+# Extension arm `sysprobe` (docs/design.md §10, declared before it ran): the same agent,
+# told to cover schema-independent test categories first (category-partition testing and
+# boundary-value analysis) and to say what it did not test. The default prompts, used by
+# the `probe` arm, are unchanged (tests/test_agents.py checks them against committed runs).
+CHECKLIST = """Probe systematically. Spend your probes on these categories first; they
+apply to any JSON schema (category-partition testing and boundary-value
+analysis), and each probe should change one thing in an otherwise valid
+document:
+1. a required field missing (one probe per field, as far as the budget allows);
+2. a non-nullable field set to null;
+3. a field with a value of the wrong JSON type (string, number, boolean,
+   array, object);
+4. a numeric field at a representation boundary: a fraction, an exponent
+   form, and integers just beyond the 32-, 53- and 64-bit ranges, positive
+   and negative;
+5. an enum-like field with an unknown value, and with a case variant;
+6. an extra unknown key, and a duplicate key;
+7. the same kinds of change inside a nested object;
+8. text that is not strict JSON: single quotes, an unquoted value, a
+   trailing comma, NaN, and a raw control character inside a string.
+You cannot cover every field in every category with the budget: prefer
+breadth across categories over repetition, and use round 2 for what
+round 1 left out or found surprising."""
+
+_NOT_TESTED = """- End with one line that starts with "Not tested:" and lists the
+  categories above that no probe covered."""
+
+
+def _probe_intro(target: Target, systematic: bool = False) -> str:
+    checklist = f"\n\n{CHECKLIST}" if systematic else ""
     return f"""You are characterizing four {target.title} by experiment, before a fuzzing campaign.
 
 {target.description}
@@ -69,7 +98,7 @@ Each probe is run through all four implementations. For each probe you see,
 per implementation, whether it accepted or rejected the document, the
 exception type if it rejected, and the decoded value if it accepted.
 
-{STRATEGY_HINT}"""
+{STRATEGY_HINT}{checklist}"""
 
 
 _PROBE_FORMAT = """Write each probe as the exact document text inside its own fenced block
@@ -80,8 +109,8 @@ labelled `probe`, like this:
 Outside the blocks, write at most one short line per probe saying what it tests."""
 
 
-def round1_prompt(target: Target) -> str:
-    return f"""{_probe_intro(target)}
+def round1_prompt(target: Target, systematic: bool = False) -> str:
+    return f"""{_probe_intro(target, systematic)}
 
 This is round 1: write at most {ROUND1_MAX} probes. After you see their results
 you get a second round with the rest of the budget, so you can follow up on
@@ -91,9 +120,9 @@ anything surprising.
 """
 
 
-def round2_prompt(target: Target, results: list[str], remaining: int) -> str:
+def round2_prompt(target: Target, results: list[str], remaining: int, systematic: bool = False) -> str:
     joined = "\n\n".join(results)
-    return f"""{_probe_intro(target)}
+    return f"""{_probe_intro(target, systematic)}
 
 Round 1 probes and their results:
 
@@ -116,15 +145,18 @@ make these four implementations disagree. Rules:
 Return only the list."""
 
 
-def probe_summary_prompt(target: Target, results: list[str]) -> str:
+def probe_summary_prompt(target: Target, results: list[str], systematic: bool = False) -> str:
     joined = "\n\n".join(results)
-    return f"""{_probe_intro(target)}
+    instruction = _SUMMARY_INSTRUCTION
+    if systematic:
+        instruction = instruction.replace("\nReturn only the list.", f"\n{_NOT_TESTED}\nReturn only the list.")
+    return f"""{_probe_intro(target, systematic)}
 
 All probes and their results:
 
 {joined}
 
-{_SUMMARY_INSTRUCTION}
+{instruction}
 """
 
 
@@ -211,19 +243,21 @@ def _run_probes(
     return formatted
 
 
-def run_probe_agent(target: Target, executable: str, llm: Any, out_dir: Path) -> str:
+def run_probe_agent(target: Target, executable: str, llm: Any, out_dir: Path, systematic: bool = False) -> str:
     out_dir.mkdir(parents=True, exist_ok=True)
-    log: dict[str, Any] = {"agent": "probe", "target": target.name}
+    log: dict[str, Any] = {"agent": "sysprobe" if systematic else "probe", "target": target.name}
     calls_before = len(llm.usage)
 
-    probes1 = _ask_for_probes(llm, round1_prompt(target), ROUND1_MAX, out_dir, "round1", log)
+    probes1 = _ask_for_probes(llm, round1_prompt(target, systematic), ROUND1_MAX, out_dir, "round1", log)
     results = _run_probes(target, executable, probes1, 1, out_dir, "round1")
     remaining = PROBE_BUDGET - len(probes1)
-    probes2 = _ask_for_probes(llm, round2_prompt(target, results, remaining), remaining, out_dir, "round2", log)
+    probes2 = _ask_for_probes(
+        llm, round2_prompt(target, results, remaining, systematic), remaining, out_dir, "round2", log
+    )
     results += _run_probes(target, executable, probes2, len(probes1) + 1, out_dir, "round2")
     log["probes"] = [len(probes1), len(probes2)]
 
-    body = _finish_summary(llm, probe_summary_prompt(target, results), out_dir, log)
+    body = _finish_summary(llm, probe_summary_prompt(target, results, systematic), out_dir, log)
     _write_log(llm, calls_before, body, out_dir, log)
     return body
 

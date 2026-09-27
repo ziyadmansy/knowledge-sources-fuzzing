@@ -8,7 +8,9 @@ the Dart `human` arm replicates paper 2's knowledge-parity prompt byte for byte.
 
 KNOWLEDGE_CAP = 1500
 
-ARMS = ("none", "human", "code", "probe")
+# `sysprobe`: extension arm, systematic probing (design §10); same header as `probe`,
+# so only the knowledge body differs between the two.
+ARMS = ("none", "human", "code", "probe", "sysprobe")
 
 _HUMAN_HEADER = """What is already known about these four implementations, from a
 hand-run characterization of them before any fuzzing (use it however you
@@ -44,6 +46,7 @@ fit):""",
 probe documents against them before any fuzzing (use it however you see
 fit):""",
 }
+_HEADERS["sysprobe"] = _HEADERS["probe"]
 
 
 class KnowledgeError(ValueError):

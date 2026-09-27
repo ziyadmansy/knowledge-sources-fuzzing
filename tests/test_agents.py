@@ -5,9 +5,18 @@ from pathlib import Path
 
 import pytest
 
-from ksfuzz.agents import PROBE_BUDGET, ROUND1_MAX, parse_probes, run_code_agent, run_probe_agent
+from ksfuzz.agents import (
+    CHECKLIST,
+    PROBE_BUDGET,
+    ROUND1_MAX,
+    parse_probes,
+    probe_summary_prompt,
+    round1_prompt,
+    run_code_agent,
+    run_probe_agent,
+)
 from ksfuzz.knowledge import KNOWLEDGE_CAP, knowledge_section
-from ksfuzz.targets import DART, KOTLIN
+from ksfuzz.targets import DART, KOTLIN, REPO_ROOT
 
 VALID = '{"id":1,"amount":"1","name":null,"status":"active","tags":[],"child":null}'
 MISSING_TAGS = '{"id":1,"amount":"1","name":null,"status":"active","child":null}'
@@ -69,3 +78,19 @@ def test_summary_over_cap_is_shortened_then_cut(tmp_path: Path) -> None:
     assert "manual.dart" in llm.prompts[0] and "Shorten" in llm.prompts[1]
     log = (tmp_path / "agent.json").read_text()
     assert '"truncated_from_chars"' in log and '"calls": 2' in log
+
+
+@pytest.mark.parametrize("target", [DART, KOTLIN], ids=lambda t: t.name)
+def test_probe_arm_prompt_unchanged_by_extension(target) -> None:
+    """The `probe` arm's committed round-1 prompts must still be what the code builds."""
+    first = sorted((REPO_ROOT / "knowledge" / target.name / "probe").glob("seed-*/round1_prompt.txt"))
+    if not first:
+        pytest.skip("no committed probe knowledge")
+    assert round1_prompt(target) == first[0].read_text(encoding="utf-8")
+
+
+def test_sysprobe_adds_checklist_and_not_tested_line() -> None:
+    assert CHECKLIST in round1_prompt(DART, systematic=True)
+    assert CHECKLIST not in round1_prompt(DART)
+    assert '"Not tested:"' in probe_summary_prompt(DART, [], systematic=True)
+    assert "Not tested" not in probe_summary_prompt(DART, [])

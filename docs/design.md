@@ -253,3 +253,36 @@ $3/month org limit (resets 1 October). Actual spend is taken from the OpenAI das
   (`rfc_object`: strict UTF-8, Python `json` with strict=True, NaN/Infinity rejected, top-level object) and
   reported as `rate_rfc_valid`. The harness is left unchanged so the committed runs stay reproducible. Original
   seeds: none 39.51%, probe 49.36% over RFC-valid objects (vs 47.02% / 64.40% under the harness label).
+
+### 10.1 Extension study (declared 2026-09-28, pushed to GitHub before any run)
+
+The main study (§4–§7) is complete and its analysis is unchanged by this extension. The extension tests two
+explanations for why unguided probing failed on Dart (paper §V), with new arms only; **no seed is added to any
+existing arm**, so no existing comparison is re-tested with more data.
+
+- **E1: `sysprobe` (systematic probing).** The same probing agent, model (`gpt-4.1-mini`), budget (20 probes,
+  12 + rest) and summary cap. Its prompt adds the category checklist in `src/ksfuzz/agents.py` (`CHECKLIST`,
+  verbatim at this commit), and its summary must end with a "Not tested:" line. The knowledge header is the same as
+  `probe`'s, so only the body differs. Seeds: Dart 700–704 and Kotlin 800–804, the same labels as the `probe`
+  arm's pre-registered seeds, so the arms pair up by seed.
+  *Bias disclosure:* the checklist was written by an author who knows the answer key. To limit this, every item is a
+  standard, schema-independent category (category-partition testing, boundary-value analysis for 32/53/64-bit
+  integers, JSON-syntax variants), and none names a field, path, or library.
+- **E2: `probe` knowledge from a larger model.** The unchanged `probe` agent and prompts, run with `gpt-4.1` for
+  knowledge acquisition only. The refinement loop stays `gpt-4.1-mini`. Dart seeds 700–704. Knowledge goes to
+  `knowledge/dart/probe-gpt41/` and runs to `artifacts/dart/probe-gpt41/`.
+
+**Tests** (exact two-sided Mann-Whitney U, mean difference, Cliff's δ; n=5 per arm):
+- E1 primary: Dart `sysprobe` vs `none`. Secondary: Dart `sysprobe` vs `probe`, vs `human`, vs `code`; Kotlin
+  `sysprobe` vs `none` (seeds 800–804) and vs `probe` (800–804). Holm correction across these six, reported next to
+  the raw p-values.
+- E2: Dart `probe-gpt41` vs `probe` and vs `none` (Holm across the two).
+- Also reported: Dart pattern recall per arm (`RAAR`, `RRRA`), probe coverage by category (the paper's Table VII),
+  whether each summary's "Not tested:" line is accurate, and cost.
+
+**Decision rules** are as in §6. If E1 shows `sysprobe` > `none` at p < 0.05 on Dart, the paper reports that the
+failure of unguided probing is a coverage problem that a generic checklist fixes. If not, it reports that coverage
+alone is not enough. If E2 shows no improvement, it reports that a larger model does not fix unguided probing
+either. No further arms or seeds are added after these results without a new, earlier entry here.
+
+**Budget:** about $0.55 (E1 about $0.26, E2 about $0.28), taken from the dashboard afterwards.
