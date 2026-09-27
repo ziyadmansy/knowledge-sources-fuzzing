@@ -192,3 +192,23 @@ $3/month org limit (resets 1 October). Actual spend is taken from the OpenAI das
 - **2026-09-27, before any data: paper 2's ablation flags are not ported.** `allow_json`,
   `category_feedback` and `mutate_source` belong to no arm in §4. Divergence signatures counted per
   run (for pattern recall) and LLM token usage per run (for cost) are recorded in each run's artifacts.
+- **2026-09-27, before any data: probing-agent protocol details (fixes §4.1's "e.g.").** Round 1 allows
+  at most 12 probes, and round 2 gets the rest of the 20. Probes are written as raw text in ```probe
+  blocks, so non-JSON probes are possible (they matter for Kotlin). Probes over a round's budget are
+  dropped in order. If a response has no probe block, the agent gets one retry with a format reminder.
+  The agent is shown, per path, accepted/rejected, the exception type, and the decoded canonical value,
+  but not the exception message (§4.1's list). A Dart input that fails the shared gate is shown as
+  "rejected before any implementation ran" with its gate status. The agent prompt uses the same target
+  description as the refinement prompt, so it holds no more a priori knowledge than the `none` arm.
+- **2026-09-27, before any data: summary cap enforcement (both agents).** If the summary is over 1,500
+  characters, there is one shortening call. If it is still over, it is cut at the last line break under
+  the cap. Both events are recorded in `agent.json`, never silently.
+- **2026-09-27, before any data: code-arm reading list.** For each Dart path, the model source and its
+  generated `*.g.dart` (manual.dart; json_serializable, freezed and built_value models and `.g.dart`;
+  built_value's serializers). That is about 17K characters, under a fixed 24K-character budget, so
+  nothing is truncated. Freezed's `.freezed.dart` (copyWith/equality boilerplate, no JSON decoding) is
+  not included, per §4.2's list. The harness entry point with the shared `jsonDecode` is not included:
+  it is not a path's deserialization code.
+- **2026-09-27, before any data: pilot seed.** The step-3 gate run uses seed 699, which is outside every
+  experiment seed range. It checks the pipeline end to end, and its output is never pooled with results.
+  Any prompt change it prompts is logged here before seeds 700+ run.
