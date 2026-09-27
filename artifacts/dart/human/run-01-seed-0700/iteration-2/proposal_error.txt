@@ -1,0 +1,1 @@
+ProposalError: generated_json is not a Hypothesis strategy: min_value=-9223372036854776808 cannot be exactly represented as a float of width 64 - use min_value=-9.223372036854776e+18 instead.

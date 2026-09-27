@@ -1,0 +1,1 @@
+ProposalError: generated_json is not a Hypothesis strategy: Expected a SearchStrategy but got <function json_string at 0x114c9b480> (type=function)

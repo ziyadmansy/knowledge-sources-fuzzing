@@ -1,0 +1,1 @@
+ProposalError: generated_json is not a Hypothesis strategy: 'str' object has no attribute 'map'

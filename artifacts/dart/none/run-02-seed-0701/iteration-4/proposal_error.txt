@@ -1,0 +1,1 @@
+ProposalError: generated_json is not a Hypothesis strategy: 'DeferredStrategy' object has no attribute 'one_of'

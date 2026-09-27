@@ -1,0 +1,40 @@
+{
+  "arguments": {
+    "arm": "probe",
+    "artifact_dir": "None",
+    "examples": "500",
+    "executable": "None",
+    "iterations": "5",
+    "knowledge_file": "knowledge/dart/probe/seed-{seed:04d}/knowledge.txt",
+    "model": "gpt-4.1-mini",
+    "overwrite": "False",
+    "runs": "5",
+    "seed": "700",
+    "target": "dart",
+    "timeout": "5.0"
+  },
+  "arm": "probe",
+  "feedback_mode": null,
+  "harness_sha256": "f63c28fbb9a901d61391740ae37ddd4cf03b5ad26d6f39a9527e849dceba6c13",
+  "hypothesis_version": "6.165.5",
+  "knowledge_section": "What is already known about these four implementations, from running\nprobe documents against them before any fuzzing (use it however you see\nfit):\n1. All four implementations accept a fully well-formed document with correct types and values (Probe 1).\n\n2. All reject if \"id\" is a string instead of int (Probe 2), with manual/json_serializable/freezed throwing _TypeError, built_value throwing DeserializationError.\n\n3. All reject if \"amount\" is an int instead of string (Probe 3), same error pattern as above.\n\n4. All reject if \"name\" is a non-null non-string (e.g., int) (Probe 4).\n\n5. All reject if \"status\" is not one of the allowed strings (\"active\", \"inactive\", \"unknown\") (Probe 5), manual/json_serializable/freezed throw ArgumentError, built_value throws DeserializationError.\n\n6. All reject if \"tags\" is not an array (Probe 6) or if array elements are not strings (Probes 7, 18, 19).\n\n7. All reject if \"child\" is an empty object {} instead of null or a valid Record (Probe 8).\n\n8. All accept nested valid \"child\" records one level deep (Probe 9).\n\n9. All reject if nested \"child\" contains an invalid \"child\" field (empty object) (Probe 10).\n\n10. All accept nested \"child\" records with extra unknown fields ignored (Probes 11, 16, 20).\n\n11. All accept top-level documents with extra unknown fields ignored (Probes 12, 17).\n\n12. All accept nested \"child\" records with one level (Probe 13) and two levels (Probe 14) of recursion.\n\n13. All reject nested \"child\" records with invalid \"child\" deeper than one level (Probe 15).",
+  "llm_usage": {
+    "calls": 5,
+    "input_tokens": 5090,
+    "output_tokens": 11212,
+    "truncated": 0
+  },
+  "model": "gpt-4.1-mini",
+  "path_order": [
+    "A_manual",
+    "B_json_serializable",
+    "C_freezed",
+    "D_built_value"
+  ],
+  "platform": "macOS-26.5.2-arm64-arm-64bit-Mach-O",
+  "python_implementation": "CPython",
+  "python_version": "3.14.7 (main, Aug  5 2026, 10:29:49) [Clang 21.0.0 (clang-2100.1.1.101)]",
+  "seed": 704,
+  "target": "dart",
+  "timestamp": "2026-09-27T09:01:33.755525+00:00"
+}

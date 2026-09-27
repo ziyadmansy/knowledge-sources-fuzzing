@@ -1,0 +1,28 @@
+{
+  "total": 500,
+  "top_level_counts": {
+    "schema_evaluated": 444,
+    "encoding_error": 20,
+    "structural_reject": 36
+  },
+  "tier_b_counts": {},
+  "tier_c_accept_reject": 289,
+  "tier_c_value": 0,
+  "unique_divergence_signatures": 8,
+  "divergence_perturbation_categories": {
+    "null_override": 15,
+    "wrong_type": 29
+  },
+  "divergence_signatures": {
+    "AARR": 29,
+    "ARRR": 180,
+    "AAAR": 56,
+    "AARA": 15,
+    "RRRA": 3,
+    "ARRA": 6
+  },
+  "tier_c_by_gate": {
+    "schema_evaluated": 263,
+    "structural_reject": 26
+  }
+}

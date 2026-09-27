@@ -233,3 +233,9 @@ $3/month org limit (resets 1 October). Actual spend is taken from the OpenAI das
   (the parity test still passes). Re-pilot (`artifacts/pilot/dart/probe-8k/`): 0 of 5 truncated. The two
   remaining failures were ordinary generator bugs, and one iteration found `RRRA`. Whether each response
   was truncated is now recorded per call and reported per arm. Decided by the author on 2026-09-27.
+- **2026-09-28, step 4 run log (not a deviation).** All 30 runs finished as pre-registered (Dart 700–704 ×
+  4 arms, Kotlin 800–804 × 2 arms); no truncated responses. Summaries hit the hard cap cut in 14 of 15
+  knowledge acquisitions, and the cut was recorded in each `agent.json`. Some iterations stalled for hours
+  because the host went to sleep, which delayed them but did not change any result. Results are in
+  `artifacts/analysis.json`. Kotlin probe vs none came out suggestive but not significant (p=0.095). Any
+  replication on fresh seeds would have to be declared here before it runs (§6).

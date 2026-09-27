@@ -1,0 +1,1 @@
+ProposalError: generated_json is not a Hypothesis strategy: Did you mean st.sampled_from(['"\x18¾É\x8c\U0007df76ÃÝ-;\x8b"', '420'])?  st.one_of() is used to combine strategies, but all of the arguments were of other types.

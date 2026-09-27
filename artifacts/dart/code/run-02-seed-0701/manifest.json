@@ -1,0 +1,40 @@
+{
+  "arguments": {
+    "arm": "code",
+    "artifact_dir": "None",
+    "examples": "500",
+    "executable": "None",
+    "iterations": "5",
+    "knowledge_file": "knowledge/dart/code/seed-{seed:04d}/knowledge.txt",
+    "model": "gpt-4.1-mini",
+    "overwrite": "False",
+    "runs": "5",
+    "seed": "700",
+    "target": "dart",
+    "timeout": "5.0"
+  },
+  "arm": "code",
+  "feedback_mode": null,
+  "harness_sha256": "f63c28fbb9a901d61391740ae37ddd4cf03b5ad26d6f39a9527e849dceba6c13",
+  "hypothesis_version": "6.165.5",
+  "knowledge_section": "What is already known about these four implementations, from reading\ntheir deserialization code before any fuzzing (use it however you see\nfit):\n1. Manual uses `as int` for `id`, rejecting floats (e.g. 1.0); json_serializable/freezed cast `(num).toInt()`, accepting integral floats.\n\n2. Manual and json_serializable/freezed accept `name: null` or string; built_value omits `name` if null but accepts null if present.\n\n3. Manual\u2019s `status` uses `Enum.values.byName` throwing raw `ArgumentError` on unknown strings; json_serializable/freezed use `$enumDecode` throwing `CheckedFromJsonException`; built_value\u2019s `valueOf` throws `ArgumentError` wrapped in `BuiltValueNestedFieldError` if nested.\n\n4. Manual casts `tags` as `List` then each element as `String`; json_serializable/freezed cast as `List<dynamic>` then map to `String`; built_value expects non-null `BuiltList<String>`. All reject non-string elements or missing/null `tags`.\n\n5. Manual and json_serializable/freezed accept `child: null` or nested object; built_value\u2019s builder requires `child` null or valid `BvRecord`. If `child` present but not a map/object, all reject.\n\n6. Enum decoding is case-sensitive exact match in all; no unknownEnumValue fallback.\n\n7. Manual\u2019s `id` and `amount` require exact types (`int` and `String`), no coercion; json_serializable/freezed coerce `id` from `num` to `int`; built_value likely requires exact types.\n\n8. Missing `name` treated as null by all; built_value omits null `name` on serialization.\n\n9. Missing or null `tags` rejected by all.",
+  "llm_usage": {
+    "calls": 5,
+    "input_tokens": 5063,
+    "output_tokens": 9204,
+    "truncated": 0
+  },
+  "model": "gpt-4.1-mini",
+  "path_order": [
+    "A_manual",
+    "B_json_serializable",
+    "C_freezed",
+    "D_built_value"
+  ],
+  "platform": "macOS-26.5.2-arm64-arm-64bit-Mach-O",
+  "python_implementation": "CPython",
+  "python_version": "3.14.7 (main, Aug  5 2026, 10:29:49) [Clang 21.0.0 (clang-2100.1.1.101)]",
+  "seed": 701,
+  "target": "dart",
+  "timestamp": "2026-09-27T04:27:48.683646+00:00"
+}

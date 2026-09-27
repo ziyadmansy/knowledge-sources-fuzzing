@@ -1,0 +1,40 @@
+{
+  "arguments": {
+    "arm": "none",
+    "artifact_dir": "None",
+    "examples": "500",
+    "executable": "None",
+    "iterations": "5",
+    "knowledge_file": "None",
+    "model": "gpt-4.1-mini",
+    "overwrite": "False",
+    "runs": "5",
+    "seed": "800",
+    "target": "kotlin",
+    "timeout": "5.0"
+  },
+  "arm": "none",
+  "feedback_mode": null,
+  "harness_sha256": "fcad662d38398cfdd5f7ff654a8c3b15f999359fca097cf358b4cf3ea47ab441",
+  "hypothesis_version": "6.165.5",
+  "knowledge_section": null,
+  "llm_usage": {
+    "calls": 5,
+    "input_tokens": 2977,
+    "output_tokens": 7278,
+    "truncated": 0
+  },
+  "model": "gpt-4.1-mini",
+  "path_order": [
+    "A_gson",
+    "B_moshi",
+    "C_kotlinx",
+    "D_jackson"
+  ],
+  "platform": "macOS-26.5.2-arm64-arm-64bit-Mach-O",
+  "python_implementation": "CPython",
+  "python_version": "3.14.7 (main, Aug  5 2026, 10:29:49) [Clang 21.0.0 (clang-2100.1.1.101)]",
+  "seed": 802,
+  "target": "kotlin",
+  "timestamp": "2026-09-27T09:16:01.273794+00:00"
+}

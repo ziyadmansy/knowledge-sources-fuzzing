@@ -1,0 +1,40 @@
+{
+  "arguments": {
+    "arm": "probe",
+    "artifact_dir": "None",
+    "examples": "500",
+    "executable": "None",
+    "iterations": "5",
+    "knowledge_file": "knowledge/kotlin/probe/seed-{seed:04d}/knowledge.txt",
+    "model": "gpt-4.1-mini",
+    "overwrite": "False",
+    "runs": "5",
+    "seed": "800",
+    "target": "kotlin",
+    "timeout": "5.0"
+  },
+  "arm": "probe",
+  "feedback_mode": null,
+  "harness_sha256": "fcad662d38398cfdd5f7ff654a8c3b15f999359fca097cf358b4cf3ea47ab441",
+  "hypothesis_version": "6.165.5",
+  "knowledge_section": "What is already known about these four implementations, from running\nprobe documents against them before any fuzzing (use it however you see\nfit):\n1. All four accept fully well-formed documents with correct types and values (Probe 1, 4, 7, 8, 10, 12).\n\n2. Gson, Moshi, Jackson, and kotlinx.serialization accept integer fields given as JSON strings and parse them as integers (Probe 2).\n\n3. Gson, Moshi, and Jackson accept numeric JSON values for the string field \"amount\" by coercing to string; kotlinx.serialization rejects (Probe 3, 13, 16).\n\n4. Gson accepts unknown enum values for \"status\" by setting the field to null; Moshi, kotlinx.serialization, and Jackson reject with exceptions (Probe 5, 17).\n\n5. All reject wrong types for array fields (e.g., \"tags\" as string) (Probe 6).\n\n6. Gson accepts empty JSON object for nullable \"child\" but fills missing fields with defaults or nulls; Moshi, kotlinx.serialization, and Jackson reject (Probe 11, 18).\n\n7. Gson and Moshi accept integer values inside string arrays by coercing to strings; kotlinx.serialization rejects; Jackson accepts coercion (Probe 15).\n\n8. Extra fields at root or nested levels are accepted by Gson and Moshi, rejected by kotlinx.serialization and Jackson (Probe 9, 19, 20).\n\n9. Nullable enum \"status\" set to null is accepted only by Gson; others reject (Probe 14).\n\n10. Jackson rejects unknown and null enum values with Kotlin-specific exceptions; Moshi and kotlinx.serialization reject with their own exceptions.",
+  "llm_usage": {
+    "calls": 5,
+    "input_tokens": 4653,
+    "output_tokens": 7209,
+    "truncated": 0
+  },
+  "model": "gpt-4.1-mini",
+  "path_order": [
+    "A_gson",
+    "B_moshi",
+    "C_kotlinx",
+    "D_jackson"
+  ],
+  "platform": "macOS-26.5.2-arm64-arm-64bit-Mach-O",
+  "python_implementation": "CPython",
+  "python_version": "3.14.7 (main, Aug  5 2026, 10:29:49) [Clang 21.0.0 (clang-2100.1.1.101)]",
+  "seed": 803,
+  "target": "kotlin",
+  "timestamp": "2026-09-27T09:55:29.143520+00:00"
+}

@@ -1,0 +1,1 @@
+ProposalError: generated_json is not a Hypothesis strategy: max_value=-9223372036854775809 cannot be exactly represented as a float of width 64 - use max_value=-9.223372036854776e+18 instead.

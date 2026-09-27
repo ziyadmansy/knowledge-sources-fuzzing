@@ -1,0 +1,40 @@
+{
+  "arguments": {
+    "arm": "probe",
+    "artifact_dir": "None",
+    "examples": "500",
+    "executable": "None",
+    "iterations": "5",
+    "knowledge_file": "knowledge/dart/probe/seed-{seed:04d}/knowledge.txt",
+    "model": "gpt-4.1-mini",
+    "overwrite": "False",
+    "runs": "5",
+    "seed": "700",
+    "target": "dart",
+    "timeout": "5.0"
+  },
+  "arm": "probe",
+  "feedback_mode": null,
+  "harness_sha256": "f63c28fbb9a901d61391740ae37ddd4cf03b5ad26d6f39a9527e849dceba6c13",
+  "hypothesis_version": "6.165.5",
+  "knowledge_section": "What is already known about these four implementations, from running\nprobe documents against them before any fuzzing (use it however you see\nfit):\n1. All four implementations accept fully well-formed documents with correct types and values (Probes 1, 8, 12, 13, 15, 16).\n\n2. All reject if \"id\" is a string instead of integer (Probe 2) or if \"amount\" is an integer instead of string (Probe 3).\n\n3. All reject if \"name\" is a non-null non-string (e.g., integer) (Probe 4); accepts string or null only.\n\n4. All reject if \"status\" is not one of the allowed strings (\"active\", \"inactive\", \"unknown\"), including \"enabled\" or null (Probes 5, 14, 19).\n\n5. The \"tags\" array must contain only strings; empty arrays are accepted; all reject if not an array of strings (Probes 6, 7).\n\n6. All reject if \"child\" is present but missing required fields or with wrong types in nested records (Probes 9, 10, 11, 17, 18, 20).\n\n7. All accept \"child\": null and nested valid child records with one level of recursion (Probes 8, 15, 16).\n\n8. Nested recursion beyond one level is accepted if types and values are correct (Probe 16).\n\n9. Extra fields beyond the schema are ignored by all and do not cause rejection (Probe 12).\n\n10. All implementations reject documents with missing required fields (implied by child empty object rejection in Probe 11).\n\n11. Exception types differ: manual, json_serializable, and freezed mostly throw _TypeError or ArgumentError; built_value throws a distinct DeserializationError on all rejections.\n\n12. No evidence of disagreement in acceptance/rejection or decoded values; all four behave identically on all probes.",
+  "llm_usage": {
+    "calls": 5,
+    "input_tokens": 5205,
+    "output_tokens": 10625,
+    "truncated": 0
+  },
+  "model": "gpt-4.1-mini",
+  "path_order": [
+    "A_manual",
+    "B_json_serializable",
+    "C_freezed",
+    "D_built_value"
+  ],
+  "platform": "macOS-26.5.2-arm64-arm-64bit-Mach-O",
+  "python_implementation": "CPython",
+  "python_version": "3.14.7 (main, Aug  5 2026, 10:29:49) [Clang 21.0.0 (clang-2100.1.1.101)]",
+  "seed": 703,
+  "target": "dart",
+  "timestamp": "2026-09-27T08:55:32.068184+00:00"
+}

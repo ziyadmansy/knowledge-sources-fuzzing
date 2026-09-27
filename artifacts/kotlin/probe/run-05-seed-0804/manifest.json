@@ -1,0 +1,40 @@
+{
+  "arguments": {
+    "arm": "probe",
+    "artifact_dir": "None",
+    "examples": "500",
+    "executable": "None",
+    "iterations": "5",
+    "knowledge_file": "knowledge/kotlin/probe/seed-{seed:04d}/knowledge.txt",
+    "model": "gpt-4.1-mini",
+    "overwrite": "False",
+    "runs": "5",
+    "seed": "800",
+    "target": "kotlin",
+    "timeout": "5.0"
+  },
+  "arm": "probe",
+  "feedback_mode": null,
+  "harness_sha256": "fcad662d38398cfdd5f7ff654a8c3b15f999359fca097cf358b4cf3ea47ab441",
+  "hypothesis_version": "6.165.5",
+  "knowledge_section": "What is already known about these four implementations, from running\nprobe documents against them before any fuzzing (use it however you see\nfit):\n1. All four accept fully well-formed documents with correct types (Probe 1).\n\n2. All accept numeric \"id\" as string, decoding to integer (Probe 2).\n\n3. Gson, Moshi, Jackson accept numeric \"amount\" as number, converting to string; kotlinx rejects (Probe 3,13).\n\n4. Gson, Moshi, Jackson accept non-string \"name\" (number, boolean), coercing to string; kotlinx rejects (Probes 4,14).\n\n5. Invalid enum \"status\" string causes Moshi, kotlinx, Jackson to reject; Gson accepts with null status (Probe 5).\n\n6. All reject non-array \"tags\" (string) (Probe 6).\n\n7. Gson, Moshi, Jackson accept non-string elements and nulls in \"tags\" array, coercing or allowing null; kotlinx rejects (Probes 7,16).\n\n8. All accept nested \"child\" with correct fields and types (Probe 8).\n\n9. All accept nested \"child\" with numeric \"id\" as string, coercing to int (Probe 9).\n\n10. Extra top-level fields cause Gson and Moshi to accept ignoring them; kotlinx and Jackson reject (Probe 10).\n\n11. Empty nested \"child\" object causes Gson to accept with default/zero values; others reject for missing required fields or nulls (Probe 12).\n\n12. Null \"status\" rejected by Moshi, kotlinx, Jackson; Gson accepts with null status (Probe 15).\n\n13. Nested \"child\" with empty \"child\" inside rejected by Moshi, kotlinx, Jackson; Gson accepts with default values (Probe 17).\n\n14. Nested \"child\" with extra fields accepted by Gson, Moshi; rejected by kotlinx, Jackson (Probe 19).",
+  "llm_usage": {
+    "calls": 5,
+    "input_tokens": 4847,
+    "output_tokens": 11761,
+    "truncated": 0
+  },
+  "model": "gpt-4.1-mini",
+  "path_order": [
+    "A_gson",
+    "B_moshi",
+    "C_kotlinx",
+    "D_jackson"
+  ],
+  "platform": "macOS-26.5.2-arm64-arm-64bit-Mach-O",
+  "python_implementation": "CPython",
+  "python_version": "3.14.7 (main, Aug  5 2026, 10:29:49) [Clang 21.0.0 (clang-2100.1.1.101)]",
+  "seed": 804,
+  "target": "kotlin",
+  "timestamp": "2026-09-27T09:57:02.641558+00:00"
+}

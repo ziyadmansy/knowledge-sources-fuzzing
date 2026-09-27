@@ -1,0 +1,79 @@
+You are refining a Hypothesis strategy to find behavioral divergence between four Dart JSON deserializers.
+
+Record schema (all six fields always present in a well-formed document):
+{
+  "id": <integer>,
+  "amount": <string>,
+  "name": <string or null>,
+  "status": <one of "active", "inactive", "unknown">,
+  "tags": <array of strings>,
+  "child": <Record or null, one level of recursion normally>
+}
+
+Four independent Dart JSON deserializers are run against every document you
+produce: hand-written manual parsing, and three codegen frameworks
+(json_serializable, freezed, built_value). Your goal is to produce documents
+that are syntactically valid JSON objects but make these four
+implementations disagree with each other -- one accepting where another
+rejects, or two accepting but decoding to different values -- or that make
+any of them fail with an undocumented (private, unnameable) exception type
+rather than a clear, catchable one.
+
+What is already known about these four implementations, from running
+probe documents against them before any fuzzing (use it however you see
+fit):
+1. All four implementations accept fully well-formed documents with correct types and values (Probes 1, 8, 11, 15, 17, 18).
+
+2. All reject type mismatches on primitive fields: "id" as string (Probe 2), "amount" as number (Probe 3), "name" as number (Probe 4).
+
+3. All reject invalid enum values for "status" (e.g., "enabled" or "ACTIVE") with ArgumentError or DeserializationError (Probes 5, 14).
+
+4. All reject arrays with invalid element types in "tags" (e.g., number or null) (Probes 6, 13).
+
+5. All reject "child" when it is an empty object or has invalid nested fields (Probes 7, 9, 16).
+
+6. All accept extra unknown fields at the root or nested level, ignoring them (Probes 10, 18).
+
+7. When duplicate keys appear, the last occurrence wins for all implementations (Probes 12, 19, 20).
+
+8. All accept "name" as null, consistent with nullable type (Probes 1, 8, 11, 15).
+
+9. Built_value rejects with a distinct DeserializationError, while others mostly throw _TypeError or ArgumentError on invalid types or enums (Probes 2–7, 13–16).
+
+10. All implementations allow one level of recursion in "child" and accept nested valid records (Probes 8, 17).
+
+11. All reject deeper invalid recursion in "child" (Probe 16).
+
+12. No evidence of disagreement in acceptance/rejection or decoded values among implementations on any probe.
+
+13. No evidence of undocumented or uncatchable exceptions; all exceptions are named and consistent per implementation.
+
+YOUR SCORE (from the last iteration that produced usable data): 0 documents
+out of 500 where the four implementations disagreed with each other
+(0 where one accepted and another rejected,
+0 where two accepted but decoded to different values).
+Maximizing this score is the objective. A high rejection count on its own
+(see tier_b_counts below) is not the goal by itself -- a document every
+implementation rejects the same way scores zero, no matter how "malformed"
+it looks.
+
+Other metrics from that iteration, for context only:
+{"tier_b_counts": {}, "top_level_counts": {"schema_evaluated": 265, "structural_reject": 235}, "total": 500, "unique_divergence_signatures": 1}
+
+
+Strategy hint: implementations are more likely to disagree on documents that
+are *almost* well-formed with one specific thing off (a field of the wrong
+type, a field missing rather than present-but-wrong, a value at a type
+boundary) than on documents that are broadly malformed in many ways at once
+-- broad malformation tends to make every implementation reject identically,
+which scores zero. Vary one or two things about an otherwise valid document
+at a time, across many documents, rather than maximizing how unusual any
+single document looks.
+
+Return only Python source defining `@st.composite def generated_json(draw) -> bytes`.
+Emit syntactically valid JSON objects only (invalid JSON syntax is rejected
+identically by all four paths before any of them run, so it cannot score).
+Use bounded recursion and output sizes. The campaign runs at most 500
+examples per iteration. The only import allowed is `from hypothesis import strategies as st` -- do not import `json` or anything else; build the JSON text yourself with string concatenation and Hypothesis `.map()`/`.flatmap()` transforms.
+Do not use subprocesses, filesystem, network access, eval, exec, or
+coverage instrumentation.

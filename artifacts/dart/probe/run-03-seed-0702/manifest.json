@@ -1,0 +1,40 @@
+{
+  "arguments": {
+    "arm": "probe",
+    "artifact_dir": "None",
+    "examples": "500",
+    "executable": "None",
+    "iterations": "5",
+    "knowledge_file": "knowledge/dart/probe/seed-{seed:04d}/knowledge.txt",
+    "model": "gpt-4.1-mini",
+    "overwrite": "False",
+    "runs": "5",
+    "seed": "700",
+    "target": "dart",
+    "timeout": "5.0"
+  },
+  "arm": "probe",
+  "feedback_mode": null,
+  "harness_sha256": "f63c28fbb9a901d61391740ae37ddd4cf03b5ad26d6f39a9527e849dceba6c13",
+  "hypothesis_version": "6.165.5",
+  "knowledge_section": "What is already known about these four implementations, from running\nprobe documents against them before any fuzzing (use it however you see\nfit):\n1. All four implementations accept fully well-formed documents with correct types and values (Probes 1, 8, 11, 15, 17, 18).\n\n2. All reject type mismatches on primitive fields: \"id\" as string (Probe 2), \"amount\" as number (Probe 3), \"name\" as number (Probe 4).\n\n3. All reject invalid enum values for \"status\" (e.g., \"enabled\" or \"ACTIVE\") with ArgumentError or DeserializationError (Probes 5, 14).\n\n4. All reject arrays with invalid element types in \"tags\" (e.g., number or null) (Probes 6, 13).\n\n5. All reject \"child\" when it is an empty object or has invalid nested fields (Probes 7, 9, 16).\n\n6. All accept extra unknown fields at the root or nested level, ignoring them (Probes 10, 18).\n\n7. When duplicate keys appear, the last occurrence wins for all implementations (Probes 12, 19, 20).\n\n8. All accept \"name\" as null, consistent with nullable type (Probes 1, 8, 11, 15).\n\n9. Built_value rejects with a distinct DeserializationError, while others mostly throw _TypeError or ArgumentError on invalid types or enums (Probes 2\u20137, 13\u201316).\n\n10. All implementations allow one level of recursion in \"child\" and accept nested valid records (Probes 8, 17).\n\n11. All reject deeper invalid recursion in \"child\" (Probe 16).\n\n12. No evidence of disagreement in acceptance/rejection or decoded values among implementations on any probe.\n\n13. No evidence of undocumented or uncatchable exceptions; all exceptions are named and consistent per implementation.",
+  "llm_usage": {
+    "calls": 5,
+    "input_tokens": 5286,
+    "output_tokens": 9944,
+    "truncated": 0
+  },
+  "model": "gpt-4.1-mini",
+  "path_order": [
+    "A_manual",
+    "B_json_serializable",
+    "C_freezed",
+    "D_built_value"
+  ],
+  "platform": "macOS-26.5.2-arm64-arm-64bit-Mach-O",
+  "python_implementation": "CPython",
+  "python_version": "3.14.7 (main, Aug  5 2026, 10:29:49) [Clang 21.0.0 (clang-2100.1.1.101)]",
+  "seed": 702,
+  "target": "dart",
+  "timestamp": "2026-09-27T08:52:47.263149+00:00"
+}

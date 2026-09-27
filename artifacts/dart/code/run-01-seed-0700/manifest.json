@@ -1,0 +1,40 @@
+{
+  "arguments": {
+    "arm": "code",
+    "artifact_dir": "None",
+    "examples": "500",
+    "executable": "None",
+    "iterations": "5",
+    "knowledge_file": "knowledge/dart/code/seed-{seed:04d}/knowledge.txt",
+    "model": "gpt-4.1-mini",
+    "overwrite": "False",
+    "runs": "5",
+    "seed": "700",
+    "target": "dart",
+    "timeout": "5.0"
+  },
+  "arm": "code",
+  "feedback_mode": null,
+  "harness_sha256": "f63c28fbb9a901d61391740ae37ddd4cf03b5ad26d6f39a9527e849dceba6c13",
+  "hypothesis_version": "6.165.5",
+  "knowledge_section": "What is already known about these four implementations, from reading\ntheir deserialization code before any fuzzing (use it however you see\nfit):\n1. Manual parsing uses `as` casts and `Enum.values.byName` which throws a raw `ArgumentError` if `status` is not exactly \"active\", \"inactive\", or \"unknown\". It expects `id` as int, `amount` as String, `name` as String or null (field must exist), `tags` as List<String>, and `child` as null or nested Map.\n\n2. json_serializable and freezed share JSON decoding logic via `$enumDecode`, throwing `CheckedFromJsonException` on unknown enum strings. They accept `id` as any num (converted to int), `amount` as String, `name` nullable and optionally missing, `tags` as List<dynamic> mapped to String, and `child` recursively.\n\n3. built_value uses typed `Serializers` with `StandardJsonPlugin`. It expects `id` as int, `amount` as String, `name` nullable and optionally missing, `tags` as `BuiltList<String>`, and `child` nullable `BvRecord`. Enum deserialization throws `ArgumentError` wrapped in built_value errors.\n\n4. built_value omits `name` and `child` if null during serialization and tolerates missing fields during deserialization (sets to null). Manual, json_serializable, and freezed require these fields present (though nullable).\n\n5. Manual and built_value require `id` strictly as int; json_serializable and freezed accept any num and convert via `.toInt()`.\n\n6. Manual and built_value throw raw or wrapped `ArgumentError` on unknown enum strings; json_serializable and freezed throw documented `CheckedFromJsonException`.",
+  "llm_usage": {
+    "calls": 5,
+    "input_tokens": 5014,
+    "output_tokens": 8248,
+    "truncated": 0
+  },
+  "model": "gpt-4.1-mini",
+  "path_order": [
+    "A_manual",
+    "B_json_serializable",
+    "C_freezed",
+    "D_built_value"
+  ],
+  "platform": "macOS-26.5.2-arm64-arm-64bit-Mach-O",
+  "python_implementation": "CPython",
+  "python_version": "3.14.7 (main, Aug  5 2026, 10:29:49) [Clang 21.0.0 (clang-2100.1.1.101)]",
+  "seed": 700,
+  "target": "dart",
+  "timestamp": "2026-09-27T04:08:40.142533+00:00"
+}

@@ -1,0 +1,13 @@
+{
+  "total": 1,
+  "top_level_counts": {
+    "proposal_rejected": 1
+  },
+  "tier_b_counts": {},
+  "tier_c_accept_reject": 0,
+  "tier_c_value": 0,
+  "unique_divergence_signatures": 0,
+  "divergence_perturbation_categories": {},
+  "divergence_signatures": {},
+  "tier_c_by_gate": {}
+}

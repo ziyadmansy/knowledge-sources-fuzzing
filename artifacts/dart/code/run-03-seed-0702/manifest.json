@@ -1,0 +1,40 @@
+{
+  "arguments": {
+    "arm": "code",
+    "artifact_dir": "None",
+    "examples": "500",
+    "executable": "None",
+    "iterations": "5",
+    "knowledge_file": "knowledge/dart/code/seed-{seed:04d}/knowledge.txt",
+    "model": "gpt-4.1-mini",
+    "overwrite": "False",
+    "runs": "5",
+    "seed": "700",
+    "target": "dart",
+    "timeout": "5.0"
+  },
+  "arm": "code",
+  "feedback_mode": null,
+  "harness_sha256": "f63c28fbb9a901d61391740ae37ddd4cf03b5ad26d6f39a9527e849dceba6c13",
+  "hypothesis_version": "6.165.5",
+  "knowledge_section": "What is already known about these four implementations, from reading\ntheir deserialization code before any fuzzing (use it however you see\nfit):\n1. Manual uses `json['id'] as int` and `json['amount'] as String` with direct casts, rejecting if `id` is not exactly int or `amount` not string; json_serializable/freezed cast `id` as `num` then `.toInt()`, accepting floats like 1.0 as id, but manual rejects those.\n\n2. Manual\u2019s `status` uses `Enum.values.byName` throwing raw `ArgumentError` on unknown enum strings; json_serializable/freezed use `$enumDecode` throwing `CheckedFromJsonException` with clear messages; built_value\u2019s `valueOf` throws `ArgumentError` similarly but wrapped in `BuiltValueNestedFieldError` if nested.\n\n3. Manual casts `tags` as `List` then maps elements as `String` with `e as String`, rejecting non-string tags; json_serializable/freezed cast `tags` as `List<dynamic>` then map; built_value expects `BuiltList<String>` and uses `serializers.deserialize`, rejecting non-string lists but with different error types.\n\n4. Manual and json_serializable/freezed accept nullable `name` via `json['name'] as String?`; built_value\u2019s `name` is nullable and omitted if null, accepting missing or null `name`.\n\n5. Manual and json_serializable/freezed accept `child` as null or nested record; built_value requires `child` deserialized via `serializers.deserialize` as `BvRecord`, rejecting invalid nested objects and throwing `BuiltValueNestedFieldError` on partial/malformed `child`.",
+  "llm_usage": {
+    "calls": 5,
+    "input_tokens": 4924,
+    "output_tokens": 8819,
+    "truncated": 0
+  },
+  "model": "gpt-4.1-mini",
+  "path_order": [
+    "A_manual",
+    "B_json_serializable",
+    "C_freezed",
+    "D_built_value"
+  ],
+  "platform": "macOS-26.5.2-arm64-arm-64bit-Mach-O",
+  "python_implementation": "CPython",
+  "python_version": "3.14.7 (main, Aug  5 2026, 10:29:49) [Clang 21.0.0 (clang-2100.1.1.101)]",
+  "seed": 702,
+  "target": "dart",
+  "timestamp": "2026-09-27T04:46:54.369238+00:00"
+}

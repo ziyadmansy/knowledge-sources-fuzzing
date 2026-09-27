@@ -1,0 +1,40 @@
+{
+  "arguments": {
+    "arm": "probe",
+    "artifact_dir": "None",
+    "examples": "500",
+    "executable": "None",
+    "iterations": "5",
+    "knowledge_file": "knowledge/kotlin/probe/seed-{seed:04d}/knowledge.txt",
+    "model": "gpt-4.1-mini",
+    "overwrite": "False",
+    "runs": "5",
+    "seed": "800",
+    "target": "kotlin",
+    "timeout": "5.0"
+  },
+  "arm": "probe",
+  "feedback_mode": null,
+  "harness_sha256": "fcad662d38398cfdd5f7ff654a8c3b15f999359fca097cf358b4cf3ea47ab441",
+  "hypothesis_version": "6.165.5",
+  "knowledge_section": "What is already known about these four implementations, from running\nprobe documents against them before any fuzzing (use it however you see\nfit):\n1. All four accept fully well-formed documents with correct types (Probe 1).\n\n2. All accept numeric \"id\" as integer or string convertible to integer (Probes 2, 9).\n\n3. Gson, Moshi, Jackson accept \"amount\" as string or number (converted to string); kotlinx rejects number (Probes 3, 13).\n\n4. Gson and Jackson accept \"name\" as string, number, or boolean (converted to string); Moshi and kotlinx reject non-string non-null \"name\" (Probes 4, 14).\n\n5. All accept \"name\" as null (Probes 1, 5, 7, 10).\n\n6. For \"status\", only exact enum strings \"active\", \"inactive\", \"unknown\" accepted; invalid values cause Moshi, kotlinx, Jackson to reject; Gson accepts but sets null (Probe 5).\n\n7. \"tags\" must be an array; non-array causes all to reject (Probe 6).\n\n8. Gson, Moshi, Jackson accept non-string elements in \"tags\" by converting to strings; kotlinx rejects (Probe 7).\n\n9. Nested \"child\" records accepted recursively with same rules (Probes 8, 9, 12).\n\n10. Empty object for \"child\" accepted by Gson with defaults; rejected by Moshi, kotlinx, Jackson (Probe 11).\n\n11. Invalid enum in nested \"child\" causes Moshi, kotlinx, Jackson to reject; Gson accepts with null (Probe 16).\n\n12. Numeric \"amount\" in nested \"child\" accepted by Gson, Moshi, Jackson (converted to string); rejected by kotlinx (Probe 17).\n\n13. Null \"status\" in nested \"child\" rejected by Moshi, kotlinx, Jackson; accepted by Gson with null (Probe 18).\n\n14. Null elements in \"tags\" accepted by Gson, Moshi, Jackson; rejected by kotlinx (Probe 15).",
+  "llm_usage": {
+    "calls": 5,
+    "input_tokens": 5107,
+    "output_tokens": 10654,
+    "truncated": 0
+  },
+  "model": "gpt-4.1-mini",
+  "path_order": [
+    "A_gson",
+    "B_moshi",
+    "C_kotlinx",
+    "D_jackson"
+  ],
+  "platform": "macOS-26.5.2-arm64-arm-64bit-Mach-O",
+  "python_implementation": "CPython",
+  "python_version": "3.14.7 (main, Aug  5 2026, 10:29:49) [Clang 21.0.0 (clang-2100.1.1.101)]",
+  "seed": 801,
+  "target": "kotlin",
+  "timestamp": "2026-09-27T09:52:35.740141+00:00"
+}

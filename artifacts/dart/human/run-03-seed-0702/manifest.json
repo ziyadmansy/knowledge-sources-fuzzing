@@ -1,0 +1,40 @@
+{
+  "arguments": {
+    "arm": "human",
+    "artifact_dir": "None",
+    "examples": "500",
+    "executable": "None",
+    "iterations": "5",
+    "knowledge_file": "None",
+    "model": "gpt-4.1-mini",
+    "overwrite": "False",
+    "runs": "5",
+    "seed": "700",
+    "target": "dart",
+    "timeout": "5.0"
+  },
+  "arm": "human",
+  "feedback_mode": null,
+  "harness_sha256": "f63c28fbb9a901d61391740ae37ddd4cf03b5ad26d6f39a9527e849dceba6c13",
+  "hypothesis_version": "6.165.5",
+  "knowledge_section": "What is already known about these four implementations, from a\nhand-run characterization of them before any fuzzing (use it however you\nsee fit):\n1. All four receive the output of one shared `jsonDecode` call. Invalid\n   JSON syntax, or a top-level value that is not an object, is rejected\n   identically before any of them runs, so it can never cause disagreement.\n2. When the `tags` field is missing entirely, built_value accepts the\n   document and silently uses an empty list, while manual, json_serializable\n   and freezed reject it. Missing `id`, `amount` or `status` is rejected by\n   all four.\n3. A wrong JSON type for a field, or null for a non-nullable field, was\n   rejected by all four in every case tried (manual, json_serializable and\n   freezed throw a private `_TypeError`; built_value throws its own public\n   `DeserializationError`). An unrecognized `status` string is rejected by\n   all four. An extra unknown top-level key, or a missing nullable `name`\n   or `child`, is accepted by all four.\n4. `id` decoding differs in the generated code: manual (`json['id'] as int`)\n   and built_value require a true Dart int, while json_serializable and\n   freezed decode it as `(json['id'] as num).toInt()`, which also accepts a\n   Dart double. `jsonDecode` turns an integer literal outside the 64-bit\n   range into a double, and `toInt()` on an out-of-range double saturates to\n   the int64 minimum/maximum instead of throwing.",
+  "llm_usage": {
+    "calls": 5,
+    "input_tokens": 4953,
+    "output_tokens": 7955,
+    "truncated": 0
+  },
+  "model": "gpt-4.1-mini",
+  "path_order": [
+    "A_manual",
+    "B_json_serializable",
+    "C_freezed",
+    "D_built_value"
+  ],
+  "platform": "macOS-26.5.2-arm64-arm-64bit-Mach-O",
+  "python_implementation": "CPython",
+  "python_version": "3.14.7 (main, Aug  5 2026, 10:29:49) [Clang 21.0.0 (clang-2100.1.1.101)]",
+  "seed": 702,
+  "target": "dart",
+  "timestamp": "2026-09-27T03:25:02.672080+00:00"
+}

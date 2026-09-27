@@ -1,0 +1,1 @@
+ProposalError: generated_json is not a Hypothesis strategy: accept.<locals>.generated_json() takes 0 positional arguments but 1 was given
