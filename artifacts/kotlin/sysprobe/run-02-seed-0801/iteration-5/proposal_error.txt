@@ -1,0 +1,1 @@
+ProposalError: generated_json is not a Hypothesis strategy: Expected a SearchStrategy but got definition()='{"id":57,"amount":"ëþL´}","name":"\x07dï\U0008e9c4/","status":"active","tags":["4A\U000b3c2b"],"child":null}' (type=str)

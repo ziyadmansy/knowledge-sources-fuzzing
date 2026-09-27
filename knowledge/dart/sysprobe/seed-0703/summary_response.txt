@@ -1,0 +1,11 @@
+1. All four reject documents missing required fields (Probes 1, 2, 4, 5) but built_value sometimes accepts missing "tags" or "child" (Probes 5, 6).
+2. All reject null for non-nullable fields "id", "amount", "status", "tags" except built_value accepts null "tags" and treats it as empty array (Probes 7, 8, 9, 10, 13).
+3. All reject wrong JSON types for fields "id" (null), "amount" (number), "status" (null), "tags" (null except built_value), and nested fields with wrong types (Probes 7, 8, 9, 10, 12, 13, 19).
+4. Enum "status" must be exactly "active", "inactive", or "unknown" lowercase; any unknown or case variant is rejected by all (Probes 15, 16).
+5. Extra unknown keys are ignored by all implementations (Probe 14).
+6. Duplicate keys were not tested.
+7. Nested objects are parsed recursively with same rules; built_value accepts null "tags" in nested child but others reject (Probes 17, 18, 19, 20).
+8. All implementations reject documents missing "tags" or "child" except built_value which accepts missing "tags" and "child" as empty or null (Probes 5, 6).
+9. Exception types differ: manual, json_serializable, and freezed mostly throw _TypeError or ArgumentError; built_value throws DeserializationError.
+10. No evidence of silent decoding differences; all accepted documents decode identically.
+Not tested: numeric field boundary values, duplicate keys, non-strict JSON syntax (single quotes, unquoted values, trailing commas, NaN, control characters).

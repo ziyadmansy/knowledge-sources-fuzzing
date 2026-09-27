@@ -1,0 +1,39 @@
+```probe
+{"id": 14, "amount": "0.01", "name": "NullName", "status": "active", "tags": [], "child": {"id": 15, "amount": "0.01", "name": null, "status": "active", "tags": [], "child": null}}
+```
+Tests: Nested child with name explicitly null (vs omitted).
+
+```probe
+{"id": 16, "amount": "0.01", "name": "Extra", "status": "active", "tags": [], "child": null, "extra": 123}
+```
+Tests: Extra unexpected field at top level.
+
+```probe
+{"id": 17, "amount": "0.01", "name": "MissingTags", "status": "active", "child": null}
+```
+Tests: Missing required field ("tags" omitted).
+
+```probe
+{"id": 18, "amount": "0.01", "name": "EmptyStringStatus", "status": "", "tags": [], "child": null}
+```
+Tests: Status as empty string (not in allowed set).
+
+```probe
+{"id": 19, "amount": "0.01", "name": "NullTags", "status": "active", "tags": null, "child": null}
+```
+Tests: "tags" explicitly null instead of array.
+
+```probe
+{"id": 20, "amount": "0.01", "name": "FloatId", "status": "active", "tags": [], "child": null}
+```
+Tests: id as float (e.g., 20.0 instead of 20).
+
+```probe
+{"id": 21, "amount": "0.01", "name": "EmptyTags", "status": "active", "tags": [], "child": {"id": 22, "amount": "0.01", "name": "Child", "status": "active", "tags": [], "child": {"id": 23, "amount": "0.01", "name": "Grandchild", "status": "active", "tags": [], "child": null}}}
+```
+Tests: Recursion depth > 1 (grandchild present).
+
+```probe
+{"id": 24, "amount": "0.01", "name": "NullChildField", "status": "active", "tags": [], "child": {"id": 25, "amount": "0.01", "name": "Child", "status": "active", "tags": [], "child": 42}}
+```
+Tests: Child field present but wrong type (number instead of object/null).

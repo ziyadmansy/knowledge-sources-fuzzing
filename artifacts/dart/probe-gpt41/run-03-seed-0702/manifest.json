@@ -1,0 +1,40 @@
+{
+  "arguments": {
+    "arm": "probe",
+    "artifact_dir": "artifacts/dart/probe-gpt41",
+    "examples": "500",
+    "executable": "None",
+    "iterations": "5",
+    "knowledge_file": "knowledge/dart/probe-gpt41/seed-{seed:04d}/knowledge.txt",
+    "model": "gpt-4.1-mini",
+    "overwrite": "False",
+    "runs": "5",
+    "seed": "700",
+    "target": "dart",
+    "timeout": "5.0"
+  },
+  "arm": "probe",
+  "feedback_mode": null,
+  "harness_sha256": "f63c28fbb9a901d61391740ae37ddd4cf03b5ad26d6f39a9527e849dceba6c13",
+  "hypothesis_version": "6.165.5",
+  "knowledge_section": "What is already known about these four implementations, from running\nprobe documents against them before any fuzzing (use it however you see\nfit):\n1. All implementations agree on well-formed documents and on most malformed documents, except for \"tags\" field handling.\n2. All reject type mismatches for \"id\", \"amount\", \"name\", \"status\", \"tags\", and \"child\" fields, but built_value always throws DeserializationError, while others throw _TypeError or ArgumentError.\n3. \"name\" is optional; if missing, all decode as null.\n4. \"tags\" as null or as an object (not array) is accepted by built_value (decoded as empty list), but rejected by others.\n5. \"tags\" containing non-string elements or being a string is rejected by all.\n6. \"status\" must be one of \"active\", \"inactive\", \"unknown\"; null, empty string, or unknown values are rejected by all (ArgumentError/DeserializationError).\n7. \"amount\" accepts any string, even if not numeric.\n8. \"child\" must be null or a valid record; missing required fields or type mismatches in \"child\" are rejected by all.\n9. All reject \"child\" as array or empty object.\n10. All accept \"name\" as null or string.\n11. built_value is more permissive for \"tags\" null/object, but otherwise matches others.\n12. No implementation throws a private/unnamed exception; all exceptions are recognizable.\n13. No implementation decodes to different values when accepting the same document, except for built_value's handling of \"tags\": null/object becomes [].",
+  "llm_usage": {
+    "calls": 5,
+    "input_tokens": 4904,
+    "output_tokens": 6661,
+    "truncated": 0
+  },
+  "model": "gpt-4.1-mini",
+  "path_order": [
+    "A_manual",
+    "B_json_serializable",
+    "C_freezed",
+    "D_built_value"
+  ],
+  "platform": "macOS-26.5.2-arm64-arm-64bit-Mach-O",
+  "python_implementation": "CPython",
+  "python_version": "3.14.7 (main, Aug  5 2026, 10:29:49) [Clang 21.0.0 (clang-2100.1.1.101)]",
+  "seed": 702,
+  "target": "dart",
+  "timestamp": "2026-09-27T14:47:58.051255+00:00"
+}

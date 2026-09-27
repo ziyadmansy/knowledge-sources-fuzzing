@@ -1,0 +1,8 @@
+1. All implementations accept well-formed records, including with null or nested child, and ignore extra fields (Probes 1, 4, 11, 13, 14, 18, 19).
+2. All reject fields with wrong types (e.g., string id, numeric amount, numeric name, string tags, tags with non-string, non-object child), but built_value always throws DeserializationError, while others throw _TypeError (Probes 2, 3, 5, 8, 9, 10, 12, 20).
+3. All accept missing "name" (interpreted as null), but reject missing required fields like "tags" except built_value, which defaults missing "tags" to [] (Probes 4, 15).
+4. All reject null or invalid "status" (null, empty string, or unrecognized value), but built_value always throws DeserializationError, others throw ArgumentError (Probes 6, 7, 16).
+5. All accept "id" as integer only; float or string is rejected (Probes 2, 3, 18).
+6. All accept "tags" as [], but only built_value accepts "tags": null, interpreting it as [] (Probe 17).
+7. All accept nested "child" records if well-formed, but reject if any required field is missing or of wrong type within the child (Probes 11, 12, 13, 19, 20).
+8. No implementation fails with a private/unnamed exception; all exceptions are either _TypeError, ArgumentError, or DeserializationError.

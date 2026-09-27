@@ -1,0 +1,71 @@
+1. Control: fully well-formed document.
+```probe
+{"id": 1, "amount": "1", "name": "Alice", "status": "active", "tags": ["foo", "bar"], "child": null}
+```
+Tests baseline acceptance.
+
+2. id as string instead of integer.
+```probe
+{"id": "1", "amount": "1", "name": "Alice", "status": "active", "tags": ["foo", "bar"], "child": null}
+```
+Tests integer field as string.
+
+3. amount as number instead of string.
+```probe
+{"id": 2, "amount": 100, "name": "Bob", "status": "inactive", "tags": ["baz"], "child": null}
+```
+Tests string field as number.
+
+4. name omitted (missing field).
+```probe
+{"id": 3, "amount": "10", "status": "unknown", "tags": [], "child": null}
+```
+Tests missing required field.
+
+5. name as number instead of string or null.
+```probe
+{"id": 4, "amount": "20", "name": 123, "status": "active", "tags": ["x"], "child": null}
+```
+Tests string-or-null field as number.
+
+6. status as invalid string.
+```probe
+{"id": 5, "amount": "30", "name": "Carol", "status": "pending", "tags": ["y"], "child": null}
+```
+Tests enum field with unknown value.
+
+7. tags as string instead of array.
+```probe
+{"id": 6, "amount": "40", "name": "Dave", "status": "inactive", "tags": "not-an-array", "child": null}
+```
+Tests array field as string.
+
+8. tags as array with non-string element.
+```probe
+{"id": 7, "amount": "50", "name": "Eve", "status": "active", "tags": ["ok", 42], "child": null}
+```
+Tests array of strings with a number inside.
+
+9. child as empty object.
+```probe
+{"id": 8, "amount": "60", "name": "Frank", "status": "unknown", "tags": [], "child": {}}
+```
+Tests recursive field as empty object (missing required fields).
+
+10. child as string instead of object or null.
+```probe
+{"id": 9, "amount": "70", "name": "Grace", "status": "active", "tags": [], "child": "not-an-object"}
+```
+Tests recursive field as wrong type.
+
+11. Extra field present.
+```probe
+{"id": 10, "amount": "80", "name": "Heidi", "status": "inactive", "tags": [], "child": null, "extra": 123}
+```
+Tests unknown/extra field handling.
+
+12. All fields present but all null.
+```probe
+{"id": null, "amount": null, "name": null, "status": null, "tags": null, "child": null}
+```
+Tests all fields present but null (except name and child, which allow null).

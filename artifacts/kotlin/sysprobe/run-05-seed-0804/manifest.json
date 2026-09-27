@@ -1,0 +1,40 @@
+{
+  "arguments": {
+    "arm": "sysprobe",
+    "artifact_dir": "None",
+    "examples": "500",
+    "executable": "None",
+    "iterations": "5",
+    "knowledge_file": "knowledge/kotlin/sysprobe/seed-{seed:04d}/knowledge.txt",
+    "model": "gpt-4.1-mini",
+    "overwrite": "False",
+    "runs": "5",
+    "seed": "800",
+    "target": "kotlin",
+    "timeout": "5.0"
+  },
+  "arm": "sysprobe",
+  "feedback_mode": null,
+  "harness_sha256": "fcad662d38398cfdd5f7ff654a8c3b15f999359fca097cf358b4cf3ea47ab441",
+  "hypothesis_version": "6.165.5",
+  "knowledge_section": "What is already known about these four implementations, from running\nprobe documents against them before any fuzzing (use it however you see\nfit):\n1. Gson accepts missing non-nullable fields, decoding missing integers as 0, missing strings as null, and missing enums as null; Moshi and kotlinx.serialization reject missing required fields; Jackson rejects missing non-nullable fields except it accepts missing \"child\".  \n2. Gson and Jackson accept null for non-nullable integer \"id\" (decoding as 0); Moshi and kotlinx.serialization reject null for \"id\".  \n3. Gson accepts null for non-nullable string \"amount\" as null; Moshi, kotlinx.serialization, and Jackson reject null for \"amount\".  \n4. Gson, Jackson, and Moshi accept integer values for string \"amount\", coercing to strings; kotlinx.serialization rejects it.  \n5. Gson accepts unknown enum values for \"status\" as null; Moshi, kotlinx.serialization, and Jackson reject unknown or case-variant enum values.  \n6. Gson and Jackson accept missing \"tags\" and \"child\" fields as null; Moshi rejects missing \"tags\"; kotlinx.serialization rejects missing \"tags\" and \"child\"; Jackson accepts missing \"child\" but rejects missing \"tags\".  \n7. Nested objects behave like top-level: Gson and Jackson accept null or missing non-nullable fields inside \"child\"; Moshi and kotlinx.serialization reject them.  \n8. Gson and Jackson accept integer \"amount\" inside nested \"child\", coercing to string; Moshi accepts it; kotlinx.serialization rejects it.  \n9. Gson accepts null \"amount\" inside nested \"child\"; Jackson rejects it.",
+  "llm_usage": {
+    "calls": 5,
+    "input_tokens": 4589,
+    "output_tokens": 9370,
+    "truncated": 0
+  },
+  "model": "gpt-4.1-mini",
+  "path_order": [
+    "A_gson",
+    "B_moshi",
+    "C_kotlinx",
+    "D_jackson"
+  ],
+  "platform": "macOS-26.5.2-arm64-arm-64bit-Mach-O",
+  "python_implementation": "CPython",
+  "python_version": "3.14.7 (main, Aug  5 2026, 10:29:49) [Clang 21.0.0 (clang-2100.1.1.101)]",
+  "seed": 804,
+  "target": "kotlin",
+  "timestamp": "2026-09-27T14:43:23.532917+00:00"
+}

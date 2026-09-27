@@ -1,0 +1,15 @@
+1. Gson accepts missing non-nullable fields, decoding missing integers as 0, missing strings as null, and missing enums as null; Moshi and kotlinx.serialization reject missing required fields; Jackson rejects missing non-nullable fields except it accepts missing "child".  
+2. Gson and Jackson accept null for non-nullable integer "id" (decoding as 0); Moshi and kotlinx.serialization reject null for "id".  
+3. Gson accepts null for non-nullable string "amount" as null; Moshi, kotlinx.serialization, and Jackson reject null for "amount".  
+4. Gson, Jackson, and Moshi accept integer values for string "amount", coercing to strings; kotlinx.serialization rejects it.  
+5. Gson accepts unknown enum values for "status" as null; Moshi, kotlinx.serialization, and Jackson reject unknown or case-variant enum values.  
+6. Gson and Jackson accept missing "tags" and "child" fields as null; Moshi rejects missing "tags"; kotlinx.serialization rejects missing "tags" and "child"; Jackson accepts missing "child" but rejects missing "tags".  
+7. Nested objects behave like top-level: Gson and Jackson accept null or missing non-nullable fields inside "child"; Moshi and kotlinx.serialization reject them.  
+8. Gson and Jackson accept integer "amount" inside nested "child", coercing to string; Moshi accepts it; kotlinx.serialization rejects it.  
+9. Gson accepts null "amount" inside nested "child"; Jackson rejects it.  
+10. Gson accepts unknown enum values inside nested "child" as null; Moshi, kotlinx.serialization, and Jackson reject them.  
+11. Moshi consistently rejects missing fields, nulls for non-nullables, and unknown enum values.  
+12. kotlinx.serialization is strictest: rejects missing fields, nulls for non-nullables, wrong types, and unknown enum values.  
+13. Jackson rejects null for non-nullable fields, missing non-nullable fields (except "child"), and unknown enum values.  
+14. Gson is most permissive, accepting missing fields, nulls for non-nullables, unknown enum values, and coercing types.  
+15. Not tested: numeric boundaries (fractions, exponents, large integers), extra unknown keys, duplicate keys, non-strict JSON syntax (single quotes, unquoted values, trailing commas, NaN, raw control chars).

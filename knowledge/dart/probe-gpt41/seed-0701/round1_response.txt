@@ -1,0 +1,61 @@
+1. **Baseline: All fields well-formed, minimal values.**
+```probe
+{"id": 1, "amount": "1", "name": null, "status": "active", "tags": [], "child": null}
+```
+
+2. **id as string instead of integer.**
+```probe
+{"id": "1", "amount": "1", "name": null, "status": "active", "tags": [], "child": null}
+```
+
+3. **amount as integer instead of string.**
+```probe
+{"id": 1, "amount": 1, "name": null, "status": "active", "tags": [], "child": null}
+```
+
+4. **name as integer instead of string or null.**
+```probe
+{"id": 1, "amount": "1", "name": 42, "status": "active", "tags": [], "child": null}
+```
+
+5. **status as an unrecognized string.**
+```probe
+{"id": 1, "amount": "1", "name": null, "status": "pending", "tags": [], "child": null}
+```
+
+6. **tags as a string instead of array.**
+```probe
+{"id": 1, "amount": "1", "name": null, "status": "active", "tags": "tag", "child": null}
+```
+
+7. **tags as array of integers instead of strings.**
+```probe
+{"id": 1, "amount": "1", "name": null, "status": "active", "tags": [1,2,3], "child": null}
+```
+
+8. **child as an empty object.**
+```probe
+{"id": 1, "amount": "1", "name": null, "status": "active", "tags": [], "child": {}}
+```
+
+9. **child as a string instead of object or null.**
+```probe
+{"id": 1, "amount": "1", "name": null, "status": "active", "tags": [], "child": "not an object"}
+```
+
+10. **Missing the 'name' field entirely.**
+```probe
+{"id": 1, "amount": "1", "status": "active", "tags": [], "child": null}
+```
+
+11. **Extra field not in schema.**
+```probe
+{"id": 1, "amount": "1", "name": null, "status": "active", "tags": [], "child": null, "extra": 123}
+```
+
+12. **All fields present but all set to null.**
+```probe
+{"id": null, "amount": null, "name": null, "status": null, "tags": null, "child": null}
+```
+
+Let me know the results for each implementation, and I’ll plan round 2 accordingly!

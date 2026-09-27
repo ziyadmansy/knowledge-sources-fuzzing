@@ -1,0 +1,40 @@
+{
+  "arguments": {
+    "arm": "probe",
+    "artifact_dir": "artifacts/dart/probe-gpt41",
+    "examples": "500",
+    "executable": "None",
+    "iterations": "5",
+    "knowledge_file": "knowledge/dart/probe-gpt41/seed-{seed:04d}/knowledge.txt",
+    "model": "gpt-4.1-mini",
+    "overwrite": "False",
+    "runs": "5",
+    "seed": "700",
+    "target": "dart",
+    "timeout": "5.0"
+  },
+  "arm": "probe",
+  "feedback_mode": null,
+  "harness_sha256": "f63c28fbb9a901d61391740ae37ddd4cf03b5ad26d6f39a9527e849dceba6c13",
+  "hypothesis_version": "6.165.5",
+  "knowledge_section": "What is already known about these four implementations, from running\nprobe documents against them before any fuzzing (use it however you see\nfit):\n1. All four implementations accept well-formed documents, tolerate extra fields, and treat missing \"name\" as null (Probes 1, 10, 11, 13, 18).\n2. All reject type mismatches for non-nullable fields (\"id\" as string, \"amount\" as int, \"tags\" as string or int array, \"child\" as string/object, etc.)\u2014manual, json_serializable, and freezed throw _TypeError; built_value throws DeserializationError (Probes 2\u20134, 6\u20139, 12, 14, 17, 19).\n3. All reject invalid enum values for \"status\" (e.g., \"pending\", \"ACTIVE\") with ArgumentError (manual, json_serializable, freezed) or DeserializationError (built_value) (Probes 5, 20).\n4. All accept missing \"name\" (interpreted as null), but missing required fields like \"id\" cause rejection (_TypeError/DeserializationError) (Probes 10, 13, 14).\n5. All reject null for required fields except \"name\" (Probe 12).\n6. For \"status\": null is rejected by all, but built_value throws DeserializationError, while json_serializable and freezed throw ArgumentError, and manual throws _TypeError (Probe 15).\n7. Only built_value accepts \"tags\": null, decoding it as an empty list; others reject with _TypeError (Probe 16).\n8. All accept recursive \"child\" if well-formed; type errors in nested \"child\" are rejected as in top-level (Probes 18, 19).\n9. No implementation throws an undocumented/private exception; all errors are _TypeError, ArgumentError, or DeserializationError.",
+  "llm_usage": {
+    "calls": 5,
+    "input_tokens": 5177,
+    "output_tokens": 7759,
+    "truncated": 0
+  },
+  "model": "gpt-4.1-mini",
+  "path_order": [
+    "A_manual",
+    "B_json_serializable",
+    "C_freezed",
+    "D_built_value"
+  ],
+  "platform": "macOS-26.5.2-arm64-arm-64bit-Mach-O",
+  "python_implementation": "CPython",
+  "python_version": "3.14.7 (main, Aug  5 2026, 10:29:49) [Clang 21.0.0 (clang-2100.1.1.101)]",
+  "seed": 701,
+  "target": "dart",
+  "timestamp": "2026-09-27T14:46:48.400825+00:00"
+}

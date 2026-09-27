@@ -1,0 +1,13 @@
+1. All implementations agree on well-formed documents and on most malformed documents, except for "tags" field handling.
+2. All reject type mismatches for "id", "amount", "name", "status", "tags", and "child" fields, but built_value always throws DeserializationError, while others throw _TypeError or ArgumentError.
+3. "name" is optional; if missing, all decode as null.
+4. "tags" as null or as an object (not array) is accepted by built_value (decoded as empty list), but rejected by others.
+5. "tags" containing non-string elements or being a string is rejected by all.
+6. "status" must be one of "active", "inactive", "unknown"; null, empty string, or unknown values are rejected by all (ArgumentError/DeserializationError).
+7. "amount" accepts any string, even if not numeric.
+8. "child" must be null or a valid record; missing required fields or type mismatches in "child" are rejected by all.
+9. All reject "child" as array or empty object.
+10. All accept "name" as null or string.
+11. built_value is more permissive for "tags" null/object, but otherwise matches others.
+12. No implementation throws a private/unnamed exception; all exceptions are recognizable.
+13. No implementation decodes to different values when accepting the same document, except for built_value's handling of "tags": null/object becomes [].

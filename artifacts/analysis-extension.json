@@ -1,0 +1,1259 @@
+{
+  "runs": {
+    "dart/code": [
+      {
+        "gson_null_bypass_docs": null,
+        "iterations_rejected": 1,
+        "llm_usage": {
+          "calls": 5,
+          "input_tokens": 5014,
+          "output_tokens": 8248,
+          "truncated": 0
+        },
+        "pattern_recall": 0.5,
+        "rate_rfc_valid": null,
+        "rate_schema": 22.74774774774775,
+        "rate_total": 10.1,
+        "rfc_valid": null,
+        "run": "run-01-seed-0700",
+        "schema_evaluated": 888,
+        "seed": 700,
+        "signatures": {
+          "RAAR": 202
+        },
+        "tier_c": 202,
+        "total": 2000
+      },
+      {
+        "gson_null_bypass_docs": null,
+        "iterations_rejected": 0,
+        "llm_usage": {
+          "calls": 5,
+          "input_tokens": 5063,
+          "output_tokens": 9204,
+          "truncated": 0
+        },
+        "pattern_recall": 0.5,
+        "rate_rfc_valid": null,
+        "rate_schema": 29.769858945805495,
+        "rate_total": 16.04,
+        "rfc_valid": null,
+        "run": "run-02-seed-0701",
+        "schema_evaluated": 1347,
+        "seed": 701,
+        "signatures": {
+          "RAAR": 401
+        },
+        "tier_c": 401,
+        "total": 2500
+      },
+      {
+        "gson_null_bypass_docs": null,
+        "iterations_rejected": 1,
+        "llm_usage": {
+          "calls": 5,
+          "input_tokens": 4924,
+          "output_tokens": 8819,
+          "truncated": 0
+        },
+        "pattern_recall": 1.0,
+        "rate_rfc_valid": null,
+        "rate_schema": 11.374407582938389,
+        "rate_total": 8.4,
+        "rfc_valid": null,
+        "run": "run-03-seed-0702",
+        "schema_evaluated": 1477,
+        "seed": 702,
+        "signatures": {
+          "RAAR": 156,
+          "RRRA": 12
+        },
+        "tier_c": 168,
+        "total": 2000
+      },
+      {
+        "gson_null_bypass_docs": null,
+        "iterations_rejected": 3,
+        "llm_usage": {
+          "calls": 5,
+          "input_tokens": 5089,
+          "output_tokens": 10129,
+          "truncated": 0
+        },
+        "pattern_recall": 0.5,
+        "rate_rfc_valid": null,
+        "rate_schema": 18.926553672316384,
+        "rate_total": 13.4,
+        "rfc_valid": null,
+        "run": "run-04-seed-0703",
+        "schema_evaluated": 708,
+        "seed": 703,
+        "signatures": {
+          "RAAR": 134
+        },
+        "tier_c": 134,
+        "total": 1000
+      },
+      {
+        "gson_null_bypass_docs": null,
+        "iterations_rejected": 1,
+        "llm_usage": {
+          "calls": 5,
+          "input_tokens": 5108,
+          "output_tokens": 7779,
+          "truncated": 0
+        },
+        "pattern_recall": 0.5,
+        "rate_rfc_valid": null,
+        "rate_schema": 15.730337078651685,
+        "rate_total": 9.8,
+        "rfc_valid": null,
+        "run": "run-05-seed-0704",
+        "schema_evaluated": 1246,
+        "seed": 704,
+        "signatures": {
+          "RAAR": 196
+        },
+        "tier_c": 196,
+        "total": 2000
+      }
+    ],
+    "dart/human": [
+      {
+        "gson_null_bypass_docs": null,
+        "iterations_rejected": 4,
+        "llm_usage": {
+          "calls": 5,
+          "input_tokens": 5017,
+          "output_tokens": 8034,
+          "truncated": 0
+        },
+        "pattern_recall": 1.0,
+        "rate_rfc_valid": null,
+        "rate_schema": 47.161572052401745,
+        "rate_total": 21.6,
+        "rfc_valid": null,
+        "run": "run-01-seed-0700",
+        "schema_evaluated": 229,
+        "seed": 700,
+        "signatures": {
+          "RAAR": 32,
+          "RRRA": 76
+        },
+        "tier_c": 108,
+        "total": 500
+      },
+      {
+        "gson_null_bypass_docs": null,
+        "iterations_rejected": 1,
+        "llm_usage": {
+          "calls": 5,
+          "input_tokens": 4884,
+          "output_tokens": 5911,
+          "truncated": 0
+        },
+        "pattern_recall": 1.0,
+        "rate_rfc_valid": null,
+        "rate_schema": 39.95956873315364,
+        "rate_total": 29.65,
+        "rfc_valid": null,
+        "run": "run-02-seed-0701",
+        "schema_evaluated": 1484,
+        "seed": 701,
+        "signatures": {
+          "RAAR": 332,
+          "RRRA": 261
+        },
+        "tier_c": 593,
+        "total": 2000
+      },
+      {
+        "gson_null_bypass_docs": null,
+        "iterations_rejected": 3,
+        "llm_usage": {
+          "calls": 5,
+          "input_tokens": 4953,
+          "output_tokens": 7955,
+          "truncated": 0
+        },
+        "pattern_recall": 1.0,
+        "rate_rfc_valid": null,
+        "rate_schema": 48.3,
+        "rate_total": 48.3,
+        "rfc_valid": null,
+        "run": "run-03-seed-0702",
+        "schema_evaluated": 1000,
+        "seed": 702,
+        "signatures": {
+          "RAAR": 260,
+          "RRRA": 223
+        },
+        "tier_c": 483,
+        "total": 1000
+      },
+      {
+        "gson_null_bypass_docs": null,
+        "iterations_rejected": 2,
+        "llm_usage": {
+          "calls": 5,
+          "input_tokens": 4943,
+          "output_tokens": 6852,
+          "truncated": 0
+        },
+        "pattern_recall": 1.0,
+        "rate_rfc_valid": null,
+        "rate_schema": 48.60956618464961,
+        "rate_total": 29.133333333333333,
+        "rfc_valid": null,
+        "run": "run-04-seed-0703",
+        "schema_evaluated": 899,
+        "seed": 703,
+        "signatures": {
+          "RAAR": 329,
+          "RRRA": 108
+        },
+        "tier_c": 437,
+        "total": 1500
+      },
+      {
+        "gson_null_bypass_docs": null,
+        "iterations_rejected": 1,
+        "llm_usage": {
+          "calls": 5,
+          "input_tokens": 4951,
+          "output_tokens": 8049,
+          "truncated": 0
+        },
+        "pattern_recall": 1.0,
+        "rate_rfc_valid": null,
+        "rate_schema": 34.128561961563946,
+        "rate_total": 25.75,
+        "rfc_valid": null,
+        "run": "run-05-seed-0704",
+        "schema_evaluated": 1509,
+        "seed": 704,
+        "signatures": {
+          "RAAR": 240,
+          "RRRA": 275
+        },
+        "tier_c": 515,
+        "total": 2000
+      }
+    ],
+    "dart/none": [
+      {
+        "gson_null_bypass_docs": null,
+        "iterations_rejected": 2,
+        "llm_usage": {
+          "calls": 5,
+          "input_tokens": 3221,
+          "output_tokens": 8138,
+          "truncated": 0
+        },
+        "pattern_recall": 1.0,
+        "rate_rfc_valid": null,
+        "rate_schema": 4.427083333333333,
+        "rate_total": 3.4,
+        "rfc_valid": null,
+        "run": "run-01-seed-0700",
+        "schema_evaluated": 1152,
+        "seed": 700,
+        "signatures": {
+          "RAAR": 49,
+          "RRRA": 2
+        },
+        "tier_c": 51,
+        "total": 1500
+      },
+      {
+        "gson_null_bypass_docs": null,
+        "iterations_rejected": 4,
+        "llm_usage": {
+          "calls": 5,
+          "input_tokens": 3309,
+          "output_tokens": 6358,
+          "truncated": 0
+        },
+        "pattern_recall": 0.0,
+        "rate_rfc_valid": null,
+        "rate_schema": 0.0,
+        "rate_total": 0.0,
+        "rfc_valid": null,
+        "run": "run-02-seed-0701",
+        "schema_evaluated": 306,
+        "seed": 701,
+        "signatures": {},
+        "tier_c": 0,
+        "total": 500
+      },
+      {
+        "gson_null_bypass_docs": null,
+        "iterations_rejected": 2,
+        "llm_usage": {
+          "calls": 5,
+          "input_tokens": 3256,
+          "output_tokens": 8261,
+          "truncated": 0
+        },
+        "pattern_recall": 1.0,
+        "rate_rfc_valid": null,
+        "rate_schema": 0.9328358208955224,
+        "rate_total": 0.6666666666666666,
+        "rfc_valid": null,
+        "run": "run-03-seed-0702",
+        "schema_evaluated": 1072,
+        "seed": 702,
+        "signatures": {
+          "RAAR": 8,
+          "RRRA": 2
+        },
+        "tier_c": 10,
+        "total": 1500
+      },
+      {
+        "gson_null_bypass_docs": null,
+        "iterations_rejected": 1,
+        "llm_usage": {
+          "calls": 5,
+          "input_tokens": 3205,
+          "output_tokens": 9358,
+          "truncated": 0
+        },
+        "pattern_recall": 1.0,
+        "rate_rfc_valid": null,
+        "rate_schema": 4.441360166551006,
+        "rate_total": 3.2,
+        "rfc_valid": null,
+        "run": "run-04-seed-0703",
+        "schema_evaluated": 1441,
+        "seed": 703,
+        "signatures": {
+          "RAAR": 63,
+          "RRRA": 1
+        },
+        "tier_c": 64,
+        "total": 2000
+      },
+      {
+        "gson_null_bypass_docs": null,
+        "iterations_rejected": 2,
+        "llm_usage": {
+          "calls": 5,
+          "input_tokens": 3226,
+          "output_tokens": 6535,
+          "truncated": 0
+        },
+        "pattern_recall": 0.0,
+        "rate_rfc_valid": null,
+        "rate_schema": 0.0,
+        "rate_total": 0.0,
+        "rfc_valid": null,
+        "run": "run-05-seed-0704",
+        "schema_evaluated": 1004,
+        "seed": 704,
+        "signatures": {},
+        "tier_c": 0,
+        "total": 1500
+      }
+    ],
+    "dart/probe": [
+      {
+        "gson_null_bypass_docs": null,
+        "iterations_rejected": 2,
+        "llm_usage": {
+          "calls": 5,
+          "input_tokens": 5022,
+          "output_tokens": 12936,
+          "truncated": 0
+        },
+        "pattern_recall": 0.5,
+        "rate_rfc_valid": null,
+        "rate_schema": 1.4981273408239701,
+        "rate_total": 1.0666666666666667,
+        "rfc_valid": null,
+        "run": "run-01-seed-0700",
+        "schema_evaluated": 1068,
+        "seed": 700,
+        "signatures": {
+          "RRRA": 16
+        },
+        "tier_c": 16,
+        "total": 1500
+      },
+      {
+        "gson_null_bypass_docs": null,
+        "iterations_rejected": 2,
+        "llm_usage": {
+          "calls": 5,
+          "input_tokens": 5008,
+          "output_tokens": 8893,
+          "truncated": 0
+        },
+        "pattern_recall": 0.5,
+        "rate_rfc_valid": null,
+        "rate_schema": 65.1101321585903,
+        "rate_total": 49.266666666666666,
+        "rfc_valid": null,
+        "run": "run-02-seed-0701",
+        "schema_evaluated": 1135,
+        "seed": 701,
+        "signatures": {
+          "RRRA": 739
+        },
+        "tier_c": 739,
+        "total": 1500
+      },
+      {
+        "gson_null_bypass_docs": null,
+        "iterations_rejected": 2,
+        "llm_usage": {
+          "calls": 5,
+          "input_tokens": 5286,
+          "output_tokens": 9944,
+          "truncated": 0
+        },
+        "pattern_recall": 0.5,
+        "rate_rfc_valid": null,
+        "rate_schema": 2.0320855614973263,
+        "rate_total": 1.2666666666666666,
+        "rfc_valid": null,
+        "run": "run-03-seed-0702",
+        "schema_evaluated": 935,
+        "seed": 702,
+        "signatures": {
+          "RRRA": 19
+        },
+        "tier_c": 19,
+        "total": 1500
+      },
+      {
+        "gson_null_bypass_docs": null,
+        "iterations_rejected": 2,
+        "llm_usage": {
+          "calls": 5,
+          "input_tokens": 5205,
+          "output_tokens": 10625,
+          "truncated": 0
+        },
+        "pattern_recall": 0.5,
+        "rate_rfc_valid": null,
+        "rate_schema": 0.9333333333333333,
+        "rate_total": 0.9333333333333333,
+        "rfc_valid": null,
+        "run": "run-04-seed-0703",
+        "schema_evaluated": 1500,
+        "seed": 703,
+        "signatures": {
+          "RRRA": 14
+        },
+        "tier_c": 14,
+        "total": 1500
+      },
+      {
+        "gson_null_bypass_docs": null,
+        "iterations_rejected": 1,
+        "llm_usage": {
+          "calls": 5,
+          "input_tokens": 5090,
+          "output_tokens": 11212,
+          "truncated": 0
+        },
+        "pattern_recall": 0.0,
+        "rate_rfc_valid": null,
+        "rate_schema": 0.0,
+        "rate_total": 0.0,
+        "rfc_valid": null,
+        "run": "run-05-seed-0704",
+        "schema_evaluated": 1386,
+        "seed": 704,
+        "signatures": {},
+        "tier_c": 0,
+        "total": 2000
+      }
+    ],
+    "dart/probe-gpt41": [
+      {
+        "gson_null_bypass_docs": null,
+        "iterations_rejected": 1,
+        "llm_usage": {
+          "calls": 5,
+          "input_tokens": 5324,
+          "output_tokens": 9763,
+          "truncated": 0
+        },
+        "pattern_recall": 1.0,
+        "rate_rfc_valid": null,
+        "rate_schema": 9.375,
+        "rate_total": 5.7,
+        "rfc_valid": null,
+        "run": "run-01-seed-0700",
+        "schema_evaluated": 1216,
+        "seed": 700,
+        "signatures": {
+          "RAAR": 4,
+          "RRRA": 110
+        },
+        "tier_c": 114,
+        "total": 2000
+      },
+      {
+        "gson_null_bypass_docs": null,
+        "iterations_rejected": 2,
+        "llm_usage": {
+          "calls": 5,
+          "input_tokens": 5177,
+          "output_tokens": 7759,
+          "truncated": 0
+        },
+        "pattern_recall": 0.5,
+        "rate_rfc_valid": null,
+        "rate_schema": 15.647482014388489,
+        "rate_total": 11.6,
+        "rfc_valid": null,
+        "run": "run-02-seed-0701",
+        "schema_evaluated": 1112,
+        "seed": 701,
+        "signatures": {
+          "RRRA": 174
+        },
+        "tier_c": 174,
+        "total": 1500
+      },
+      {
+        "gson_null_bypass_docs": null,
+        "iterations_rejected": 3,
+        "llm_usage": {
+          "calls": 5,
+          "input_tokens": 4904,
+          "output_tokens": 6661,
+          "truncated": 0
+        },
+        "pattern_recall": 0.5,
+        "rate_rfc_valid": null,
+        "rate_schema": 34.84848484848485,
+        "rate_total": 13.8,
+        "rfc_valid": null,
+        "run": "run-03-seed-0702",
+        "schema_evaluated": 396,
+        "seed": 702,
+        "signatures": {
+          "RRRA": 138
+        },
+        "tier_c": 138,
+        "total": 1000
+      },
+      {
+        "gson_null_bypass_docs": null,
+        "iterations_rejected": 1,
+        "llm_usage": {
+          "calls": 5,
+          "input_tokens": 5080,
+          "output_tokens": 11470,
+          "truncated": 0
+        },
+        "pattern_recall": 1.0,
+        "rate_rfc_valid": null,
+        "rate_schema": 42.22401289282836,
+        "rate_total": 26.2,
+        "rfc_valid": null,
+        "run": "run-04-seed-0703",
+        "schema_evaluated": 1241,
+        "seed": 703,
+        "signatures": {
+          "RAAR": 33,
+          "RRRA": 491
+        },
+        "tier_c": 524,
+        "total": 2000
+      },
+      {
+        "gson_null_bypass_docs": null,
+        "iterations_rejected": 2,
+        "llm_usage": {
+          "calls": 5,
+          "input_tokens": 5049,
+          "output_tokens": 10034,
+          "truncated": 0
+        },
+        "pattern_recall": 0.5,
+        "rate_rfc_valid": null,
+        "rate_schema": 5.7953144266337855,
+        "rate_total": 3.1333333333333333,
+        "rfc_valid": null,
+        "run": "run-05-seed-0704",
+        "schema_evaluated": 811,
+        "seed": 704,
+        "signatures": {
+          "RRRA": 47
+        },
+        "tier_c": 47,
+        "total": 1500
+      }
+    ],
+    "dart/sysprobe": [
+      {
+        "gson_null_bypass_docs": null,
+        "iterations_rejected": 1,
+        "llm_usage": {
+          "calls": 5,
+          "input_tokens": 5085,
+          "output_tokens": 16915,
+          "truncated": 1
+        },
+        "pattern_recall": 1.0,
+        "rate_rfc_valid": null,
+        "rate_schema": 25.139664804469273,
+        "rate_total": 15.75,
+        "rfc_valid": null,
+        "run": "run-01-seed-0700",
+        "schema_evaluated": 1253,
+        "seed": 700,
+        "signatures": {
+          "RAAR": 235,
+          "RRRA": 80
+        },
+        "tier_c": 315,
+        "total": 2000
+      },
+      {
+        "gson_null_bypass_docs": null,
+        "iterations_rejected": 2,
+        "llm_usage": {
+          "calls": 5,
+          "input_tokens": 5229,
+          "output_tokens": 11830,
+          "truncated": 0
+        },
+        "pattern_recall": 0.5,
+        "rate_rfc_valid": null,
+        "rate_schema": 3.4151547491995733,
+        "rate_total": 2.1333333333333333,
+        "rfc_valid": null,
+        "run": "run-02-seed-0701",
+        "schema_evaluated": 937,
+        "seed": 701,
+        "signatures": {
+          "RRRA": 32
+        },
+        "tier_c": 32,
+        "total": 1500
+      },
+      {
+        "gson_null_bypass_docs": null,
+        "iterations_rejected": 1,
+        "llm_usage": {
+          "calls": 5,
+          "input_tokens": 5304,
+          "output_tokens": 10752,
+          "truncated": 0
+        },
+        "pattern_recall": 0.5,
+        "rate_rfc_valid": null,
+        "rate_schema": 52.23765432098765,
+        "rate_total": 33.85,
+        "rfc_valid": null,
+        "run": "run-03-seed-0702",
+        "schema_evaluated": 1296,
+        "seed": 702,
+        "signatures": {
+          "RRRA": 677
+        },
+        "tier_c": 677,
+        "total": 2000
+      },
+      {
+        "gson_null_bypass_docs": null,
+        "iterations_rejected": 4,
+        "llm_usage": {
+          "calls": 5,
+          "input_tokens": 5267,
+          "output_tokens": 8095,
+          "truncated": 0
+        },
+        "pattern_recall": 0.5,
+        "rate_rfc_valid": null,
+        "rate_schema": 39.0,
+        "rate_total": 39.0,
+        "rfc_valid": null,
+        "run": "run-04-seed-0703",
+        "schema_evaluated": 500,
+        "seed": 703,
+        "signatures": {
+          "RRRA": 195
+        },
+        "tier_c": 195,
+        "total": 500
+      },
+      {
+        "gson_null_bypass_docs": null,
+        "iterations_rejected": 1,
+        "llm_usage": {
+          "calls": 5,
+          "input_tokens": 5318,
+          "output_tokens": 8265,
+          "truncated": 0
+        },
+        "pattern_recall": 0.5,
+        "rate_rfc_valid": null,
+        "rate_schema": 16.284584980237153,
+        "rate_total": 10.3,
+        "rfc_valid": null,
+        "run": "run-05-seed-0704",
+        "schema_evaluated": 1265,
+        "seed": 704,
+        "signatures": {
+          "RRRA": 206
+        },
+        "tier_c": 206,
+        "total": 2000
+      }
+    ],
+    "kotlin/none": [
+      {
+        "gson_null_bypass_docs": 649,
+        "iterations_rejected": 1,
+        "llm_usage": {
+          "calls": 5,
+          "input_tokens": 2939,
+          "output_tokens": 8292,
+          "truncated": 0
+        },
+        "pattern_recall": 1.0,
+        "rate_rfc_valid": 34.322373696872496,
+        "rate_schema": 49.794238683127574,
+        "rate_total": 49.7,
+        "rfc_valid": 1247,
+        "run": "run-01-seed-0800",
+        "schema_evaluated": 1944,
+        "seed": 800,
+        "signatures": {
+          "AAAR": 56,
+          "AARA": 38,
+          "AARR": 49,
+          "ARRA": 32,
+          "ARRR": 781,
+          "RRRA": 38
+        },
+        "tier_c": 994,
+        "total": 2000
+      },
+      {
+        "gson_null_bypass_docs": 219,
+        "iterations_rejected": 2,
+        "llm_usage": {
+          "calls": 5,
+          "input_tokens": 2954,
+          "output_tokens": 9391,
+          "truncated": 0
+        },
+        "pattern_recall": 1.0,
+        "rate_rfc_valid": 20.226843100189036,
+        "rate_schema": 30.466666666666665,
+        "rate_total": 30.466666666666665,
+        "rfc_valid": 1058,
+        "run": "run-02-seed-0801",
+        "schema_evaluated": 1500,
+        "seed": 801,
+        "signatures": {
+          "AAAR": 55,
+          "AARA": 22,
+          "AARR": 23,
+          "ARRA": 44,
+          "ARRR": 300,
+          "RRRA": 13
+        },
+        "tier_c": 457,
+        "total": 1500
+      },
+      {
+        "gson_null_bypass_docs": 395,
+        "iterations_rejected": 3,
+        "llm_usage": {
+          "calls": 5,
+          "input_tokens": 2977,
+          "output_tokens": 7278,
+          "truncated": 0
+        },
+        "pattern_recall": 1.0,
+        "rate_rfc_valid": 47.032967032967036,
+        "rate_schema": 73.25819672131148,
+        "rate_total": 71.5,
+        "rfc_valid": 455,
+        "run": "run-03-seed-0802",
+        "schema_evaluated": 976,
+        "seed": 802,
+        "signatures": {
+          "AAAR": 154,
+          "AARA": 43,
+          "AARR": 60,
+          "ARRA": 42,
+          "ARRR": 415,
+          "RRRA": 1
+        },
+        "tier_c": 715,
+        "total": 1000
+      },
+      {
+        "gson_null_bypass_docs": 495,
+        "iterations_rejected": 2,
+        "llm_usage": {
+          "calls": 5,
+          "input_tokens": 2976,
+          "output_tokens": 7763,
+          "truncated": 0
+        },
+        "pattern_recall": 1.0,
+        "rate_rfc_valid": 52.6046986721144,
+        "rate_schema": 43.46666666666667,
+        "rate_total": 43.46666666666667,
+        "rfc_valid": 979,
+        "run": "run-04-seed-0803",
+        "schema_evaluated": 1500,
+        "seed": 803,
+        "signatures": {
+          "AAAR": 1,
+          "AARA": 75,
+          "AARR": 15,
+          "ARRA": 46,
+          "ARRR": 503,
+          "RRRA": 12
+        },
+        "tier_c": 652,
+        "total": 1500
+      },
+      {
+        "gson_null_bypass_docs": 114,
+        "iterations_rejected": 3,
+        "llm_usage": {
+          "calls": 5,
+          "input_tokens": 2982,
+          "output_tokens": 7501,
+          "truncated": 0
+        },
+        "pattern_recall": 1.0,
+        "rate_rfc_valid": 43.38358458961474,
+        "rate_schema": 38.12217194570136,
+        "rate_total": 33.7,
+        "rfc_valid": 597,
+        "run": "run-05-seed-0804",
+        "schema_evaluated": 884,
+        "seed": 804,
+        "signatures": {
+          "AAAR": 1,
+          "AARA": 127,
+          "AARR": 3,
+          "ARRA": 27,
+          "ARRR": 179
+        },
+        "tier_c": 337,
+        "total": 1000
+      }
+    ],
+    "kotlin/probe": [
+      {
+        "gson_null_bypass_docs": 375,
+        "iterations_rejected": 3,
+        "llm_usage": {
+          "calls": 5,
+          "input_tokens": 4898,
+          "output_tokens": 10467,
+          "truncated": 0
+        },
+        "pattern_recall": 1.0,
+        "rate_rfc_valid": 39.87068965517241,
+        "rate_schema": 56.58291457286432,
+        "rate_total": 56.3,
+        "rfc_valid": 464,
+        "run": "run-01-seed-0800",
+        "schema_evaluated": 995,
+        "seed": 800,
+        "signatures": {
+          "AAAR": 3,
+          "AARA": 10,
+          "AARR": 75,
+          "ARRA": 11,
+          "ARRR": 464
+        },
+        "tier_c": 563,
+        "total": 1000
+      },
+      {
+        "gson_null_bypass_docs": 572,
+        "iterations_rejected": 3,
+        "llm_usage": {
+          "calls": 5,
+          "input_tokens": 5107,
+          "output_tokens": 10654,
+          "truncated": 0
+        },
+        "pattern_recall": 1.0,
+        "rate_rfc_valid": 70.98674521354934,
+        "rate_schema": 80.3,
+        "rate_total": 80.3,
+        "rfc_valid": 679,
+        "run": "run-02-seed-0801",
+        "schema_evaluated": 1000,
+        "seed": 801,
+        "signatures": {
+          "AAAR": 3,
+          "AARA": 32,
+          "AARR": 18,
+          "ARRA": 65,
+          "ARRR": 685
+        },
+        "tier_c": 803,
+        "total": 1000
+      },
+      {
+        "gson_null_bypass_docs": 452,
+        "iterations_rejected": 2,
+        "llm_usage": {
+          "calls": 5,
+          "input_tokens": 4972,
+          "output_tokens": 11933,
+          "truncated": 0
+        },
+        "pattern_recall": 1.0,
+        "rate_rfc_valid": 36.25806451612903,
+        "rate_schema": 61.8,
+        "rate_total": 61.8,
+        "rfc_valid": 775,
+        "run": "run-03-seed-0802",
+        "schema_evaluated": 1500,
+        "seed": 802,
+        "signatures": {
+          "AAAR": 7,
+          "AARA": 26,
+          "AARR": 191,
+          "ARRA": 9,
+          "ARRR": 694
+        },
+        "tier_c": 927,
+        "total": 1500
+      },
+      {
+        "gson_null_bypass_docs": 725,
+        "iterations_rejected": 2,
+        "llm_usage": {
+          "calls": 5,
+          "input_tokens": 4653,
+          "output_tokens": 7209,
+          "truncated": 0
+        },
+        "pattern_recall": 1.0,
+        "rate_rfc_valid": 52.17391304347826,
+        "rate_schema": 65.73333333333333,
+        "rate_total": 65.73333333333333,
+        "rfc_valid": 1012,
+        "run": "run-04-seed-0803",
+        "schema_evaluated": 1500,
+        "seed": 803,
+        "signatures": {
+          "AAAR": 9,
+          "AARA": 45,
+          "AARR": 91,
+          "ARRA": 8,
+          "ARRR": 833
+        },
+        "tier_c": 986,
+        "total": 1500
+      },
+      {
+        "gson_null_bypass_docs": 790,
+        "iterations_rejected": 0,
+        "llm_usage": {
+          "calls": 5,
+          "input_tokens": 4847,
+          "output_tokens": 11761,
+          "truncated": 0
+        },
+        "pattern_recall": 1.0,
+        "rate_rfc_valid": 47.535505430242274,
+        "rate_schema": 57.56,
+        "rate_total": 57.56,
+        "rfc_valid": 1197,
+        "run": "run-05-seed-0804",
+        "schema_evaluated": 2500,
+        "seed": 804,
+        "signatures": {
+          "AAAR": 16,
+          "AARA": 31,
+          "AARR": 141,
+          "ARRA": 25,
+          "ARRR": 1226
+        },
+        "tier_c": 1439,
+        "total": 2500
+      }
+    ],
+    "kotlin/sysprobe": [
+      {
+        "gson_null_bypass_docs": 678,
+        "iterations_rejected": 3,
+        "llm_usage": {
+          "calls": 5,
+          "input_tokens": 4678,
+          "output_tokens": 8722,
+          "truncated": 0
+        },
+        "pattern_recall": 1.0,
+        "rate_rfc_valid": 69.48905109489051,
+        "rate_schema": 73.5,
+        "rate_total": 73.5,
+        "rfc_valid": 685,
+        "run": "run-01-seed-0800",
+        "schema_evaluated": 1000,
+        "seed": 800,
+        "signatures": {
+          "AAAR": 2,
+          "AARA": 7,
+          "AARR": 5,
+          "ARRA": 37,
+          "ARRR": 684
+        },
+        "tier_c": 735,
+        "total": 1000
+      },
+      {
+        "gson_null_bypass_docs": 425,
+        "iterations_rejected": 3,
+        "llm_usage": {
+          "calls": 5,
+          "input_tokens": 4481,
+          "output_tokens": 12366,
+          "truncated": 0
+        },
+        "pattern_recall": 1.0,
+        "rate_rfc_valid": 61.69429097605893,
+        "rate_schema": 62.34817813765182,
+        "rate_total": 61.6,
+        "rfc_valid": 543,
+        "run": "run-02-seed-0801",
+        "schema_evaluated": 988,
+        "seed": 801,
+        "signatures": {
+          "AAAR": 13,
+          "AARA": 8,
+          "AARR": 31,
+          "ARRA": 93,
+          "ARRR": 471
+        },
+        "tier_c": 616,
+        "total": 1000
+      },
+      {
+        "gson_null_bypass_docs": 701,
+        "iterations_rejected": 3,
+        "llm_usage": {
+          "calls": 5,
+          "input_tokens": 4654,
+          "output_tokens": 8710,
+          "truncated": 0
+        },
+        "pattern_recall": 1.0,
+        "rate_rfc_valid": 93.37094499294781,
+        "rate_schema": 95.23326572008114,
+        "rate_total": 93.9,
+        "rfc_valid": 709,
+        "run": "run-03-seed-0802",
+        "schema_evaluated": 986,
+        "seed": 802,
+        "signatures": {
+          "AAAR": 4,
+          "AARA": 8,
+          "AARR": 92,
+          "ARRA": 68,
+          "ARRR": 767
+        },
+        "tier_c": 939,
+        "total": 1000
+      },
+      {
+        "gson_null_bypass_docs": 780,
+        "iterations_rejected": 3,
+        "llm_usage": {
+          "calls": 5,
+          "input_tokens": 4676,
+          "output_tokens": 10538,
+          "truncated": 0
+        },
+        "pattern_recall": 1.0,
+        "rate_rfc_valid": 84.20221169036336,
+        "rate_schema": 85.8,
+        "rate_total": 85.8,
+        "rfc_valid": 633,
+        "run": "run-04-seed-0803",
+        "schema_evaluated": 1000,
+        "seed": 803,
+        "signatures": {
+          "AARR": 2,
+          "ARRA": 58,
+          "ARRR": 798
+        },
+        "tier_c": 858,
+        "total": 1000
+      },
+      {
+        "gson_null_bypass_docs": 1691,
+        "iterations_rejected": 1,
+        "llm_usage": {
+          "calls": 5,
+          "input_tokens": 4589,
+          "output_tokens": 9370,
+          "truncated": 0
+        },
+        "pattern_recall": 1.0,
+        "rate_rfc_valid": 92.19373219373219,
+        "rate_schema": 93.15,
+        "rate_total": 93.15,
+        "rfc_valid": 1755,
+        "run": "run-05-seed-0804",
+        "schema_evaluated": 2000,
+        "seed": 804,
+        "signatures": {
+          "AARA": 22,
+          "AARR": 1,
+          "ARRA": 133,
+          "ARRR": 1707
+        },
+        "tier_c": 1863,
+        "total": 2000
+      }
+    ]
+  },
+  "tests": {
+    "E1 dart sysprobe-code": {
+      "cliffs_delta": 0.36,
+      "mean_a": 20.206666666666667,
+      "mean_b": 11.548,
+      "mean_diff": 8.658666666666667,
+      "p": 0.42063492063492064,
+      "p_holm": 0.8412698412698413
+    },
+    "E1 dart sysprobe-human": {
+      "cliffs_delta": -0.36,
+      "mean_a": 20.206666666666667,
+      "mean_b": 30.886666666666667,
+      "mean_diff": -10.68,
+      "p": 0.42063492063492064,
+      "p_holm": 0.8412698412698413
+    },
+    "E1 dart sysprobe-probe": {
+      "cliffs_delta": 0.6,
+      "mean_a": 20.206666666666667,
+      "mean_b": 10.506666666666666,
+      "mean_diff": 9.700000000000001,
+      "p": 0.15079365079365079,
+      "p_holm": 0.45238095238095233
+    },
+    "E1 kotlin sysprobe-none": {
+      "cliffs_delta": 0.92,
+      "mean_a": 81.59,
+      "mean_b": 45.766666666666666,
+      "mean_diff": 35.82333333333334,
+      "p": 0.015873015873015872,
+      "p_holm": 0.09523809523809523
+    },
+    "E1 kotlin sysprobe-probe": {
+      "cliffs_delta": 0.68,
+      "mean_a": 81.59,
+      "mean_b": 64.33866666666667,
+      "mean_diff": 17.251333333333335,
+      "p": 0.09523809523809523,
+      "p_holm": 0.38095238095238093
+    },
+    "E1 primary: dart sysprobe-none": {
+      "cliffs_delta": 0.84,
+      "mean_a": 20.206666666666667,
+      "mean_b": 1.4533333333333334,
+      "mean_diff": 18.753333333333334,
+      "p": 0.031746031746031744,
+      "p_holm": 0.15873015873015872
+    },
+    "E2 dart probe-gpt41 - none": {
+      "cliffs_delta": 0.84,
+      "mean_a": 12.086666666666666,
+      "mean_b": 1.4533333333333334,
+      "mean_diff": 10.633333333333333,
+      "p": 0.031746031746031744,
+      "p_holm": 0.06349206349206349
+    },
+    "E2 dart probe-gpt41 - probe": {
+      "cliffs_delta": 0.6,
+      "mean_a": 12.086666666666666,
+      "mean_b": 10.506666666666666,
+      "mean_diff": 1.58,
+      "p": 0.15079365079365079,
+      "p_holm": 0.15079365079365079
+    },
+    "RQ1 co-primary: probe-human": {
+      "cliffs_delta": -0.6,
+      "mean_a": 10.506666666666666,
+      "mean_b": 30.886666666666667,
+      "mean_diff": -20.380000000000003,
+      "p": 0.15079365079365079
+    },
+    "RQ1 primary: dart probe-none": {
+      "cliffs_delta": 0.2,
+      "mean_a": 10.506666666666666,
+      "mean_b": 1.4533333333333334,
+      "mean_diff": 9.053333333333333,
+      "p": 0.6904761904761905
+    },
+    "RQ2 dart code-human": {
+      "cliffs_delta": -1.0,
+      "mean_a": 11.548,
+      "mean_b": 30.886666666666667,
+      "mean_diff": -19.33866666666667,
+      "p": 0.007936507936507936,
+      "p_holm": 0.047619047619047616
+    },
+    "RQ2 dart code-none": {
+      "cliffs_delta": 1.0,
+      "mean_a": 11.548,
+      "mean_b": 1.4533333333333334,
+      "mean_diff": 10.094666666666667,
+      "p": 0.007936507936507936,
+      "p_holm": 0.047619047619047616
+    },
+    "RQ2 dart human-none": {
+      "cliffs_delta": 1.0,
+      "mean_a": 30.886666666666667,
+      "mean_b": 1.4533333333333334,
+      "mean_diff": 29.433333333333334,
+      "p": 0.007936507936507936,
+      "p_holm": 0.047619047619047616
+    },
+    "RQ2 dart probe-code": {
+      "cliffs_delta": -0.6,
+      "mean_a": 10.506666666666666,
+      "mean_b": 11.548,
+      "mean_diff": -1.041333333333334,
+      "p": 0.15079365079365079,
+      "p_holm": 0.45238095238095233
+    },
+    "RQ2 dart probe-human": {
+      "cliffs_delta": -0.6,
+      "mean_a": 10.506666666666666,
+      "mean_b": 30.886666666666667,
+      "mean_diff": -20.380000000000003,
+      "p": 0.15079365079365079,
+      "p_holm": 0.45238095238095233
+    },
+    "RQ2 dart probe-none": {
+      "cliffs_delta": 0.2,
+      "mean_a": 10.506666666666666,
+      "mean_b": 1.4533333333333334,
+      "mean_diff": 9.053333333333333,
+      "p": 0.6904761904761905,
+      "p_holm": 0.6904761904761905
+    },
+    "RQ3 primary: kotlin probe-none": {
+      "cliffs_delta": 0.68,
+      "mean_a": 64.33866666666667,
+      "mean_b": 45.766666666666666,
+      "mean_diff": 18.572000000000003,
+      "p": 0.09523809523809523
+    }
+  }
+}

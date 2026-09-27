@@ -1,0 +1,39 @@
+```probe
+{"id": 1, "amount": "1", "name": null, "status": "active", "tags": null, "child": null}
+```
+Test if built_value accepts `tags` null but others reject (repeat to confirm Probe 10).
+
+```probe
+{"id": 1, "amount": "1", "name": null, "status": "active", "tags": [], "child": null, "extra": "field"}
+```
+Test behavior with an extra unknown key.
+
+```probe
+{"id": 1, "amount": "1", "name": null, "status": "ACTIVE", "tags": [], "child": null}
+```
+Test enum case variant in `status` (uppercase).
+
+```probe
+{"id": 1, "amount": "1", "name": null, "status": "actve", "tags": [], "child": null}
+```
+Test unknown enum value in `status` (typo).
+
+```probe
+{"id": 1, "amount": "1", "name": null, "status": "active", "tags": [], "child": {"id": 2, "amount": "2", "name": null, "status": "active", "tags": [], "child": null}}
+```
+Test nested `child` object well-formed.
+
+```probe
+{"id": 1, "amount": "1", "name": null, "status": "active", "tags": [], "child": {"id": null, "amount": "2", "name": null, "status": "active", "tags": [], "child": null}}
+```
+Test nested `child.id` null (non-nullable nested field).
+
+```probe
+{"id": 1, "amount": "1", "name": null, "status": "active", "tags": [], "child": {"id": 2, "amount": 2, "name": null, "status": "active", "tags": [], "child": null}}
+```
+Test nested `child.amount` wrong type (number instead of string).
+
+```probe
+{"id": 1, "amount": "1", "name": null, "status": "active", "tags": [], "child": {"id": 2, "amount": "2", "name": null, "status": "active", "tags": null, "child": null}}
+```
+Test nested `child.tags` null (nullable or not in nested).

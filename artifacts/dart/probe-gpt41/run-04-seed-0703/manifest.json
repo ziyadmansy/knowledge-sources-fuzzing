@@ -1,0 +1,40 @@
+{
+  "arguments": {
+    "arm": "probe",
+    "artifact_dir": "artifacts/dart/probe-gpt41",
+    "examples": "500",
+    "executable": "None",
+    "iterations": "5",
+    "knowledge_file": "knowledge/dart/probe-gpt41/seed-{seed:04d}/knowledge.txt",
+    "model": "gpt-4.1-mini",
+    "overwrite": "False",
+    "runs": "5",
+    "seed": "700",
+    "target": "dart",
+    "timeout": "5.0"
+  },
+  "arm": "probe",
+  "feedback_mode": null,
+  "harness_sha256": "f63c28fbb9a901d61391740ae37ddd4cf03b5ad26d6f39a9527e849dceba6c13",
+  "hypothesis_version": "6.165.5",
+  "knowledge_section": "What is already known about these four implementations, from running\nprobe documents against them before any fuzzing (use it however you see\nfit):\n1. All implementations accept well-formed records, including with null or nested child, and ignore extra fields (Probes 1, 4, 11, 13, 14, 18, 19).\n2. All reject fields with wrong types (e.g., string id, numeric amount, numeric name, string tags, tags with non-string, non-object child), but built_value always throws DeserializationError, while others throw _TypeError (Probes 2, 3, 5, 8, 9, 10, 12, 20).\n3. All accept missing \"name\" (interpreted as null), but reject missing required fields like \"tags\" except built_value, which defaults missing \"tags\" to [] (Probes 4, 15).\n4. All reject null or invalid \"status\" (null, empty string, or unrecognized value), but built_value always throws DeserializationError, others throw ArgumentError (Probes 6, 7, 16).\n5. All accept \"id\" as integer only; float or string is rejected (Probes 2, 3, 18).\n6. All accept \"tags\" as [], but only built_value accepts \"tags\": null, interpreting it as [] (Probe 17).\n7. All accept nested \"child\" records if well-formed, but reject if any required field is missing or of wrong type within the child (Probes 11, 12, 13, 19, 20).\n8. No implementation fails with a private/unnamed exception; all exceptions are either _TypeError, ArgumentError, or DeserializationError.",
+  "llm_usage": {
+    "calls": 5,
+    "input_tokens": 5080,
+    "output_tokens": 11470,
+    "truncated": 0
+  },
+  "model": "gpt-4.1-mini",
+  "path_order": [
+    "A_manual",
+    "B_json_serializable",
+    "C_freezed",
+    "D_built_value"
+  ],
+  "platform": "macOS-26.5.2-arm64-arm-64bit-Mach-O",
+  "python_implementation": "CPython",
+  "python_version": "3.14.7 (main, Aug  5 2026, 10:29:49) [Clang 21.0.0 (clang-2100.1.1.101)]",
+  "seed": 703,
+  "target": "dart",
+  "timestamp": "2026-09-27T14:48:53.923717+00:00"
+}

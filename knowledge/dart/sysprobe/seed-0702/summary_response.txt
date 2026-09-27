@@ -1,0 +1,19 @@
+1. All four reject documents missing required fields (Probes 1,2,4,5), except built_value accepts missing "tags" (Probe 5).
+2. All reject null for non-nullable fields "id", "amount", "status", "tags" (Probes 7,8,9,10), except built_value accepts null "tags" by treating as empty array (Probe 10).
+3. All reject wrong JSON types for fields, e.g. number for "amount" (Probe 17), array with non-string elements for "tags" (Probe 18).
+4. All accept fully valid documents with all fields present and correct types (Probe 3,11).
+5. All accept nested "child" objects when valid (Probe 12).
+6. All accept extra unknown keys silently (Probe 13).
+7. Duplicate keys are accepted; last occurrence wins for all (Probe 14).
+8. Enum "status" is case-sensitive; variants like "Active" or unknown values like "pending" cause rejection by all (Probes 15,16).
+9. Nested objects follow same rules; built_value accepts null "tags" inside nested child, others reject (Probe 20).
+10. All reject missing "status" (Probe 4) and null "status" (Probe 9).
+11. All reject missing "name" (Probe 4), but accept null "name" (Probe 3).
+12. All reject missing "child" (Probe 6) except built_value accepts missing "tags" and "child" (Probe 6).
+13. All reject null "id" (Probe 7).
+14. All reject null "amount" (Probe 8).
+15. All reject null "tags" except built_value (Probes 10,20).
+16. All reject wrong types inside arrays (Probe 18).
+17. All reject nested child with null "id" (Probe 19).
+18. Exception types differ: manual, json_serializable, freezed mostly _TypeError or ArgumentError; built_value uses DeserializationError.
+Not tested: numeric field boundary values, single quotes, unquoted values, trailing commas, NaN, raw control characters.

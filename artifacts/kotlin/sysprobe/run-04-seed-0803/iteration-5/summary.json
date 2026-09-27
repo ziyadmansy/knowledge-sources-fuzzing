@@ -1,0 +1,25 @@
+{
+  "total": 500,
+  "top_level_counts": {
+    "schema_evaluated": 500
+  },
+  "tier_b_counts": {},
+  "tier_c_accept_reject": 445,
+  "tier_c_value": 0,
+  "unique_divergence_signatures": 4,
+  "divergence_perturbation_categories": {
+    "missing_field": 170,
+    "bad_enum": 49,
+    "extra_key": 80,
+    "wrong_type": 40,
+    "null_override": 147
+  },
+  "divergence_signatures": {
+    "ARRR": 386,
+    "ARRA": 57,
+    "AARR": 2
+  },
+  "tier_c_by_gate": {
+    "schema_evaluated": 445
+  }
+}

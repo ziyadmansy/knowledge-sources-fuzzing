@@ -1,0 +1,71 @@
+1. Control: a fully well-formed document.
+```probe
+{"id": 1, "amount": "1", "name": "Alice", "status": "active", "tags": ["foo", "bar"], "child": null}
+```
+Tests: Baseline for all implementations.
+
+2. "id" as string instead of integer.
+```probe
+{"id": "1", "amount": "1", "name": "Alice", "status": "active", "tags": ["foo", "bar"], "child": null}
+```
+Tests: Type flexibility/strictness for integer fields.
+
+3. "amount" as number instead of string.
+```probe
+{"id": 2, "amount": 100, "name": "Bob", "status": "inactive", "tags": ["baz"], "child": null}
+```
+Tests: Type flexibility/strictness for string fields.
+
+4. "name" missing (field omitted).
+```probe
+{"id": 3, "amount": "5", "status": "unknown", "tags": [], "child": null}
+```
+Tests: Handling of missing nullable fields.
+
+5. "name" as number instead of string/null.
+```probe
+{"id": 4, "amount": "10", "name": 42, "status": "active", "tags": ["x"], "child": null}
+```
+Tests: Type flexibility/strictness for nullable string fields.
+
+6. "status" as an unrecognized string.
+```probe
+{"id": 5, "amount": "20", "name": "Carol", "status": "pending", "tags": [], "child": null}
+```
+Tests: Enum handling for unknown values.
+
+7. "status" as null.
+```probe
+{"id": 6, "amount": "30", "name": "Dave", "status": null, "tags": [], "child": null}
+```
+Tests: Enum handling for null values.
+
+8. "tags" as a string instead of array.
+```probe
+{"id": 7, "amount": "40", "name": "Eve", "status": "inactive", "tags": "notalist", "child": null}
+```
+Tests: Type flexibility/strictness for array fields.
+
+9. "tags" as array with a non-string element.
+```probe
+{"id": 8, "amount": "50", "name": "Frank", "status": "active", "tags": ["ok", 123], "child": null}
+```
+Tests: Array element type enforcement.
+
+10. "child" as an empty object.
+```probe
+{"id": 9, "amount": "60", "name": "Grace", "status": "unknown", "tags": [], "child": {}}
+```
+Tests: Handling of recursive field with missing required fields.
+
+11. "child" as a string.
+```probe
+{"id": 10, "amount": "70", "name": "Heidi", "status": "active", "tags": [], "child": "notanobject"}
+```
+Tests: Type flexibility/strictness for nested object fields.
+
+12. "child" as a valid nested record.
+```probe
+{"id": 11, "amount": "80", "name": "Ivan", "status": "inactive", "tags": [], "child": {"id": 12, "amount": "90", "name": null, "status": "active", "tags": [], "child": null}}
+```
+Tests: Baseline for recursive/nested decoding.

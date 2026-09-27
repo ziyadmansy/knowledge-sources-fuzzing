@@ -1,0 +1,10 @@
+1. All implementations accept well-formed documents with correct types and all required fields present, including when "name" is null or missing (interpreted as null), and "child" is either null or a valid nested record.
+2. All implementations reject when "id" is not an integer or "amount" is not a string, with A/B/C throwing _TypeError and D throwing DeserializationError.
+3. All implementations reject when "name" is not a string or null, with A/B/C throwing _TypeError and D throwing DeserializationError.
+4. All implementations reject when "tags" is not a list of strings (e.g., not a list, contains non-string/null, or is missing), with A/B/C throwing _TypeError and D throwing DeserializationError.
+5. All implementations reject when "child" is not null or a valid record (e.g., string, array, or empty object), with A/B/C throwing _TypeError and D throwing DeserializationError.
+6. All implementations reject when "status" is not one of the allowed strings ("active", "inactive", "unknown"), with A/B/C throwing ArgumentError and D throwing DeserializationError.
+7. When "status" is null, A rejects with _TypeError, B/C with ArgumentError, D with DeserializationError.
+8. When "tags" is missing, D_built_value accepts and defaults to an empty list, while A/B/C reject with _TypeError.
+9. When "tags" is an object (not a list), D_built_value accepts and decodes as an empty list, while A/B/C reject with _TypeError.
+10. D_built_value always throws DeserializationError on type/enum errors, never _TypeError or ArgumentError.

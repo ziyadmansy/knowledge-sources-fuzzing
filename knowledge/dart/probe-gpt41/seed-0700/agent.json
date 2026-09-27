@@ -1,0 +1,15 @@
+{
+  "agent": "probe",
+  "knowledge_chars": 1411,
+  "llm_usage": {
+    "calls": 3,
+    "input_tokens": 5260,
+    "output_tokens": 1571,
+    "truncated": 0
+  },
+  "probes": [
+    12,
+    8
+  ],
+  "target": "dart"
+}

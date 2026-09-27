@@ -1,0 +1,39 @@
+```probe
+{"id": 1, "amount": "1", "name": null, "status": "active", "tags": [], "child": {}}
+```
+Tests empty object as `child` instead of null or full record.
+
+```probe
+{"id": 1, "amount": "1", "name": null, "status": "active", "tags": ["tag1"], "child": {"id": 2, "amount": "2", "name": null, "status": "inactive", "tags": [], "child": null}}
+```
+Tests valid nested `child` record.
+
+```probe
+{"id": 1, "amount": "1", "name": null, "status": "ACTIVE", "tags": [], "child": null}
+```
+Tests case variant of enum `status`.
+
+```probe
+{"id": 1, "amount": "1", "name": null, "status": "invalid_status", "tags": [], "child": null}
+```
+Tests unknown enum value for `status`.
+
+```probe
+{"id": 1, "amount": "1", "name": null, "status": "active", "tags": [], "child": null, "extra": "field"}
+```
+Tests extra unknown key at top level.
+
+```probe
+{"id": 1, "amount": "1", "name": null, "status": "active", "tags": [], "child": null, "id": 2}
+```
+Tests duplicate key `id` at top level.
+
+```probe
+{"id": 1, "amount": "1", "name": null, "status": "active", "tags": [1, 2], "child": null}
+```
+Tests wrong element types inside `tags` array.
+
+```probe
+{"id": 1, "amount": "1", "name": null, "status": "active", "tags": [], "child": {"id": 2, "amount": 2, "name": null, "status": "inactive", "tags": [], "child": null}}
+```
+Tests wrong type (number instead of string) for `amount` inside nested `child`.

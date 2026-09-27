@@ -1,0 +1,39 @@
+```probe
+{"id": 1, "amount": "1", "name": null, "status": "active", "tags": [], "child": {}}
+```
+Tests child field as empty object instead of null or valid record.
+
+```probe
+{"id": 1, "amount": "1", "name": null, "status": "active", "tags": [], "child": {"id": 2, "amount": "2", "name": null, "status": "active", "tags": [], "child": null}}
+```
+Tests valid nested child object (one level deep).
+
+```probe
+{"id": 1, "amount": "1", "name": null, "status": "active", "tags": [], "child": {"id": null, "amount": "2", "name": null, "status": "active", "tags": [], "child": null}}
+```
+Tests nested child with null id (non-nullable field).
+
+```probe
+{"id": 1, "amount": "1", "name": null, "status": "active", "tags": [], "child": {"id": 2, "amount": null, "name": null, "status": "active", "tags": [], "child": null}}
+```
+Tests nested child with null amount (non-nullable string).
+
+```probe
+{"id": 1, "amount": "1", "name": null, "status": "active", "tags": [], "child": {"id": 2, "amount": "2", "name": null, "status": "invalid", "tags": [], "child": null}}
+```
+Tests nested child with invalid enum value in status.
+
+```probe
+{"id": 1, "amount": "1", "name": null, "status": "ACTIVE", "tags": [], "child": null}
+```
+Tests status enum case sensitivity (uppercase).
+
+```probe
+{"id": 1, "amount": "1", "name": null, "status": "active", "tags": ["tag1", 2], "child": null}
+```
+Tests tags array with mixed types (string and number).
+
+```probe
+{"id": 1, "amount": "1", "name": null, "status": "active", "tags": [], "child": null, "extra": "field"}
+```
+Tests extra unknown key at top level.

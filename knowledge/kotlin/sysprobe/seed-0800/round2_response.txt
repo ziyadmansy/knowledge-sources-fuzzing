@@ -1,0 +1,39 @@
+```probe
+{"id": 1, "amount": "1", "name": null, "status": "Active", "tags": [], "child": null}
+```
+Test enum case sensitivity in "status" field.
+
+```probe
+{"id": 1, "amount": "1", "name": null, "status": "active", "tags": [], "child": {"id": 2, "amount": "2", "name": null, "status": "active", "tags": [], "child": null}}
+```
+Test valid nested "child" object.
+
+```probe
+{"id": 1, "amount": "1", "name": null, "status": "active", "tags": [], "child": {"id": null, "amount": "2", "name": null, "status": "active", "tags": [], "child": null}}
+```
+Test nested "child" with null non-nullable "id".
+
+```probe
+{"id": 1, "amount": "1", "name": null, "status": "active", "tags": [], "child": {"id": 2, "amount": null, "name": null, "status": "active", "tags": [], "child": null}}
+```
+Test nested "child" with null non-nullable "amount".
+
+```probe
+{"id": 1, "amount": "1", "name": null, "status": "active", "tags": [], "child": {"id": 2, "amount": 2, "name": null, "status": "active", "tags": [], "child": null}}
+```
+Test nested "child" with numeric "amount" instead of string.
+
+```probe
+{"id": 1, "amount": "1", "name": null, "status": "active", "tags": [], "child": {"id": 2, "amount": "2", "name": null, "status": "invalid", "tags": [], "child": null}}
+```
+Test nested "child" with invalid enum value in "status".
+
+```probe
+{"id": 1, "amount": "1", "name": null, "status": "active", "tags": [], "child": {"id": 2, "amount": "2", "name": null, "status": "active", "tags": null, "child": null}}
+```
+Test nested "child" with null "tags" array.
+
+```probe
+{"id": 1, "amount": "1", "name": null, "status": "active", "tags": [], "child": {"id": 2, "amount": "2", "name": null, "status": "active", "tags": [], "child": {}}}
+```
+Test nested "child" with empty object as "child" field (should be null or Record).

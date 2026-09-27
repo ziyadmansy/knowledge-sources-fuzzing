@@ -1,0 +1,11 @@
+1. All four reject documents missing required fields, but built_value sometimes accepts missing "tags" (Probe 5) or "tags": null (Probe 10) by substituting an empty list; others reject these cases.  
+2. All reject null for non-nullable fields ("id", "amount", "status", "tags") with _TypeError or DeserializationError; only "name" can be null.  
+3. Missing "name" field causes rejection by all (Probe 4); "name" must be present even if null.  
+4. Duplicate keys are accepted by all, with last key winning (Probe 14).  
+5. Extra unknown keys are ignored by all (Probe 13).  
+6. Enum "status" is case-sensitive and limited to "active", "inactive", "unknown"; variants like "ACTIVE" or unknown values cause rejection by all (Probes 15,16).  
+7. Numeric "id" must be an integer; manual rejects float "id" (Probe 18), built_value rejects float and exponent form (Probes 18,19), but json_serializable and freezed accept float and exponent, truncating to int.  
+8. Large integers beyond 32-bit range are accepted by all (Probe 20).  
+9. "amount" is a string and accepts numeric strings including fractional values (Probe 17); null "amount" rejected by all.  
+10. Nested "child" objects are parsed recursively and consistently accepted when well-formed (Probe 12).  
+11. Missing "child" field causes rejection except built_value accepts missing "tags" or "tags": null but not missing "child" (Probe 6 vs 5).

@@ -1,0 +1,48 @@
+```probe
+{"id": 1, "amount": "1", "name": null, "status": "active", "tags": [], "child": null, "extra": "field"}
+```
+Test extra unknown key presence.
+
+```probe
+{"id": 1, "amount": "1", "name": null, "status": "active", "tags": [], "child": null, "id": 2}
+```
+Test duplicate key in root object.
+
+```probe
+{"id": 1, "amount": "1", "name": null, "status": "ACTIVE", "tags": [], "child": null}
+```
+Test enum field with case variant ("ACTIVE" vs "active").
+
+```probe
+{"id": 1, "amount": "1", "name": null, "status": "pending", "tags": [], "child": null}
+```
+Test enum field with unknown value ("pending").
+
+```probe
+{"id": 1, "amount": "1.5", "name": null, "status": "active", "tags": [], "child": null}
+```
+Test numeric field with fraction (id as integer, amount is string, so no fraction here, test id fraction instead):
+
+Correction: id is integer, amount is string, so fraction test applies to id only if changed to fraction.
+
+Better probe:
+
+```probe
+{"id": 1.5, "amount": "1", "name": null, "status": "active", "tags": [], "child": null}
+```
+Test id field as fraction number.
+
+```probe
+{"id": 1e3, "amount": "1", "name": null, "status": "active", "tags": [], "child": null}
+```
+Test id field as exponent number.
+
+```probe
+{"id": 2147483648, "amount": "1", "name": null, "status": "active", "tags": [], "child": null}
+```
+Test id field just beyond 32-bit integer max.
+
+```probe
+{"id": -2147483649, "amount": "1", "name": null, "status": "active", "tags": [], "child": null}
+```
+Test id field just beyond 32-bit integer min.

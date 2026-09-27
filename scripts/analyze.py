@@ -27,6 +27,8 @@ sys.path.insert(0, str(REPO_ROOT / "src"))
 from ksfuzz.targets import TARGETS  # noqa: E402
 
 ARMS = {"dart": ("none", "human", "code", "probe"), "kotlin": ("none", "probe")}
+# Extension study (design §10.1): new arms only, analysed as their own families.
+EXTENSION_ARMS = {"dart": ("sysprobe", "probe-gpt41"), "kotlin": ("sysprobe",)}
 # Dart answer key (§5.1): id saturation and built_value's missing-tags default.
 DART_KEY = ("RAAR", "RRRA")
 _NON_NULL = ("amount", "status", "tags")
@@ -150,7 +152,7 @@ def main() -> None:
 
     report: dict = {"runs": {}, "tests": {}}
     rates: dict[tuple[str, str], list[float]] = {}
-    for target_name, arms in ARMS.items():
+    for target_name, arms in {t: ARMS[t] + EXTENSION_ARMS[t] for t in ARMS}.items():
         assert target_name in TARGETS
         for arm in arms:
             # run_arm.py adds llm_usage to the manifest only once a run has finished.
@@ -208,6 +210,38 @@ def main() -> None:
         for name, p_holm in holm(rq2).items():
             report["tests"][name]["p_holm"] = p_holm
         print("Holm-adjusted RQ2:", {k: round(v, 4) for k, v in holm(rq2).items()})
+
+    def family(label: str, pairs: list[tuple[str, tuple[str, str], tuple[str, str]]]) -> None:
+        names = []
+        for name, a, b in pairs:
+            test(name, a, b)
+            if name in report["tests"]:
+                names.append(name)
+        if names:
+            adjusted = holm({n: report["tests"][n]["p"] for n in names})
+            for n, p_holm in adjusted.items():
+                report["tests"][n]["p_holm"] = p_holm
+            print(f"Holm-adjusted {label}:", {k: round(v, 4) for k, v in adjusted.items()})
+
+    print()
+    family(
+        "E1",
+        [
+            ("E1 primary: dart sysprobe-none", ("dart", "sysprobe"), ("dart", "none")),
+            ("E1 dart sysprobe-probe", ("dart", "sysprobe"), ("dart", "probe")),
+            ("E1 dart sysprobe-human", ("dart", "sysprobe"), ("dart", "human")),
+            ("E1 dart sysprobe-code", ("dart", "sysprobe"), ("dart", "code")),
+            ("E1 kotlin sysprobe-none", ("kotlin", "sysprobe"), ("kotlin", "none")),
+            ("E1 kotlin sysprobe-probe", ("kotlin", "sysprobe"), ("kotlin", "probe")),
+        ],
+    )
+    family(
+        "E2",
+        [
+            ("E2 dart probe-gpt41 - probe", ("dart", "probe-gpt41"), ("dart", "probe")),
+            ("E2 dart probe-gpt41 - none", ("dart", "probe-gpt41"), ("dart", "none")),
+        ],
+    )
     if args.json:
         args.json.write_text(json.dumps(report, indent=2, sort_keys=True) + "\n")
 

@@ -1,0 +1,39 @@
+```probe
+{"id": 1, "amount": "1", "name": null, "status": "active", "tags": [], "child": null, "extra": "field"}
+```
+Test extra unknown key presence.
+
+```probe
+{"id": 1, "amount": "1", "name": null, "status": "active", "tags": [], "child": null, "id": 2}
+```
+Test duplicate key "id" with different values.
+
+```probe
+{"id": 1, "amount": "1", "name": null, "status": "Active", "tags": [], "child": null}
+```
+Test enum "status" with case variant ("Active" instead of "active").
+
+```probe
+{"id": 1, "amount": "1", "name": null, "status": "pending", "tags": [], "child": null}
+```
+Test enum "status" with unknown value ("pending").
+
+```probe
+{"id": 1, "amount": 1, "name": null, "status": "active", "tags": [], "child": null}
+```
+Test wrong type for "amount" (number instead of string).
+
+```probe
+{"id": 1, "amount": "1", "name": null, "status": "active", "tags": [1, 2], "child": null}
+```
+Test wrong element types inside "tags" array (numbers instead of strings).
+
+```probe
+{"id": 1, "amount": "1", "name": null, "status": "active", "tags": [], "child": {"id": null, "amount": "2", "name": "child", "status": "inactive", "tags": ["tag"], "child": null}}
+```
+Test null "id" inside nested "child" object.
+
+```probe
+{"id": 1, "amount": "1", "name": null, "status": "active", "tags": [], "child": {"id": 2, "amount": "2", "name": null, "status": "inactive", "tags": null, "child": null}}
+```
+Test null "tags" inside nested "child" object.

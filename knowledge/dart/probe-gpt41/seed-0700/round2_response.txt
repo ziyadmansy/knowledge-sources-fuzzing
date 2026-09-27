@@ -1,0 +1,39 @@
+1. Test if "name" can be omitted (not present at all, not null).
+```probe
+{"id": 13, "amount": "130", "status": "active", "tags": ["foo"], "child": null}
+```
+
+2. Test if "tags" can be omitted (not present at all).
+```probe
+{"id": 14, "amount": "140", "name": "Ivan", "status": "inactive", "child": null}
+```
+
+3. Test if "child" can be omitted (not present at all).
+```probe
+{"id": 15, "amount": "150", "name": "Judy", "status": "unknown", "tags": ["bar"]}
+```
+
+4. Test if "status" can be omitted (not present at all).
+```probe
+{"id": 16, "amount": "160", "name": "Mallory", "tags": ["baz"], "child": null}
+```
+
+5. Test if "id" can be omitted (not present at all).
+```probe
+{"amount": "170", "name": "Niaj", "status": "active", "tags": ["qux"], "child": null}
+```
+
+6. Test if "amount" can be omitted (not present at all).
+```probe
+{"id": 18, "name": "Olivia", "status": "inactive", "tags": ["zap"], "child": null}
+```
+
+7. Test "child" with a valid nested record (one level deep, all fields present).
+```probe
+{"id": 19, "amount": "190", "name": "Peggy", "status": "active", "tags": ["foo"], "child": {"id": 20, "amount": "200", "name": "Quinn", "status": "inactive", "tags": [], "child": null}}
+```
+
+8. Test "child" with a nested record missing a required field ("amount" missing in child).
+```probe
+{"id": 21, "amount": "210", "name": "Ruth", "status": "unknown", "tags": ["bar"], "child": {"id": 22, "name": "Steve", "status": "active", "tags": [], "child": null}}
+```

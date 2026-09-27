@@ -1,0 +1,63 @@
+1. **Baseline: All fields well-formed.**
+```probe
+{"id": 1, "amount": "100.00", "name": "Alice", "status": "active", "tags": ["foo", "bar"], "child": null}
+```
+
+2. **id as string instead of integer.**
+```probe
+{"id": "1", "amount": "100.00", "name": "Alice", "status": "active", "tags": ["foo", "bar"], "child": null}
+```
+
+3. **amount as number instead of string.**
+```probe
+{"id": 2, "amount": 100.00, "name": "Bob", "status": "inactive", "tags": ["baz"], "child": null}
+```
+
+4. **name omitted (missing field).**
+```probe
+{"id": 3, "amount": "50.00", "status": "unknown", "tags": [], "child": null}
+```
+
+5. **name as integer instead of string or null.**
+```probe
+{"id": 4, "amount": "75.00", "name": 123, "status": "active", "tags": [], "child": null}
+```
+
+6. **status as null (should be string).**
+```probe
+{"id": 5, "amount": "10.00", "name": "Eve", "status": null, "tags": [], "child": null}
+```
+
+7. **status as unrecognized string.**
+```probe
+{"id": 6, "amount": "20.00", "name": "Mallory", "status": "pending", "tags": [], "child": null}
+```
+
+8. **tags as string instead of array.**
+```probe
+{"id": 7, "amount": "30.00", "name": "Oscar", "status": "inactive", "tags": "notalist", "child": null}
+```
+
+9. **tags as array with non-string element.**
+```probe
+{"id": 8, "amount": "40.00", "name": "Peggy", "status": "active", "tags": ["ok", 123], "child": null}
+```
+
+10. **child as empty object (should be a Record).**
+```probe
+{"id": 9, "amount": "60.00", "name": "Trent", "status": "unknown", "tags": [], "child": {}}
+```
+
+11. **child as array instead of object or null.**
+```probe
+{"id": 10, "amount": "70.00", "name": "Victor", "status": "active", "tags": [], "child": []}
+```
+
+12. **child as valid nested Record.**
+```probe
+{"id": 11, "amount": "80.00", "name": "Walter", "status": "inactive", "tags": ["x"], "child": {"id": 12, "amount": "5.00", "name": null, "status": "active", "tags": [], "child": null}}
+```
+
+---
+
+Let me know the results for each implementation, and I'll plan the next round!

@@ -1,0 +1,1 @@
+ProposalError: generated_json is not a Hypothesis strategy: Expected a SearchStrategy but got '{"id":0,"amount":"0","name":null,"status":"active","tags":[],"child":null}' (type=str)

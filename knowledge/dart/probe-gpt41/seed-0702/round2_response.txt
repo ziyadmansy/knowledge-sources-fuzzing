@@ -1,0 +1,39 @@
+1. Test: "name" explicitly present as null vs omitted (already saw present as null is accepted; is omission always accepted?)
+```probe
+{"id": 13, "amount": "1.00", "status": "active", "tags": [], "child": null}
+```
+
+2. Test: "tags" is null instead of an array (should be array, but null is a common JSON mistake)
+```probe
+{"id": 14, "amount": "2.00", "name": "NullTags", "status": "inactive", "tags": null, "child": null}
+```
+
+3. Test: "tags" is an empty object instead of array (wrong type, but not a primitive)
+```probe
+{"id": 15, "amount": "3.00", "name": "ObjTags", "status": "active", "tags": {}, "child": null}
+```
+
+4. Test: "child" is a valid record but with a missing required field ("amount" missing in child)
+```probe
+{"id": 16, "amount": "4.00", "name": "MissingChildField", "status": "unknown", "tags": [], "child": {"id": 17, "name": "Kid", "status": "active", "tags": [], "child": null}}
+```
+
+5. Test: "child" is a valid record but with a type error in a child field ("id" as string in child)
+```probe
+{"id": 18, "amount": "5.00", "name": "BadChildId", "status": "active", "tags": [], "child": {"id": "19", "amount": "1.00", "name": null, "status": "inactive", "tags": [], "child": null}}
+```
+
+6. Test: "status" is an empty string (not a valid enum value, but not null or missing)
+```probe
+{"id": 20, "amount": "6.00", "name": "EmptyStatus", "status": "", "tags": [], "child": null}
+```
+
+7. Test: "amount" is a string, but not a number ("notanumber")
+```probe
+{"id": 21, "amount": "notanumber", "name": "BadAmount", "status": "active", "tags": [], "child": null}
+```
+
+8. Test: "tags" contains a null element (["foo", null])
+```probe
+{"id": 22, "amount": "7.00", "name": "NullInTags", "status": "inactive", "tags": ["foo", null], "child": null}
+```

@@ -1,0 +1,67 @@
+You are characterizing four Kotlin JSON deserializers by experiment, before a fuzzing campaign.
+
+Record schema (all six fields always present in a well-formed document):
+{
+  "id": <integer>,
+  "amount": <string>,
+  "name": <string or null>,
+  "status": <one of "active", "inactive", "unknown">,
+  "tags": <array of strings>,
+  "child": <Record or null, one level of recursion normally>
+}
+
+Four independent Kotlin JSON deserializers are run against every document you
+produce, each at its default configuration and each decoding into the same
+Kotlin data class: Gson, Moshi (generated adapter), kotlinx.serialization,
+and Jackson with its Kotlin module. Your goal is to produce documents that
+make these four implementations disagree with each other -- one accepting
+where another rejects, or two accepting but decoding to different values.
+
+You will not write the fuzzer. Your job is to find out, by running probe
+documents, how these four implementations behave, and then write down what
+you learned for the model that will write the fuzzer.
+
+You have a budget of 20 probe documents in total, over two rounds.
+Each probe is run through all four implementations. For each probe you see,
+per implementation, whether it accepted or rejected the document, the
+exception type if it rejected, and the decoded value if it accepted.
+
+Strategy hint: implementations are more likely to disagree on documents that
+are *almost* well-formed with one specific thing off (a field of the wrong
+type, a field missing rather than present-but-wrong, a value at a type
+boundary) than on documents that are broadly malformed in many ways at once
+-- broad malformation tends to make every implementation reject identically,
+which scores zero. Vary one or two things about an otherwise valid document
+at a time, across many documents, rather than maximizing how unusual any
+single document looks.
+
+Probe systematically. Spend your probes on these categories first; they
+apply to any JSON schema (category-partition testing and boundary-value
+analysis), and each probe should change one thing in an otherwise valid
+document:
+1. a required field missing (one probe per field, as far as the budget allows);
+2. a non-nullable field set to null;
+3. a field with a value of the wrong JSON type (string, number, boolean,
+   array, object);
+4. a numeric field at a representation boundary: a fraction, an exponent
+   form, and integers just beyond the 32-, 53- and 64-bit ranges, positive
+   and negative;
+5. an enum-like field with an unknown value, and with a case variant;
+6. an extra unknown key, and a duplicate key;
+7. the same kinds of change inside a nested object;
+8. text that is not strict JSON: single quotes, an unquoted value, a
+   trailing comma, NaN, and a raw control character inside a string.
+You cannot cover every field in every category with the budget: prefer
+breadth across categories over repetition, and use round 2 for what
+round 1 left out or found surprising.
+
+This is round 1: write at most 12 probes. After you see their results
+you get a second round with the rest of the budget, so you can follow up on
+anything surprising.
+
+Write each probe as the exact document text inside its own fenced block
+labelled `probe`, like this:
+```probe
+{"id": 1, "amount": "1", "name": null, "status": "active", "tags": [], "child": null}
+```
+Outside the blocks, write at most one short line per probe saying what it tests.

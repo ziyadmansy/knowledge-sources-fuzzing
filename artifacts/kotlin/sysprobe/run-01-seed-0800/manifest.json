@@ -1,0 +1,40 @@
+{
+  "arguments": {
+    "arm": "sysprobe",
+    "artifact_dir": "None",
+    "examples": "500",
+    "executable": "None",
+    "iterations": "5",
+    "knowledge_file": "knowledge/kotlin/sysprobe/seed-{seed:04d}/knowledge.txt",
+    "model": "gpt-4.1-mini",
+    "overwrite": "False",
+    "runs": "5",
+    "seed": "800",
+    "target": "kotlin",
+    "timeout": "5.0"
+  },
+  "arm": "sysprobe",
+  "feedback_mode": null,
+  "harness_sha256": "fcad662d38398cfdd5f7ff654a8c3b15f999359fca097cf358b4cf3ea47ab441",
+  "hypothesis_version": "6.165.5",
+  "knowledge_section": "What is already known about these four implementations, from running\nprobe documents against them before any fuzzing (use it however you see\nfit):\n1. Gson accepts missing required fields and sets them to null or default (e.g., missing \"id\" \u2192 0, missing \"status\" \u2192 null, missing \"tags\" \u2192 null).  \n2. Moshi rejects documents missing any required field or with null in non-nullable fields, throwing JsonDataException.  \n3. kotlinx.serialization rejects missing required fields and null in non-nullable fields, throwing MissingFieldException or JsonDecodingException.  \n4. Jackson rejects missing required fields and null in non-nullable fields with KotlinInvalidNullException or InvalidFormatException.  \n5. Gson and Jackson accept null for nullable fields (\"name\" is nullable), but Jackson rejects null for non-nullable fields.  \n6. Gson and Moshi accept \"amount\" as string or number, converting number to string; kotlinx.serialization rejects number for string field.  \n7. Gson accepts null for non-nullable string fields (\"amount\"); Moshi, kotlinx, and Jackson reject null for non-nullable fields.  \n8. Gson accepts unknown enum values (\"status\": \"Active\" or invalid) as null; Moshi, kotlinx, and Jackson reject with exceptions.  \n9. Gson accepts missing \"child\" field as null; Moshi and kotlinx reject missing fields; Jackson accepts missing \"child\".  \n10. Nested objects follow same acceptance/rejection patterns as top-level fields.  \n11. Gson accepts empty object for \"child.child\" with all fields missing/null/defaulted; Moshi, kotlinx, Jackson reject.",
+  "llm_usage": {
+    "calls": 5,
+    "input_tokens": 4678,
+    "output_tokens": 8722,
+    "truncated": 0
+  },
+  "model": "gpt-4.1-mini",
+  "path_order": [
+    "A_gson",
+    "B_moshi",
+    "C_kotlinx",
+    "D_jackson"
+  ],
+  "platform": "macOS-26.5.2-arm64-arm-64bit-Mach-O",
+  "python_implementation": "CPython",
+  "python_version": "3.14.7 (main, Aug  5 2026, 10:29:49) [Clang 21.0.0 (clang-2100.1.1.101)]",
+  "seed": 800,
+  "target": "kotlin",
+  "timestamp": "2026-09-27T14:37:24.152033+00:00"
+}

@@ -1,0 +1,47 @@
+Probe 13: Test missing "name" field (vs. explicit null in probe 4).
+```probe
+{"id": 13, "amount": "100", "status": "active", "tags": [], "child": null}
+```
+Tests if omitting an optional field is accepted or rejected.
+
+Probe 14: Test missing "tags" field (should always be present, but empty is allowed).
+```probe
+{"id": 14, "amount": "110", "name": "Mallory", "status": "inactive", "child": null}
+```
+Tests if omitting a required field is handled differently.
+
+Probe 15: Test "tags" as an array of nulls.
+```probe
+{"id": 15, "amount": "120", "name": "Niaj", "status": "unknown", "tags": [null, null], "child": null}
+```
+Tests if array element type is strictly enforced.
+
+Probe 16: Test "child" as an array (wrong type, but valid JSON).
+```probe
+{"id": 16, "amount": "130", "name": "Olivia", "status": "active", "tags": [], "child": []}
+```
+Tests if non-object, non-null "child" is rejected.
+
+Probe 17: Test "status" as an empty string.
+```probe
+{"id": 17, "amount": "140", "name": "Peggy", "status": "", "tags": [], "child": null}
+```
+Tests if empty string is accepted for enum.
+
+Probe 18: Test "amount" as a stringified float.
+```probe
+{"id": 18, "amount": "150.5", "name": "Quentin", "status": "inactive", "tags": [], "child": null}
+```
+Tests if stringified floats are accepted for "amount".
+
+Probe 19: Test "child" as a valid record, but with a missing field inside.
+```probe
+{"id": 19, "amount": "160", "name": "Ruth", "status": "active", "tags": [], "child": {"id": 20, "amount": "170", "status": "inactive", "tags": [], "child": null}}
+```
+Tests if missing "name" in nested "child" is accepted.
+
+Probe 20: Test "tags" as an empty object.
+```probe
+{"id": 20, "amount": "180", "name": "Sybil", "status": "unknown", "tags": {}, "child": null}
+```
+Tests if wrong type for "tags" is rejected or handled differently.

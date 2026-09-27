@@ -1,0 +1,17 @@
+{
+  "agent": "sysprobe",
+  "knowledge_chars": 1467,
+  "llm_usage": {
+    "calls": 4,
+    "input_tokens": 7508,
+    "output_tokens": 1970,
+    "truncated": 0
+  },
+  "probes": [
+    12,
+    8
+  ],
+  "summary_over_cap_chars": 2277,
+  "target": "kotlin",
+  "truncated_from_chars": 2186
+}

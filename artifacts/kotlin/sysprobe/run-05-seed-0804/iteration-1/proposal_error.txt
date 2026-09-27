@@ -1,0 +1,1 @@
+ProposalError: generated_json is not a Hypothesis strategy: Unexpected type in serialize_json_value

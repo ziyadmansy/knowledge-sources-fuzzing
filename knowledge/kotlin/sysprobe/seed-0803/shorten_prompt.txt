@@ -1,0 +1,24 @@
+Shorten this list to at most 1500 characters, keeping the most useful observations and their exact facts. Return only the list.
+
+1. Gson accepts missing non-nullable fields, decoding missing integers as 0, missing strings as null, and missing enums as null; Moshi and kotlinx.serialization reject missing required fields; Jackson rejects missing non-nullable fields except it accepts missing "child".
+2. Gson and Jackson accept null for non-nullable integer "id" (decoding as 0) and string "amount" (decoding as null); Moshi and kotlinx.serialization reject null for non-nullable fields.
+3. Gson and Jackson accept null for "tags" (non-nullable array), decoding as null; Moshi and kotlinx.serialization reject null for non-nullable fields.
+4. Gson and Moshi accept missing "child" field; kotlinx.serialization rejects it; Jackson accepts it.
+5. Gson and Moshi accept extra unknown keys; kotlinx.serialization and Jackson reject unknown keys.
+6. Duplicate keys are accepted by all four, with the last occurrence winning.
+7. Gson and Moshi accept wrong JSON types for "amount" (number instead of string), coercing to string; Jackson accepts and coerces similarly; kotlinx.serialization rejects.
+8. Gson, Moshi, and Jackson accept arrays of integers in "tags" (string array), coercing integers to strings; kotlinx.serialization rejects.
+9. Enum "status" with unknown or case-variant values is accepted by Gson as null; Moshi, kotlinx.serialization, and Jackson reject with format exceptions.
+10. Nested objects follow the same acceptance/rejection patterns as top-level fields.
+11. Gson and Jackson accept null for enum "status" decoding as null; Moshi and kotlinx.serialization reject.
+12. Gson accepts missing "id" decoding as 0; Jackson rejects missing "id".
+13. Gson accepts null for "amount" decoding as null; Jackson rejects null "amount".
+14. Gson accepts missing "status" decoding as null; Jackson rejects missing "status".
+15. Gson accepts missing "tags" decoding as null; Jackson rejects missing "tags".
+16. Gson accepts null "name" (nullable string); Moshi rejects missing "name".
+17. Gson accepts null "tags" decoding as null; Moshi rejects null "tags".
+18. Gson accepts null "child" decoding as null; Moshi rejects null "child".
+19. Gson accepts null "amount" inside nested "child"; Moshi rejects.
+20. Gson accepts extra unknown keys inside nested "child"; Jackson rejects.
+
+Not tested: numeric field boundary values (fractions, exponents, large integers), boolean/wrong types for non-numeric fields, single quotes, unquoted values, trailing commas, NaN, raw control characters inside strings.

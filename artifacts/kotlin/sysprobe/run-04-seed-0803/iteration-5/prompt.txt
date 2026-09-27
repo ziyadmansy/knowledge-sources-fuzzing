@@ -1,0 +1,65 @@
+You are refining a Hypothesis strategy to find behavioral divergence between four Kotlin JSON deserializers.
+
+Record schema (all six fields always present in a well-formed document):
+{
+  "id": <integer>,
+  "amount": <string>,
+  "name": <string or null>,
+  "status": <one of "active", "inactive", "unknown">,
+  "tags": <array of strings>,
+  "child": <Record or null, one level of recursion normally>
+}
+
+Four independent Kotlin JSON deserializers are run against every document you
+produce, each at its default configuration and each decoding into the same
+Kotlin data class: Gson, Moshi (generated adapter), kotlinx.serialization,
+and Jackson with its Kotlin module. Your goal is to produce documents that
+make these four implementations disagree with each other -- one accepting
+where another rejects, or two accepting but decoding to different values.
+
+What is already known about these four implementations, from running
+probe documents against them before any fuzzing (use it however you see
+fit):
+1. Gson accepts missing non-nullable fields, decoding missing integers as 0, missing strings and enums as null; Moshi and kotlinx.serialization reject missing required fields; Jackson rejects missing non-nullable fields except it accepts missing "child".  
+2. Gson and Jackson accept null for non-nullable integer "id" (decoding as 0) and string "amount" (decoding as null); Moshi and kotlinx.serialization reject null for non-nullable fields.  
+3. Gson and Jackson accept null for "tags" (non-nullable array), decoding as null; Moshi and kotlinx.serialization reject null for non-nullable fields.  
+4. Gson and Moshi accept missing "child"; kotlinx.serialization rejects it; Jackson accepts it.  
+5. Gson and Moshi accept extra unknown keys; kotlinx.serialization and Jackson reject unknown keys.  
+6. Duplicate keys are accepted by all four, with the last occurrence winning.  
+7. Gson, Moshi, and Jackson accept wrong JSON types for "amount" (number instead of string), coercing to string; kotlinx.serialization rejects.  
+8. Gson, Moshi, and Jackson accept arrays of integers in "tags" (string array), coercing integers to strings; kotlinx.serialization rejects.  
+9. Enum "status" with unknown or case-variant values is accepted by Gson as null; Moshi, kotlinx.serialization, and Jackson reject with format exceptions.  
+10. Gson and Jackson accept null for enum "status" decoding as null; Moshi and kotlinx.serialization reject.
+
+YOUR SCORE (from the last iteration that produced usable data): 413 documents
+out of 500 where the four implementations disagreed with each other
+(413 where one accepted and another rejected,
+0 where two accepted but decoded to different values).
+Maximizing this score is the objective. A high rejection count on its own
+(see tier_b_counts below) is not the goal by itself -- a document every
+implementation rejects the same way scores zero, no matter how "malformed"
+it looks.
+
+Other metrics from that iteration, for context only:
+{"tier_b_counts": {}, "top_level_counts": {"schema_evaluated": 500}, "total": 500, "unique_divergence_signatures": 3}
+
+The previous iteration's proposal failed before producing usable data:
+ProposalError: generated_json is not a Hypothesis strategy: module 'hypothesis.strategies' has no attribute 'weighted_choices'
+
+
+Strategy hint: implementations are more likely to disagree on documents that
+are *almost* well-formed with one specific thing off (a field of the wrong
+type, a field missing rather than present-but-wrong, a value at a type
+boundary) than on documents that are broadly malformed in many ways at once
+-- broad malformation tends to make every implementation reject identically,
+which scores zero. Vary one or two things about an otherwise valid document
+at a time, across many documents, rather than maximizing how unusual any
+single document looks.
+
+Return only Python source defining `@st.composite def generated_json(draw) -> bytes`.
+Each document is passed to all four libraries as raw text, and each library
+parses that text itself.
+Use bounded recursion and output sizes. The campaign runs at most 500
+examples per iteration. The only import allowed is `from hypothesis import strategies as st` -- do not import `json` or anything else; build the JSON text yourself with string concatenation and Hypothesis `.map()`/`.flatmap()` transforms.
+Do not use subprocesses, filesystem, network access, eval, exec, or
+coverage instrumentation.

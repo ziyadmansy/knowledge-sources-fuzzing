@@ -1,0 +1,13 @@
+Shorten this list to at most 1500 characters, keeping the most useful observations and their exact facts. Return only the list.
+
+1. Missing required fields: Gson and Jackson accept missing fields, defaulting to null or zero; Moshi and kotlinx.serialization reject with MissingFieldException or JsonDataException.
+2. Non-nullable fields set to null: Gson accepts and sets to null or zero; Jackson rejects with KotlinInvalidNullException; Moshi and kotlinx.serialization reject with JsonDataException or JsonDecodingException.
+3. Wrong JSON type for fields: Gson and Moshi accept string fields given as numbers (e.g., "amount": 1), coercing to string; kotlinx.serialization rejects; Jackson accepts with coercion except for nulls.
+4. Numeric field "id" null: Gson and Jackson accept, decode as zero; Moshi and kotlinx.serialization reject.
+5. Enum "status" unknown or case variant: Gson accepts, decodes as null; Moshi, kotlinx.serialization, and Jackson reject with JsonDataException or InvalidFormatException.
+6. Extra unknown keys: Gson and Moshi accept and ignore; kotlinx.serialization rejects with JsonDecodingException; Jackson rejects with UnrecognizedPropertyException.
+7. Duplicate keys: Gson, Moshi, kotlinx.serialization, and Jackson accept, last key wins in decoding.
+8. Nested object fields behave like top-level: Gson and Jackson accept null or missing fields in nested objects; Moshi and kotlinx.serialization reject.
+9. Null arrays ("tags"): Gson accepts null; Jackson rejects; Moshi and kotlinx.serialization reject.
+10. All four accept fully valid documents.
+Not tested: numeric boundary values (fractions, exponents, large integers), unquoted values, single quotes, trailing commas, NaN, raw control characters inside strings.

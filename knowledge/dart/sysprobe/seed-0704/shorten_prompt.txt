@@ -1,0 +1,21 @@
+Shorten this list to at most 1500 characters, keeping the most useful observations and their exact facts. Return only the list.
+
+1. All four reject documents missing required fields "id" (probe 1), "amount" (probe 2), "status" (probe 4), and "tags" (probe 5), except built_value accepts missing "tags" (probe 5) and missing "child" (probe 6) by defaulting to empty array or null.
+
+2. All reject null for non-nullable fields "id" (probe 7), "amount" (probe 8), "status" (probe 9), and "tags" (probe 10), except built_value accepts null "tags" (probe 10) and converts it to empty array.
+
+3. All reject wrong JSON types for "amount" as number (probe 12), "child" as empty object (probe 13), and "tags" containing non-string element (probe 19).
+
+4. All accept a fully valid document (probe 3, 11) and nested valid child (probe 14).
+
+5. All reject nested child with null "id" (probe 15), null "amount" (probe 16), or invalid enum "status" (probe 17).
+
+6. Enum "status" is case-sensitive; all reject unknown value "invalid" (probe 17) and case variant "ACTIVE" (probe 18) with ArgumentError or DeserializationError.
+
+7. Duplicate keys were not tested; extra unknown keys are accepted by all (probe 20) and ignored.
+
+8. Manual, json_serializable, and freezed reject missing "child" (probe 6) while built_value accepts and defaults it to null.
+
+9. Exception types differ: manual, json_serializable, and freezed mostly throw _TypeError or ArgumentError; built_value throws DeserializationError on rejects.
+
+Not tested: numeric boundary values (category 4), duplicate keys (category 6), nested missing fields or nulls beyond one level (category 7), and non-strict JSON syntax (category 8).

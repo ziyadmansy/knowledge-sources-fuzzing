@@ -1,0 +1,15 @@
+{
+  "agent": "sysprobe",
+  "knowledge_chars": 1463,
+  "llm_usage": {
+    "calls": 3,
+    "input_tokens": 5938,
+    "output_tokens": 1439,
+    "truncated": 0
+  },
+  "probes": [
+    12,
+    8
+  ],
+  "target": "dart"
+}

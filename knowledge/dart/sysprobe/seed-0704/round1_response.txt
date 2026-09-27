@@ -1,0 +1,59 @@
+```probe
+{"amount": "1", "name": null, "status": "active", "tags": [], "child": null}
+```
+Test missing required field "id".
+
+```probe
+{"id": 1, "name": null, "status": "active", "tags": [], "child": null}
+```
+Test missing required field "amount".
+
+```probe
+{"id": 1, "amount": "1", "status": "active", "tags": [], "child": null}
+```
+Test missing required field "name".
+
+```probe
+{"id": 1, "amount": "1", "name": null, "tags": [], "child": null}
+```
+Test missing required field "status".
+
+```probe
+{"id": 1, "amount": "1", "name": null, "status": "active", "child": null}
+```
+Test missing required field "tags".
+
+```probe
+{"id": 1, "amount": "1", "name": null, "status": "active", "tags": []}
+```
+Test missing required field "child".
+
+```probe
+{"id": null, "amount": "1", "name": null, "status": "active", "tags": [], "child": null}
+```
+Test non-nullable field "id" set to null.
+
+```probe
+{"id": 1, "amount": null, "name": null, "status": "active", "tags": [], "child": null}
+```
+Test non-nullable field "amount" set to null.
+
+```probe
+{"id": 1, "amount": "1", "name": null, "status": null, "tags": [], "child": null}
+```
+Test non-nullable field "status" set to null.
+
+```probe
+{"id": 1, "amount": "1", "name": null, "status": "active", "tags": null, "child": null}
+```
+Test non-nullable field "tags" set to null.
+
+```probe
+{"id": 1, "amount": "1", "name": null, "status": "active", "tags": [], "child": null}
+```
+Control: all fields present and valid.
+
+```probe
+{"id": 1, "amount": 100, "name": null, "status": "active", "tags": [], "child": null}
+```
+Test field "amount" with wrong JSON type (number instead of string).

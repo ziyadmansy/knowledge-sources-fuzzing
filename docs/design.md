@@ -286,3 +286,14 @@ alone is not enough. If E2 shows no improvement, it reports that a larger model 
 either. No further arms or seeds are added after these results without a new, earlier entry here.
 
 **Budget:** about $0.55 (E1 about $0.26, E2 about $0.28), taken from the dashboard afterwards.
+
+**2026-09-27, extension run log (not a deviation).** Everything ran as declared in §10.1. Results are in
+`artifacts/analysis-extension.json`.
+- E1: Dart `sysprobe` vs `none` has p=0.032 and δ=+0.84, which meets the pre-registered rule (p < 0.05). The
+  Holm-adjusted p across the declared family of six is 0.159; both are reported. Kotlin `sysprobe` vs `none` has
+  p=0.016 (Holm 0.095).
+- E2: `probe-gpt41` vs `none` has p=0.032 (Holm 0.064); vs `probe`, p=0.151.
+- One `sysprobe` refinement response was truncated at the 8,000-token limit.
+- The "Not tested:" line was lost to the cap cut in 3 of 5 Dart and 5 of 5 Kotlin summaries, because it comes last
+  and the pre-registered cut removes trailing lines. This is a flaw in the extension's design; it is reported, not
+  fixed after the fact.

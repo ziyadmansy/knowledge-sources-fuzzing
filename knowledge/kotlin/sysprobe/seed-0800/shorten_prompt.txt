@@ -1,0 +1,24 @@
+Shorten this list to at most 1500 characters, keeping the most useful observations and their exact facts. Return only the list.
+
+1. Gson accepts missing required fields and sets them to null or default (e.g., missing "id" → 0, missing "status" → null, missing "tags" → null).
+2. Moshi rejects documents missing any required field or with null in non-nullable fields, throwing JsonDataException.
+3. kotlinx.serialization rejects missing required fields and null in non-nullable fields, throwing MissingFieldException or JsonDecodingException.
+4. Jackson rejects missing required fields and null in non-nullable fields with KotlinInvalidNullException or InvalidFormatException.
+5. Gson and Jackson accept null for nullable fields ("name" is nullable), but Jackson rejects null for non-nullable fields.
+6. Gson and Moshi accept "amount" as a string or number, converting number to string; kotlinx.serialization rejects number for string field.
+7. Gson accepts null for non-nullable string fields ("amount"), Moshi and kotlinx reject, Jackson rejects null for non-nullable fields.
+8. Gson accepts unknown enum values ("status": "Active" or invalid) as null; Moshi, kotlinx, and Jackson reject with exceptions.
+9. Gson accepts missing "child" field as null; Moshi rejects missing fields; kotlinx rejects missing fields; Jackson accepts missing "child".
+10. Nested objects follow same acceptance/rejection patterns as top-level fields.
+11. Gson accepts empty object for "child.child" with all fields missing/null/defaulted; Moshi, kotlinx, Jackson reject.
+12. Duplicate keys and extra unknown keys were not tested.
+13. Gson accepts null for arrays ("tags": null); Moshi, kotlinx, Jackson reject null arrays.
+14. Gson accepts null for integer fields ("id": null) as 0; Jackson accepts but sets to 0; Moshi and kotlinx reject.
+15. Gson and Jackson accept missing "child" field; Moshi and kotlinx reject.
+16. Gson accepts number for string fields by converting to string; Moshi does the same; kotlinx rejects.
+17. Gson accepts missing "status" as null; Jackson rejects missing "status".
+18. Gson accepts missing "tags" as null; Jackson rejects missing "tags".
+19. Gson accepts null for "tags" array; Jackson rejects null arrays.
+20. Gson accepts null for "amount" string field; Jackson rejects null for non-nullable fields.
+
+Not tested: duplicate keys, extra unknown keys, numeric boundary values, non-strict JSON (single quotes, unquoted values, trailing commas, NaN, raw control chars).

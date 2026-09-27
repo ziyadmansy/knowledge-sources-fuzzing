@@ -1,0 +1,42 @@
+1. Test if "name" can be omitted (since missing fields are accepted for "name" in round 1, probe 10).
+```probe
+{"id": 1, "amount": "1", "status": "active", "tags": [], "child": null}
+```
+2. Test omitting a required field ("id") to see if any accept or default.
+```probe
+{"amount": "1", "name": null, "status": "active", "tags": [], "child": null}
+```
+3. Test "status" as null (since it's an enum, but null was not tried).
+```probe
+{"id": 1, "amount": "1", "name": null, "status": null, "tags": [], "child": null}
+```
+4. Test "tags" as null (should be list, but null was not tried alone).
+```probe
+{"id": 1, "amount": "1", "name": null, "status": "active", "tags": null, "child": null}
+```
+5. Test "tags" as an array with a null element (["tag", null]).
+```probe
+{"id": 1, "amount": "1", "name": null, "status": "active", "tags": ["tag", null], "child": null}
+```
+6. Test "child" as a valid nested record (one level of recursion).
+```probe
+{"id": 1, "amount": "1", "name": null, "status": "active", "tags": [], "child": {"id": 2, "amount": "2", "name": "child", "status": "inactive", "tags": ["a"], "child": null}}
+```
+7. Test "child" as a nested record with a type error inside (e.g., "id" as string).
+```probe
+{"id": 1, "amount": "1", "name": null, "status": "active", "tags": [], "child": {"id": "2", "amount": "2", "name": "child", "status": "inactive", "tags": ["a"], "child": null}}
+```
+8. Test "status" as uppercase (enum case sensitivity).
+```probe
+{"id": 1, "amount": "1", "name": null, "status": "ACTIVE", "tags": [], "child": null}
+```
+
+**Summary of what each probe tests:**
+1. Omitting "name" (optional field).
+2. Omitting "id" (required field).
+3. "status" as null (enum nullability).
+4. "tags" as null (list nullability).
+5. "tags" as array with null element (list element type).
+6. "child" as valid nested record (recursion).
+7. "child" as nested record with type error (nested error propagation).
+8. "status" as uppercase (enum case sensitivity).

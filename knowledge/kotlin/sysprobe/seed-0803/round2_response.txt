@@ -1,0 +1,39 @@
+```probe
+{"id": 1, "amount": "1", "name": null, "status": null, "tags": [], "child": null}
+```
+Test null for non-nullable enum field "status" (confirm Jackson rejects, Gson accepts with null).
+
+```probe
+{"id": 1, "amount": "1", "name": null, "status": "ACTIVE", "tags": [], "child": null}
+```
+Test case variant of enum "status" (uppercase "ACTIVE").
+
+```probe
+{"id": 1, "amount": "1", "name": null, "status": "invalid", "tags": [], "child": null}
+```
+Test unknown enum value for "status".
+
+```probe
+{"id": 1, "amount": 1, "name": null, "status": "active", "tags": [], "child": null}
+```
+Test wrong type for "amount" (number instead of string).
+
+```probe
+{"id": 1, "amount": "1", "name": null, "status": "active", "tags": [1, 2], "child": null}
+```
+Test wrong element type in "tags" array (numbers instead of strings).
+
+```probe
+{"id": 1, "amount": "1", "name": null, "status": "active", "tags": [], "child": {"id": null, "amount": "2", "name": null, "status": "inactive", "tags": [], "child": null}}
+```
+Test null for non-nullable "id" inside nested "child" object.
+
+```probe
+{"id": 1, "amount": "1", "name": null, "status": "active", "tags": [], "child": {"id": 2, "amount": null, "name": null, "status": "inactive", "tags": [], "child": null}}
+```
+Test null for non-nullable "amount" inside nested "child" object.
+
+```probe
+{"id": 1, "amount": "1", "name": null, "status": "active", "tags": [], "child": {"id": 2, "amount": "2", "name": null, "status": "inactive", "tags": [], "child": null}, "extra": "value"}
+```
+Test extra unknown key at root level with nested child present (confirm Jackson rejects unknown keys even with nested objects).

@@ -1,0 +1,11 @@
+1. All four reject documents missing required fields "id" (probe 1), "amount" (probe 2), "name" (probe 4), "status" (probe 5 except built_value accepts), and "tags" (probe 6 all accept).  
+2. built_value accepts missing "tags" (probe 6) and missing "status" (probe 5) by substituting defaults; others reject missing any required field.  
+3. All reject null for non-nullable fields "id" (probe 7), "amount" (probe 8), "status" (probe 9), and "tags" (probe 10 except built_value accepts null "tags" as empty array).  
+4. "name" can be null (probe 3 accepted by all).  
+5. Wrong JSON types cause rejection by all: "amount" as number (probe 12), "child" as empty object when not null (probe 13), "tags" array with non-string elements (probe 19).  
+6. Nested object "child" must be well-formed or null; wrong types inside cause rejection by all (probe 20).  
+7. Enum "status" is case-sensitive and restricted: "ACTIVE" (probe 15) and unknown "invalid_status" (probe 16) rejected by all.  
+8. Extra unknown keys are ignored by all (probe 17 accepted by all).  
+9. Duplicate keys: last wins for all (probe 18 all accept with last "id":2).  
+10. All implementations decode accepted documents identically (probes 3, 11, 14).  
+11. Exception types differ: manual, json_serializable, and freezed mostly throw _TypeError or ArgumentError; built_value throws DeserializationError.

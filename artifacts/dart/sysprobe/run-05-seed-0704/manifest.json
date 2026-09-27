@@ -1,0 +1,40 @@
+{
+  "arguments": {
+    "arm": "sysprobe",
+    "artifact_dir": "None",
+    "examples": "500",
+    "executable": "None",
+    "iterations": "5",
+    "knowledge_file": "knowledge/dart/sysprobe/seed-{seed:04d}/knowledge.txt",
+    "model": "gpt-4.1-mini",
+    "overwrite": "False",
+    "runs": "5",
+    "seed": "700",
+    "target": "dart",
+    "timeout": "5.0"
+  },
+  "arm": "sysprobe",
+  "feedback_mode": null,
+  "harness_sha256": "f63c28fbb9a901d61391740ae37ddd4cf03b5ad26d6f39a9527e849dceba6c13",
+  "hypothesis_version": "6.165.5",
+  "knowledge_section": "What is already known about these four implementations, from running\nprobe documents against them before any fuzzing (use it however you see\nfit):\n1. All four reject documents missing required fields \"id\" (probe 1), \"amount\" (probe 2), \"status\" (probe 4), and \"tags\" (probe 5), except built_value accepts missing \"tags\" (probe 5) and missing \"child\" (probe 6) by defaulting to empty array or null.\n\n2. All reject null for non-nullable fields \"id\" (probe 7), \"amount\" (probe 8), \"status\" (probe 9), and \"tags\" (probe 10), except built_value accepts null \"tags\" (probe 10) and converts it to empty array.\n\n3. All reject wrong JSON types for \"amount\" as number (probe 12), \"child\" as empty object (probe 13), and \"tags\" containing non-string element (probe 19).\n\n4. All accept a fully valid document (probe 3, 11) and nested valid child (probe 14).\n\n5. All reject nested child with null \"id\" (probe 15), null \"amount\" (probe 16), or invalid enum \"status\" (probe 17).\n\n6. Enum \"status\" is case-sensitive; all reject unknown value \"invalid\" (probe 17) and case variant \"ACTIVE\" (probe 18) with ArgumentError or DeserializationError.\n\n7. Extra unknown keys are accepted by all (probe 20) and ignored.\n\n8. Manual, json_serializable, and freezed reject missing \"child\" (probe 6) while built_value accepts and defaults it to null.\n\n9. Exception types differ: manual, json_serializable, and freezed mostly throw _TypeError or ArgumentError; built_value throws DeserializationError on rejects.\n\nNot tested: numeric boundary values, duplicate keys, nested missing fields or nulls beyond one level, and non-strict JSON syntax.",
+  "llm_usage": {
+    "calls": 5,
+    "input_tokens": 5318,
+    "output_tokens": 8265,
+    "truncated": 0
+  },
+  "model": "gpt-4.1-mini",
+  "path_order": [
+    "A_manual",
+    "B_json_serializable",
+    "C_freezed",
+    "D_built_value"
+  ],
+  "platform": "macOS-26.5.2-arm64-arm-64bit-Mach-O",
+  "python_implementation": "CPython",
+  "python_version": "3.14.7 (main, Aug  5 2026, 10:29:49) [Clang 21.0.0 (clang-2100.1.1.101)]",
+  "seed": 704,
+  "target": "dart",
+  "timestamp": "2026-09-27T14:31:38.911506+00:00"
+}

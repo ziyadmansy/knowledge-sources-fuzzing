@@ -1,0 +1,9 @@
+1. All four implementations accept well-formed documents, tolerate extra fields, and treat missing "name" as null (Probes 1, 10, 11, 13, 18).
+2. All reject type mismatches for non-nullable fields ("id" as string, "amount" as int, "tags" as string or int array, "child" as string/object, etc.)—manual, json_serializable, and freezed throw _TypeError; built_value throws DeserializationError (Probes 2–4, 6–9, 12, 14, 17, 19).
+3. All reject invalid enum values for "status" (e.g., "pending", "ACTIVE") with ArgumentError (manual, json_serializable, freezed) or DeserializationError (built_value) (Probes 5, 20).
+4. All accept missing "name" (interpreted as null), but missing required fields like "id" cause rejection (_TypeError/DeserializationError) (Probes 10, 13, 14).
+5. All reject null for required fields except "name" (Probe 12).
+6. For "status": null is rejected by all, but built_value throws DeserializationError, while json_serializable and freezed throw ArgumentError, and manual throws _TypeError (Probe 15).
+7. Only built_value accepts "tags": null, decoding it as an empty list; others reject with _TypeError (Probe 16).
+8. All accept recursive "child" if well-formed; type errors in nested "child" are rejected as in top-level (Probes 18, 19).
+9. No implementation throws an undocumented/private exception; all errors are _TypeError, ArgumentError, or DeserializationError.

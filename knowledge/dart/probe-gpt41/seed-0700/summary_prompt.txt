@@ -1,0 +1,188 @@
+You are characterizing four Dart JSON deserializers by experiment, before a fuzzing campaign.
+
+Record schema (all six fields always present in a well-formed document):
+{
+  "id": <integer>,
+  "amount": <string>,
+  "name": <string or null>,
+  "status": <one of "active", "inactive", "unknown">,
+  "tags": <array of strings>,
+  "child": <Record or null, one level of recursion normally>
+}
+
+Four independent Dart JSON deserializers are run against every document you
+produce: hand-written manual parsing, and three codegen frameworks
+(json_serializable, freezed, built_value). Your goal is to produce documents
+that are syntactically valid JSON objects but make these four
+implementations disagree with each other -- one accepting where another
+rejects, or two accepting but decoding to different values -- or that make
+any of them fail with an undocumented (private, unnameable) exception type
+rather than a clear, catchable one.
+
+You will not write the fuzzer. Your job is to find out, by running probe
+documents, how these four implementations behave, and then write down what
+you learned for the model that will write the fuzzer.
+
+You have a budget of 20 probe documents in total, over two rounds.
+Each probe is run through all four implementations. For each probe you see,
+per implementation, whether it accepted or rejected the document, the
+exception type if it rejected, and the decoded value if it accepted.
+
+Strategy hint: implementations are more likely to disagree on documents that
+are *almost* well-formed with one specific thing off (a field of the wrong
+type, a field missing rather than present-but-wrong, a value at a type
+boundary) than on documents that are broadly malformed in many ways at once
+-- broad malformation tends to make every implementation reject identically,
+which scores zero. Vary one or two things about an otherwise valid document
+at a time, across many documents, rather than maximizing how unusual any
+single document looks.
+
+All probes and their results:
+
+Probe 1:
+{"id": 1, "amount": "1", "name": "Alice", "status": "active", "tags": ["foo", "bar"], "child": null}
+  A_manual: accepted, decoded as {"id":1,"amount":"1","name":"Alice","status":"active","tags":["foo","bar"],"child":null}
+  B_json_serializable: accepted, decoded as {"id":1,"amount":"1","name":"Alice","status":"active","tags":["foo","bar"],"child":null}
+  C_freezed: accepted, decoded as {"id":1,"amount":"1","name":"Alice","status":"active","tags":["foo","bar"],"child":null}
+  D_built_value: accepted, decoded as {"id":1,"amount":"1","name":"Alice","status":"active","tags":["foo","bar"],"child":null}
+
+Probe 2:
+{"id": "1", "amount": "1", "name": "Alice", "status": "active", "tags": ["foo", "bar"], "child": null}
+  A_manual: rejected (_TypeError)
+  B_json_serializable: rejected (_TypeError)
+  C_freezed: rejected (_TypeError)
+  D_built_value: rejected (DeserializationError)
+
+Probe 3:
+{"id": 2, "amount": 100, "name": "Bob", "status": "inactive", "tags": ["baz"], "child": null}
+  A_manual: rejected (_TypeError)
+  B_json_serializable: rejected (_TypeError)
+  C_freezed: rejected (_TypeError)
+  D_built_value: rejected (DeserializationError)
+
+Probe 4:
+{"id": 3, "amount": "10", "status": "unknown", "tags": [], "child": null}
+  A_manual: accepted, decoded as {"id":3,"amount":"10","name":null,"status":"unknown","tags":[],"child":null}
+  B_json_serializable: accepted, decoded as {"id":3,"amount":"10","name":null,"status":"unknown","tags":[],"child":null}
+  C_freezed: accepted, decoded as {"id":3,"amount":"10","name":null,"status":"unknown","tags":[],"child":null}
+  D_built_value: accepted, decoded as {"id":3,"amount":"10","name":null,"status":"unknown","tags":[],"child":null}
+
+Probe 5:
+{"id": 4, "amount": "20", "name": 123, "status": "active", "tags": ["x"], "child": null}
+  A_manual: rejected (_TypeError)
+  B_json_serializable: rejected (_TypeError)
+  C_freezed: rejected (_TypeError)
+  D_built_value: rejected (DeserializationError)
+
+Probe 6:
+{"id": 5, "amount": "30", "name": "Carol", "status": "pending", "tags": ["y"], "child": null}
+  A_manual: rejected (ArgumentError)
+  B_json_serializable: rejected (ArgumentError)
+  C_freezed: rejected (ArgumentError)
+  D_built_value: rejected (DeserializationError)
+
+Probe 7:
+{"id": 6, "amount": "40", "name": "Dave", "status": "inactive", "tags": "not-an-array", "child": null}
+  A_manual: rejected (_TypeError)
+  B_json_serializable: rejected (_TypeError)
+  C_freezed: rejected (_TypeError)
+  D_built_value: rejected (DeserializationError)
+
+Probe 8:
+{"id": 7, "amount": "50", "name": "Eve", "status": "active", "tags": ["ok", 42], "child": null}
+  A_manual: rejected (_TypeError)
+  B_json_serializable: rejected (_TypeError)
+  C_freezed: rejected (_TypeError)
+  D_built_value: rejected (DeserializationError)
+
+Probe 9:
+{"id": 8, "amount": "60", "name": "Frank", "status": "unknown", "tags": [], "child": {}}
+  A_manual: rejected (_TypeError)
+  B_json_serializable: rejected (_TypeError)
+  C_freezed: rejected (_TypeError)
+  D_built_value: rejected (DeserializationError)
+
+Probe 10:
+{"id": 9, "amount": "70", "name": "Grace", "status": "active", "tags": [], "child": "not-an-object"}
+  A_manual: rejected (_TypeError)
+  B_json_serializable: rejected (_TypeError)
+  C_freezed: rejected (_TypeError)
+  D_built_value: rejected (DeserializationError)
+
+Probe 11:
+{"id": 10, "amount": "80", "name": "Heidi", "status": "inactive", "tags": [], "child": null, "extra": 123}
+  A_manual: accepted, decoded as {"id":10,"amount":"80","name":"Heidi","status":"inactive","tags":[],"child":null}
+  B_json_serializable: accepted, decoded as {"id":10,"amount":"80","name":"Heidi","status":"inactive","tags":[],"child":null}
+  C_freezed: accepted, decoded as {"id":10,"amount":"80","name":"Heidi","status":"inactive","tags":[],"child":null}
+  D_built_value: accepted, decoded as {"id":10,"amount":"80","name":"Heidi","status":"inactive","tags":[],"child":null}
+
+Probe 12:
+{"id": null, "amount": null, "name": null, "status": null, "tags": null, "child": null}
+  A_manual: rejected (_TypeError)
+  B_json_serializable: rejected (_TypeError)
+  C_freezed: rejected (_TypeError)
+  D_built_value: rejected (DeserializationError)
+
+Probe 13:
+{"id": 13, "amount": "130", "status": "active", "tags": ["foo"], "child": null}
+  A_manual: accepted, decoded as {"id":13,"amount":"130","name":null,"status":"active","tags":["foo"],"child":null}
+  B_json_serializable: accepted, decoded as {"id":13,"amount":"130","name":null,"status":"active","tags":["foo"],"child":null}
+  C_freezed: accepted, decoded as {"id":13,"amount":"130","name":null,"status":"active","tags":["foo"],"child":null}
+  D_built_value: accepted, decoded as {"id":13,"amount":"130","name":null,"status":"active","tags":["foo"],"child":null}
+
+Probe 14:
+{"id": 14, "amount": "140", "name": "Ivan", "status": "inactive", "child": null}
+  A_manual: rejected (_TypeError)
+  B_json_serializable: rejected (_TypeError)
+  C_freezed: rejected (_TypeError)
+  D_built_value: accepted, decoded as {"id":14,"amount":"140","name":"Ivan","status":"inactive","tags":[],"child":null}
+
+Probe 15:
+{"id": 15, "amount": "150", "name": "Judy", "status": "unknown", "tags": ["bar"]}
+  A_manual: accepted, decoded as {"id":15,"amount":"150","name":"Judy","status":"unknown","tags":["bar"],"child":null}
+  B_json_serializable: accepted, decoded as {"id":15,"amount":"150","name":"Judy","status":"unknown","tags":["bar"],"child":null}
+  C_freezed: accepted, decoded as {"id":15,"amount":"150","name":"Judy","status":"unknown","tags":["bar"],"child":null}
+  D_built_value: accepted, decoded as {"id":15,"amount":"150","name":"Judy","status":"unknown","tags":["bar"],"child":null}
+
+Probe 16:
+{"id": 16, "amount": "160", "name": "Mallory", "tags": ["baz"], "child": null}
+  A_manual: rejected (_TypeError)
+  B_json_serializable: rejected (ArgumentError)
+  C_freezed: rejected (ArgumentError)
+  D_built_value: rejected (DeserializationError)
+
+Probe 17:
+{"amount": "170", "name": "Niaj", "status": "active", "tags": ["qux"], "child": null}
+  A_manual: rejected (_TypeError)
+  B_json_serializable: rejected (_TypeError)
+  C_freezed: rejected (_TypeError)
+  D_built_value: rejected (DeserializationError)
+
+Probe 18:
+{"id": 18, "name": "Olivia", "status": "inactive", "tags": ["zap"], "child": null}
+  A_manual: rejected (_TypeError)
+  B_json_serializable: rejected (_TypeError)
+  C_freezed: rejected (_TypeError)
+  D_built_value: rejected (DeserializationError)
+
+Probe 19:
+{"id": 19, "amount": "190", "name": "Peggy", "status": "active", "tags": ["foo"], "child": {"id": 20, "amount": "200", "name": "Quinn", "status": "inactive", "tags": [], "child": null}}
+  A_manual: accepted, decoded as {"id":19,"amount":"190","name":"Peggy","status":"active","tags":["foo"],"child":{"id":20,"amount":"200","name":"Quinn","status":"inactive","tags":[],"child":null}}
+  B_json_serializable: accepted, decoded as {"id":19,"amount":"190","name":"Peggy","status":"active","tags":["foo"],"child":{"id":20,"amount":"200","name":"Quinn","status":"inactive","tags":[],"child":null}}
+  C_freezed: accepted, decoded as {"id":19,"amount":"190","name":"Peggy","status":"active","tags":["foo"],"child":{"id":20,"amount":"200","name":"Quinn","status":"inactive","tags":[],"child":null}}
+  D_built_value: accepted, decoded as {"id":19,"amount":"190","name":"Peggy","status":"active","tags":["foo"],"child":{"id":20,"amount":"200","name":"Quinn","status":"inactive","tags":[],"child":null}}
+
+Probe 20:
+{"id": 21, "amount": "210", "name": "Ruth", "status": "unknown", "tags": ["bar"], "child": {"id": 22, "name": "Steve", "status": "active", "tags": [], "child": null}}
+  A_manual: rejected (_TypeError)
+  B_json_serializable: rejected (_TypeError)
+  C_freezed: rejected (_TypeError)
+  D_built_value: rejected (DeserializationError)
+
+Write down what you learned, for the model that will write a generator to
+make these four implementations disagree. Rules:
+- At most 1500 characters in total.
+- A numbered list of observations about behaviour: which implementations
+  accept or reject what, and how they decode it.
+- State only what the evidence above shows. No generator code.
+Return only the list.

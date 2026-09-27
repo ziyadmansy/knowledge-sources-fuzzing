@@ -1,0 +1,11 @@
+1. Gson accepts missing required fields and sets them to null or default (e.g., missing "id" → 0, missing "status" → null, missing "tags" → null).  
+2. Moshi rejects documents missing any required field or with null in non-nullable fields, throwing JsonDataException.  
+3. kotlinx.serialization rejects missing required fields and null in non-nullable fields, throwing MissingFieldException or JsonDecodingException.  
+4. Jackson rejects missing required fields and null in non-nullable fields with KotlinInvalidNullException or InvalidFormatException.  
+5. Gson and Jackson accept null for nullable fields ("name" is nullable), but Jackson rejects null for non-nullable fields.  
+6. Gson and Moshi accept "amount" as string or number, converting number to string; kotlinx.serialization rejects number for string field.  
+7. Gson accepts null for non-nullable string fields ("amount"); Moshi, kotlinx, and Jackson reject null for non-nullable fields.  
+8. Gson accepts unknown enum values ("status": "Active" or invalid) as null; Moshi, kotlinx, and Jackson reject with exceptions.  
+9. Gson accepts missing "child" field as null; Moshi and kotlinx reject missing fields; Jackson accepts missing "child".  
+10. Nested objects follow same acceptance/rejection patterns as top-level fields.  
+11. Gson accepts empty object for "child.child" with all fields missing/null/defaulted; Moshi, kotlinx, Jackson reject.

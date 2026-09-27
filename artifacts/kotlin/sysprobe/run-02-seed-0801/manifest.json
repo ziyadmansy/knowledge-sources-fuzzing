@@ -1,0 +1,40 @@
+{
+  "arguments": {
+    "arm": "sysprobe",
+    "artifact_dir": "None",
+    "examples": "500",
+    "executable": "None",
+    "iterations": "5",
+    "knowledge_file": "knowledge/kotlin/sysprobe/seed-{seed:04d}/knowledge.txt",
+    "model": "gpt-4.1-mini",
+    "overwrite": "False",
+    "runs": "5",
+    "seed": "800",
+    "target": "kotlin",
+    "timeout": "5.0"
+  },
+  "arm": "sysprobe",
+  "feedback_mode": null,
+  "harness_sha256": "fcad662d38398cfdd5f7ff654a8c3b15f999359fca097cf358b4cf3ea47ab441",
+  "hypothesis_version": "6.165.5",
+  "knowledge_section": "What is already known about these four implementations, from running\nprobe documents against them before any fuzzing (use it however you see\nfit):\n1. Gson accepts missing required fields, decoding missing integers as 0, missing strings as null, and missing enums as null; Moshi and kotlinx.serialization reject missing required fields; Jackson rejects missing non-nullable fields but accepts missing nullable ones.  \n2. Gson accepts null for non-nullable fields (id, amount, status, tags), decoding null integers as 0 and null strings as null; Moshi and kotlinx.serialization reject null for non-nullable fields; Jackson rejects null for non-nullable fields.  \n3. Gson and Moshi accept wrong JSON types for string fields if convertible (e.g., number for amount), decoding numbers as strings; kotlinx.serialization rejects wrong types; Jackson accepts convertible types for strings but rejects invalid enum values.  \n4. Gson and Jackson accept missing enum fields, decoding them as null; Moshi and kotlinx.serialization reject missing enums; Gson accepts unknown enum values by decoding as null; Moshi, kotlinx.serialization, and Jackson reject unknown or case-variant enum values.  \n5. Gson and Moshi accept missing or null nested objects; kotlinx.serialization rejects missing nested objects; Jackson accepts missing nested objects but rejects null nested objects if non-nullable.  \n6. Gson accepts extra unknown keys and duplicate keys silently; Moshi accepts extra unknown keys but rejects duplicates (not tested explicitly); kotlinx.serialization rejects extra unknown keys; Jackson rejects extra unknown keys.",
+  "llm_usage": {
+    "calls": 5,
+    "input_tokens": 4481,
+    "output_tokens": 12366,
+    "truncated": 0
+  },
+  "model": "gpt-4.1-mini",
+  "path_order": [
+    "A_gson",
+    "B_moshi",
+    "C_kotlinx",
+    "D_jackson"
+  ],
+  "platform": "macOS-26.5.2-arm64-arm-64bit-Mach-O",
+  "python_implementation": "CPython",
+  "python_version": "3.14.7 (main, Aug  5 2026, 10:29:49) [Clang 21.0.0 (clang-2100.1.1.101)]",
+  "seed": 801,
+  "target": "kotlin",
+  "timestamp": "2026-09-27T14:38:37.264411+00:00"
+}

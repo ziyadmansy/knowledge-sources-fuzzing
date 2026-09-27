@@ -1,0 +1,27 @@
+{
+  "total": 500,
+  "top_level_counts": {
+    "encoding_error": 21,
+    "structural_reject": 214,
+    "schema_evaluated": 265
+  },
+  "tier_b_counts": {
+    "A_manual": 213,
+    "B_json_serializable": 129,
+    "C_freezed": 129
+  },
+  "tier_c_accept_reject": 121,
+  "tier_c_value": 0,
+  "unique_divergence_signatures": 4,
+  "divergence_perturbation_categories": {
+    "wrong_type": 84,
+    "null_override": 37
+  },
+  "divergence_signatures": {
+    "RAAR": 84,
+    "RRRA": 37
+  },
+  "tier_c_by_gate": {
+    "schema_evaluated": 121
+  }
+}

@@ -1,0 +1,40 @@
+{
+  "arguments": {
+    "arm": "sysprobe",
+    "artifact_dir": "None",
+    "examples": "500",
+    "executable": "None",
+    "iterations": "5",
+    "knowledge_file": "knowledge/dart/sysprobe/seed-{seed:04d}/knowledge.txt",
+    "model": "gpt-4.1-mini",
+    "overwrite": "False",
+    "runs": "5",
+    "seed": "700",
+    "target": "dart",
+    "timeout": "5.0"
+  },
+  "arm": "sysprobe",
+  "feedback_mode": null,
+  "harness_sha256": "f63c28fbb9a901d61391740ae37ddd4cf03b5ad26d6f39a9527e849dceba6c13",
+  "hypothesis_version": "6.165.5",
+  "knowledge_section": "What is already known about these four implementations, from running\nprobe documents against them before any fuzzing (use it however you see\nfit):\n1. All four reject documents missing required fields, but built_value sometimes accepts missing \"tags\" (Probe 5) or \"tags\": null (Probe 10) by substituting an empty list; others reject these cases.  \n2. All reject null for non-nullable fields (\"id\", \"amount\", \"status\", \"tags\") with _TypeError or DeserializationError; only \"name\" can be null.  \n3. Missing \"name\" field causes rejection by all (Probe 4); \"name\" must be present even if null.  \n4. Duplicate keys are accepted by all, with last key winning (Probe 14).  \n5. Extra unknown keys are ignored by all (Probe 13).  \n6. Enum \"status\" is case-sensitive and limited to \"active\", \"inactive\", \"unknown\"; variants like \"ACTIVE\" or unknown values cause rejection by all (Probes 15,16).  \n7. Numeric \"id\" must be an integer; manual rejects float \"id\" (Probe 18), built_value rejects float and exponent form (Probes 18,19), but json_serializable and freezed accept float and exponent, truncating to int.  \n8. Large integers beyond 32-bit range are accepted by all (Probe 20).  \n9. \"amount\" is a string and accepts numeric strings including fractional values (Probe 17); null \"amount\" rejected by all.  \n10. Nested \"child\" objects are parsed recursively and consistently accepted when well-formed (Probe 12).  \n11. Missing \"child\" field causes rejection except built_value accepts missing \"tags\" or \"tags\": null but not missing \"child\" (Probe 6 vs 5).",
+  "llm_usage": {
+    "calls": 5,
+    "input_tokens": 5085,
+    "output_tokens": 16915,
+    "truncated": 1
+  },
+  "model": "gpt-4.1-mini",
+  "path_order": [
+    "A_manual",
+    "B_json_serializable",
+    "C_freezed",
+    "D_built_value"
+  ],
+  "platform": "macOS-26.5.2-arm64-arm-64bit-Mach-O",
+  "python_implementation": "CPython",
+  "python_version": "3.14.7 (main, Aug  5 2026, 10:29:49) [Clang 21.0.0 (clang-2100.1.1.101)]",
+  "seed": 700,
+  "target": "dart",
+  "timestamp": "2026-09-27T14:23:37.759760+00:00"
+}

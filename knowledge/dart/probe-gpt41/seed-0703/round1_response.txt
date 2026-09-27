@@ -1,0 +1,48 @@
+1. Baseline: All fields well-formed.
+```probe
+{"id": 1, "amount": "100.00", "name": "Alice", "status": "active", "tags": ["vip"], "child": null}
+```
+2. id as string instead of integer.
+```probe
+{"id": "1", "amount": "100.00", "name": "Alice", "status": "active", "tags": ["vip"], "child": null}
+```
+3. amount as number instead of string.
+```probe
+{"id": 2, "amount": 100.00, "name": "Bob", "status": "inactive", "tags": ["regular"], "child": null}
+```
+4. name omitted (missing field).
+```probe
+{"id": 3, "amount": "50.00", "status": "unknown", "tags": [], "child": null}
+```
+5. name as number instead of string/null.
+```probe
+{"id": 4, "amount": "25.00", "name": 123, "status": "active", "tags": [], "child": null}
+```
+6. status as null.
+```probe
+{"id": 5, "amount": "10.00", "name": "Eve", "status": null, "tags": [], "child": null}
+```
+7. status as an unrecognized string.
+```probe
+{"id": 6, "amount": "5.00", "name": "Mallory", "status": "pending", "tags": [], "child": null}
+```
+8. tags as string instead of array.
+```probe
+{"id": 7, "amount": "2.00", "name": "Oscar", "status": "active", "tags": "single", "child": null}
+```
+9. tags as array with a non-string element.
+```probe
+{"id": 8, "amount": "1.00", "name": "Trudy", "status": "inactive", "tags": ["ok", 42], "child": null}
+```
+10. child as array instead of object/null.
+```probe
+{"id": 9, "amount": "0.50", "name": "Victor", "status": "active", "tags": [], "child": []}
+```
+11. child as valid nested record.
+```probe
+{"id": 10, "amount": "0.25", "name": "Wendy", "status": "unknown", "tags": [], "child": {"id": 11, "amount": "0.10", "name": null, "status": "inactive", "tags": [], "child": null}}
+```
+12. child as object missing required fields.
+```probe
+{"id": 12, "amount": "0.05", "name": "Zoe", "status": "active", "tags": [], "child": {"id": 13}}
+```

@@ -1,0 +1,10 @@
+1. Gson accepts missing non-nullable fields, decoding missing integers as 0, missing strings and enums as null; Moshi and kotlinx.serialization reject missing required fields; Jackson rejects missing non-nullable fields except it accepts missing "child".  
+2. Gson and Jackson accept null for non-nullable integer "id" (decoding as 0) and string "amount" (decoding as null); Moshi and kotlinx.serialization reject null for non-nullable fields.  
+3. Gson and Jackson accept null for "tags" (non-nullable array), decoding as null; Moshi and kotlinx.serialization reject null for non-nullable fields.  
+4. Gson and Moshi accept missing "child"; kotlinx.serialization rejects it; Jackson accepts it.  
+5. Gson and Moshi accept extra unknown keys; kotlinx.serialization and Jackson reject unknown keys.  
+6. Duplicate keys are accepted by all four, with the last occurrence winning.  
+7. Gson, Moshi, and Jackson accept wrong JSON types for "amount" (number instead of string), coercing to string; kotlinx.serialization rejects.  
+8. Gson, Moshi, and Jackson accept arrays of integers in "tags" (string array), coercing integers to strings; kotlinx.serialization rejects.  
+9. Enum "status" with unknown or case-variant values is accepted by Gson as null; Moshi, kotlinx.serialization, and Jackson reject with format exceptions.  
+10. Gson and Jackson accept null for enum "status" decoding as null; Moshi and kotlinx.serialization reject.

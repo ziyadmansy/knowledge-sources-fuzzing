@@ -1,0 +1,40 @@
+{
+  "arguments": {
+    "arm": "sysprobe",
+    "artifact_dir": "None",
+    "examples": "500",
+    "executable": "None",
+    "iterations": "5",
+    "knowledge_file": "knowledge/kotlin/sysprobe/seed-{seed:04d}/knowledge.txt",
+    "model": "gpt-4.1-mini",
+    "overwrite": "False",
+    "runs": "5",
+    "seed": "800",
+    "target": "kotlin",
+    "timeout": "5.0"
+  },
+  "arm": "sysprobe",
+  "feedback_mode": null,
+  "harness_sha256": "fcad662d38398cfdd5f7ff654a8c3b15f999359fca097cf358b4cf3ea47ab441",
+  "hypothesis_version": "6.165.5",
+  "knowledge_section": "What is already known about these four implementations, from running\nprobe documents against them before any fuzzing (use it however you see\nfit):\n1. Gson accepts missing non-nullable fields, decoding missing integers as 0, missing strings and enums as null; Moshi and kotlinx.serialization reject missing required fields; Jackson rejects missing non-nullable fields except it accepts missing \"child\".  \n2. Gson and Jackson accept null for non-nullable integer \"id\" (decoding as 0) and string \"amount\" (decoding as null); Moshi and kotlinx.serialization reject null for non-nullable fields.  \n3. Gson and Jackson accept null for \"tags\" (non-nullable array), decoding as null; Moshi and kotlinx.serialization reject null for non-nullable fields.  \n4. Gson and Moshi accept missing \"child\"; kotlinx.serialization rejects it; Jackson accepts it.  \n5. Gson and Moshi accept extra unknown keys; kotlinx.serialization and Jackson reject unknown keys.  \n6. Duplicate keys are accepted by all four, with the last occurrence winning.  \n7. Gson, Moshi, and Jackson accept wrong JSON types for \"amount\" (number instead of string), coercing to string; kotlinx.serialization rejects.  \n8. Gson, Moshi, and Jackson accept arrays of integers in \"tags\" (string array), coercing integers to strings; kotlinx.serialization rejects.  \n9. Enum \"status\" with unknown or case-variant values is accepted by Gson as null; Moshi, kotlinx.serialization, and Jackson reject with format exceptions.  \n10. Gson and Jackson accept null for enum \"status\" decoding as null; Moshi and kotlinx.serialization reject.",
+  "llm_usage": {
+    "calls": 5,
+    "input_tokens": 4676,
+    "output_tokens": 10538,
+    "truncated": 0
+  },
+  "model": "gpt-4.1-mini",
+  "path_order": [
+    "A_gson",
+    "B_moshi",
+    "C_kotlinx",
+    "D_jackson"
+  ],
+  "platform": "macOS-26.5.2-arm64-arm-64bit-Mach-O",
+  "python_implementation": "CPython",
+  "python_version": "3.14.7 (main, Aug  5 2026, 10:29:49) [Clang 21.0.0 (clang-2100.1.1.101)]",
+  "seed": 803,
+  "target": "kotlin",
+  "timestamp": "2026-09-27T14:42:01.852345+00:00"
+}
