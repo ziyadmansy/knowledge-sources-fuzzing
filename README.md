@@ -3,7 +3,8 @@
 Research artifact for the paper *Where Does an LLM Fuzzer's Domain Knowledge Come From? Human, Code-Read, and
 Self-Acquired Knowledge for Differential Testing of Typed Deserializers*.
 
-Preprint: [doi:10.5281/zenodo.23002933](https://doi.org/10.5281/zenodo.23002933)
+Preprint: [doi:10.5281/zenodo.23002933](https://doi.org/10.5281/zenodo.23002933) ·
+Software: [doi:10.5281/zenodo.23003263](https://doi.org/10.5281/zenodo.23003263)
 
 An earlier study ([Beyond Sanitizers](https://doi.org/10.5281/zenodo.22555794)) found that an LLM-guided
 refinement loop for differential testing of Dart JSON deserializers found divergence in 2.9% of generated

@@ -11,6 +11,7 @@ authors:
 repository-code: "https://github.com/ziyadmansy/knowledge-sources-fuzzing"
 url: "https://github.com/ziyadmansy/knowledge-sources-fuzzing"
 license: MIT
+doi: 10.5281/zenodo.23003263
 
 keywords:
   - differential testing

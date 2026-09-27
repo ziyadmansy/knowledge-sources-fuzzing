@@ -26,7 +26,7 @@ REPLACE = [
     ("An earlier study ([Beyond Sanitizers](https://doi.org/10.5281/zenodo.22555794))", "An earlier study (anonymized for review)"),
     ("[agentic-fuzzing-dart-json](https://github.com/ziyadmansy/agentic-fuzzing-dart-json) checked out next to this\nrepository",
      "the previous study's artifact (anonymized for review) checked out next to this\nrepository as `previous-study-artifact`"),
-    ("\nPreprint: [doi:10.5281/zenodo.23002933](https://doi.org/10.5281/zenodo.23002933)\n", ""),
+    ("\nPreprint: [doi:10.5281/zenodo.23002933](https://doi.org/10.5281/zenodo.23002933) ·\nSoftware: [doi:10.5281/zenodo.23003263](https://doi.org/10.5281/zenodo.23003263)\n", ""),
     ("hard deadline: preprint before PhD applications on 1 December", "hard deadline: 1 December"),
     ("artifact release, Zenodo DOI, preprint; CV/SOP entry.", "artifact release, DOI, preprint."),
     ("citing mansy2026agentic/mansy2026beyond here\n% deanonymizes the submission.", "the named citations are omitted\n% from this copy."),
