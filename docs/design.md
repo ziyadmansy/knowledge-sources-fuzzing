@@ -161,4 +161,17 @@ $3/month org limit (resets 1 October). Actual spend is taken from the OpenAI das
 
 ## 10. Deviations log
 
-*(empty; every change to §4–§7 after data exists goes here, with date and reason)*
+- **2026-09-27, before any data: Kotlin has no shared parsing gate (clarifies §5.2).** In Dart, all
+  four paths receive the output of one shared `jsonDecode`, so invalid JSON can never cause divergence.
+  In Kotlin, each library parses the raw text itself (Gson, Moshi, kotlinx.serialization, and Jackson
+  each have their own parser; Gson is lenient by default). So the Kotlin harness runs **all four paths
+  on every input**, and still reports the Dart-style gate `status` computed by a strict reference parser
+  (`kotlinx.serialization.json.Json.parseToJsonElement`). Syntax-level divergences are therefore
+  possible and counted in Kotlin's primary metric (divergence over all documents); they are also
+  reported separately by gate status, so the Dart and Kotlin rates can be compared like for like.
+- **2026-09-27, before any data: Kotlin schema is idiomatic, with no default values.** The Record is a
+  plain data class with no default parameter values and no annotations beyond what each library needs
+  to run (`@Serializable`, `@JsonClass(generateAdapter = true)`). Enum constants are lowercase so that
+  every library maps them by name with zero configuration. Documented library behaviour that follows
+  from this (e.g. kotlinx.serialization requiring a default for an *optional* nullable field) counts as
+  divergence, but is labelled "documented default", never "bug".
