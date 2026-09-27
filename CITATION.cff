@@ -30,3 +30,13 @@ abstract: >
   JSON deserialization paths.
 
 version: "1.0.0"
+
+preferred-citation:
+  type: article
+  title: "Where Does an LLM Fuzzer's Domain Knowledge Come From? Human, Code-Read, and Self-Acquired Knowledge for Differential Testing of Typed Deserializers"
+  authors:
+    - family-names: Ibrahim
+      given-names: "Ziyad Mohammad Mansy"
+      orcid: "https://orcid.org/0009-0008-3499-3828"
+  doi: 10.5281/zenodo.23002933
+  year: 2026
