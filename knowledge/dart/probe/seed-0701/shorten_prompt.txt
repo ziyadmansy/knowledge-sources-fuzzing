@@ -1,0 +1,27 @@
+Shorten this list to at most 1500 characters, keeping the most useful observations and their exact facts. Return only the list.
+
+1. All four implementations accept fully well-formed documents with correct types and values (Probe 1, 8, 12, 13, 14, 16, 18).
+
+2. All reject fields with wrong primitive types for required fields: e.g., "id" as string (Probe 2), "amount" as number (Probe 3), "name" as number (Probe 4), "tags" as string (Probe 6), or array with non-string elements (Probe 7).
+
+3. All reject invalid enum values for "status" (Probe 5, 19), but built_value rejects with a distinct DeserializationError, others with ArgumentError.
+
+4. All reject missing or empty required nested objects if expected to be a Record (Probe 11, 15).
+
+5. All accept null for nullable fields "name" and "child" (Probes 1, 8, 12, 13, 14, 16, 18).
+
+6. All reject nested Records with wrong types in required fields (Probe 9: nested "id" as string rejected by all).
+
+7. Extra fields in root or nested objects are ignored by all four implementations (Probe 10, 16).
+
+8. Built_value uniquely accepts null for a field expected to be a non-null list if that field is explicitly null (Probe 17: nested "tags": null accepted by built_value, rejected by others).
+
+9. When duplicate keys appear, all implementations take the last occurrence (Probe 20: duplicate "id" fields, all decode "id" as the last value).
+
+10. All implementations reject documents with wrong types in nested Records consistently (Probes 9, 11, 15).
+
+11. All implementations reject invalid enum values in nested Records (Probe 19).
+
+12. All implementations reject documents with null or empty objects where a nested Record is expected (Probes 11, 15).
+
+Summary: The main disagreements are built_value accepting null for a list field where others reject, and the difference in exception types (DeserializationError vs ArgumentError/_TypeError). Duplicate keys are resolved consistently by all. Extra fields are ignored by all.

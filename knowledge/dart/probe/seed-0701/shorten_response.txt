@@ -1,0 +1,17 @@
+1. All four implementations accept fully well-formed documents with correct types and values (Probe 1, 8, 12, 13, 14, 16, 18).
+
+2. All reject fields with wrong primitive types for required fields: e.g., "id" as string (Probe 2), "amount" as number (Probe 3), "name" as number (Probe 4), "tags" as string (Probe 6), or array with non-string elements (Probe 7).
+
+3. All reject invalid enum values for "status" (Probe 5, 19), but built_value rejects with DeserializationError, others with ArgumentError.
+
+4. All reject missing or empty required nested objects if expected to be a Record (Probes 11, 15).
+
+5. All accept null for nullable fields "name" and "child" (Probes 1, 8, 12, 13, 14, 16, 18).
+
+6. All reject nested Records with wrong types in required fields (Probe 9: nested "id" as string rejected by all).
+
+7. Extra fields in root or nested objects are ignored by all implementations (Probe 10, 16).
+
+8. Built_value uniquely accepts null for a field expected to be a non-null list if that field is explicitly null (Probe 17: nested "tags": null accepted by built_value, rejected by others).
+
+9. When duplicate keys appear, all implementations take the last occurrence (Probe 20: duplicate "id" fields, all decode "id" as the last value).

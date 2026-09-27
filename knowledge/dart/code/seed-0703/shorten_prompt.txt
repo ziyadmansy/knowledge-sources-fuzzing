@@ -1,0 +1,30 @@
+Shorten this list to at most 1500 characters, keeping the most useful observations and their exact facts. Return only the list.
+
+1. Manual parsing uses `as` casts and `Enum.values.byName` which throws a raw `ArgumentError` if `status` is not exactly one of "active", "inactive", "unknown". This is an undocumented exception type (Tier B).
+
+2. json_serializable and freezed share the same JSON decoding logic (json_serializable-generated code), using `$enumDecode` which throws a `CheckedFromJsonException` on unknown enum strings, a documented and catchable error.
+
+3. built_value uses its own enum deserialization (`BvStatus.valueOf`) which throws an `ArgumentError` on unknown enum strings, similar to manual but wrapped in built_value error handling.
+
+4. For `id`, manual requires `int` exactly (`json['id'] as int`), while json_serializable and freezed accept any `num` and convert to `int` via `.toInt()`. built_value uses its serializer which expects an `int` and likely rejects non-int types.
+
+5. For `amount`, all require a `String` exactly (`as String` or serializer), so non-string values cause rejection.
+
+6. For `name`, all accept `null` or `String`. Manual and json_serializable/freezed use nullable casts; built_value uses nullable field with serializer.
+
+7. For `tags`, manual casts to `List` then maps elements as `String`. json_serializable/freezed cast to `List<dynamic>` then map to `String`. built_value expects a `BuiltList<String>` and uses a builder factory; it will reject non-list or lists with non-string elements.
+
+8. For `child`, all accept `null` or a nested record object. Manual and json_serializable/freezed recursively call their own `fromJson`. built_value uses its serializer and builder pattern.
+
+9. Missing fields: manual and json_serializable/freezed require all fields present (no defaults). built_value requires all non-nullable fields; `name` and `child` are nullable and omitted fields decode as null.
+
+10. Differences likely arise on:
+   - `status` with unknown enum strings: manual and built_value throw raw `ArgumentError` (undocumented), json_serializable/freezed throw documented `CheckedFromJsonException`.
+   - `id` as non-int number (e.g. float): manual rejects, json_serializable/freezed accept and convert, built_value likely rejects.
+   - `tags` with non-string elements: manual and json_serializable/freezed reject on cast, built_value rejects during builder build with nested field error.
+   - `name` or `child` as wrong types or missing: manual and others differ on nullability and error types.
+   - Extra fields are ignored by all.
+
+11. built_value throws nested field errors on collection or nested object build failures, which differ from manual’s raw cast errors and json_serializable/freezed’s checked exceptions.
+
+12. Overall, enum decoding and numeric type coercion on `id` are the main divergence points, with manual and built_value less forgiving or less documented in error reporting than json_serializable/freezed.

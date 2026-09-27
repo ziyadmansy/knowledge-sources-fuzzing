@@ -1,0 +1,9 @@
+1. Manual uses `json['id'] as int` and `json['amount'] as String` with direct casts, rejecting if `id` is not exactly int or `amount` not string; json_serializable/freezed cast `id` as `num` then `.toInt()`, accepting floats like 1.0 as id, but manual rejects those.
+
+2. Manual’s `status` uses `Enum.values.byName` throwing raw `ArgumentError` on unknown enum strings; json_serializable/freezed use `$enumDecode` throwing `CheckedFromJsonException` with clear messages; built_value’s `valueOf` throws `ArgumentError` similarly but wrapped in `BuiltValueNestedFieldError` if nested.
+
+3. Manual casts `tags` as `List` then maps elements as `String` with `e as String`, rejecting non-string tags; json_serializable/freezed cast `tags` as `List<dynamic>` then map; built_value expects `BuiltList<String>` and uses `serializers.deserialize`, rejecting non-string lists but with different error types.
+
+4. Manual and json_serializable/freezed accept nullable `name` via `json['name'] as String?`; built_value’s `name` is nullable and omitted if null, accepting missing or null `name`.
+
+5. Manual and json_serializable/freezed accept `child` as null or nested record; built_value requires `child` deserialized via `serializers.deserialize` as `BvRecord`, rejecting invalid nested objects and throwing `BuiltValueNestedFieldError` on partial/malformed `child`.

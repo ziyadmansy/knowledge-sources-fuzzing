@@ -1,0 +1,27 @@
+1. All four implementations accept fully well-formed documents with correct types and values (Probe 1, 8, 11, 15, 17, 18).
+
+2. All reject type mismatches on primitive fields: "id" as string (Probe 2), "amount" as number (Probe 3), "name" as number (Probe 4).
+
+3. All reject invalid enum values for "status" (e.g., "enabled" or "ACTIVE") with ArgumentError or DeserializationError (Probes 5, 14).
+
+4. All reject arrays with invalid element types in "tags" (e.g., number or null) (Probes 6, 13).
+
+5. All reject "child" when it is an empty object or has invalid nested fields (Probes 7, 9, 16).
+
+6. All accept extra unknown fields at the root or nested level, ignoring them (Probes 10, 18).
+
+7. When duplicate keys appear, the last occurrence wins for all implementations (Probes 12, 19, 20).
+
+8. All accept "name" as null, consistent with nullable type (Probes 1, 8, 11, 15).
+
+9. Built_value rejects with a distinct DeserializationError, while others mostly throw _TypeError or ArgumentError on invalid types or enums (Probes 2–7, 13–16).
+
+10. All implementations allow one level of recursion in "child" and accept nested valid records (Probe 8, 17).
+
+11. All reject deeper invalid recursion in "child" (Probe 16).
+
+12. No evidence of disagreement in acceptance/rejection or decoded values among implementations on any probe.
+
+13. No evidence of undocumented or uncatchable exceptions; all exceptions are named and consistent per implementation.
+
+14. The only decoding difference is that duplicate keys overwrite previous values, consistently across all implementations.

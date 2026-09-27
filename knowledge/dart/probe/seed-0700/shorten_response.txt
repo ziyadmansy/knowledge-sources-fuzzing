@@ -1,0 +1,25 @@
+1. All four implementations accept fully well-formed documents with correct types and values (Probe 1).
+
+2. All reject type mismatches on scalar fields (e.g., "id" as string, "amount" as number, "name" as number, "tags" as string or array of non-strings) with consistent exceptions (_TypeError for manual, json_serializable, freezed; DeserializationError for built_value) (Probes 2,3,4,6,7).
+
+3. All reject invalid enum values for "status" ("enabled") with ArgumentError for manual, json_serializable, freezed, and DeserializationError for built_value (Probes 5,14).
+
+4. All accept null for nullable "name" and "child" fields (Probes 1,8,10,11,13,16).
+
+5. Nested "child" objects must be well-formed; type errors or invalid enums inside cause rejection in all implementations (Probes 9,12,14,15).
+
+6. Nested recursion beyond one level is accepted by all (Probe 16), despite the schema stating one level normally.
+
+7. Extra fields at any level are ignored by all implementations and do not cause rejection (Probes 17,20).
+
+8. Duplicate keys in nested objects cause rejection if the duplicate is a scalar field with a conflicting type (e.g., "id" duplicated as string) (Probe 18).
+
+9. Duplicate keys in nested objects for array fields ("tags") are accepted; the last occurrence overwrites the previous one in all implementations (Probe 19).
+
+10. Decoded values are consistent across all implementations when accepted; no evidence of differing decoded values.
+
+11. No undocumented or uncatchable exceptions observed; all rejections produce known exception types (_TypeError, ArgumentError, DeserializationError).
+
+12. Empty arrays for "tags" are accepted by all (Probes 8,10,11).
+
+13. Empty objects for "child" are rejected by all (Probe 12).

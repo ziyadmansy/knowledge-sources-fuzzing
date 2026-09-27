@@ -1,0 +1,39 @@
+1. All four implementations accept a fully well-formed document with correct types and values (Probe 1).
+
+2. All reject if "id" is a string instead of int (Probe 2), with manual/json_serializable/freezed throwing _TypeError, built_value throwing DeserializationError.
+
+3. All reject if "amount" is an int instead of string (Probe 3), same error pattern as above.
+
+4. All reject if "name" is a non-null non-string (e.g., int) (Probe 4).
+
+5. All reject if "status" is not one of the allowed strings ("active", "inactive", "unknown") (Probe 5), manual/json_serializable/freezed throw ArgumentError, built_value throws DeserializationError.
+
+6. All reject if "tags" is not an array (Probe 6) or if array elements are not strings (Probes 7, 18, 19).
+
+7. All reject if "child" is an empty object {} instead of null or a valid Record (Probe 8).
+
+8. All accept nested valid "child" records one level deep (Probe 9).
+
+9. All reject if nested "child" contains an invalid "child" field (empty object) (Probe 10).
+
+10. All accept nested "child" records with extra unknown fields ignored (Probes 11, 16, 20).
+
+11. All accept top-level documents with extra unknown fields ignored (Probe 12, 17).
+
+12. All accept nested "child" records with one level of recursion (Probe 13) and two levels (Probe 14).
+
+13. All reject nested "child" records with invalid "child" deeper than one level (Probe 15).
+
+14. Manual, json_serializable, and freezed consistently throw _TypeError or ArgumentError on type/value errors; built_value throws DeserializationError.
+
+15. No evidence of any implementation accepting a malformed document that others reject, or decoding differently when accepted.
+
+16. Extra fields at any level are ignored by all implementations without error.
+
+17. Null is accepted for nullable fields ("name", "child") consistently.
+
+18. The only difference in error types is built_value using DeserializationError, others using _TypeError or ArgumentError.
+
+19. No undocumented or private exception types observed beyond these named ones.
+
+20. Overall, all four implementations behave consistently in acceptance/rejection and decoding for all tested variations.

@@ -1,0 +1,27 @@
+1. All four accept fully well-formed documents with correct types and values (Probe 1, 4, 7, 8, 10, 12).
+
+2. Gson, Moshi, and Jackson accept integer fields given as JSON strings and parse them as integers (Probe 2). kotlinx.serialization also accepts this.
+
+3. Gson, Moshi, and Jackson accept numeric JSON values for the string field "amount" by coercing to string; kotlinx.serialization rejects (Probe 3, 13, 16).
+
+4. Gson accepts unknown enum values for "status" by setting the field to null; Moshi, kotlinx.serialization, and Jackson reject with exceptions (Probe 5, 17).
+
+5. All reject wrong types for array fields (e.g., "tags" as string) (Probe 6).
+
+6. Gson accepts empty JSON object for nullable "child" but fills missing fields with defaults or nulls; Moshi, kotlinx.serialization, and Jackson reject (Probe 11, 18).
+
+7. Gson and Moshi accept integer values inside string arrays by coercing to strings; kotlinx.serialization rejects; Jackson accepts coercion (Probe 15).
+
+8. Extra fields at the root or nested levels are accepted by Gson and Moshi, rejected by kotlinx.serialization and Jackson (Probe 9, 19, 20).
+
+9. Nullable enum "status" set to null is accepted only by Gson; others reject (Probe 14).
+
+10. Jackson rejects unknown enum values and null enum values with Kotlin-specific exceptions; Moshi and kotlinx.serialization reject with their own exceptions.
+
+11. Gson is the most permissive, accepting type mismatches by coercion or defaulting; Moshi is stricter, rejecting unknown enums and empty objects for required nested fields; kotlinx.serialization is strictest, rejecting type mismatches, unknown enums, extra fields, and missing nested fields; Jackson rejects unknown fields and invalid enum values but accepts string-to-integer coercion.
+
+12. Nested "child" objects follow the same acceptance/rejection patterns as root objects for all implementations.
+
+13. Empty arrays and nulls for nullable fields are accepted by all implementations.
+
+14. When rejecting, exceptions are distinct per implementation, useful for identifying which parser failed.

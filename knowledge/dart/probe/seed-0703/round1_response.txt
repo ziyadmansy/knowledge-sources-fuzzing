@@ -1,0 +1,59 @@
+```probe
+{"id": 1, "amount": "100", "name": "Alice", "status": "active", "tags": ["tag1"], "child": null}
+```
+Baseline well-formed document, all fields correct types and values.
+
+```probe
+{"id": "1", "amount": "100", "name": "Alice", "status": "active", "tags": ["tag1"], "child": null}
+```
+Test id as string instead of integer.
+
+```probe
+{"id": 1, "amount": 100, "name": "Alice", "status": "active", "tags": ["tag1"], "child": null}
+```
+Test amount as integer instead of string.
+
+```probe
+{"id": 1, "amount": "100", "name": 123, "status": "active", "tags": ["tag1"], "child": null}
+```
+Test name as integer instead of string or null.
+
+```probe
+{"id": 1, "amount": "100", "name": null, "status": "enabled", "tags": ["tag1"], "child": null}
+```
+Test status with invalid enum value.
+
+```probe
+{"id": 1, "amount": "100", "name": null, "status": "active", "tags": "tag1", "child": null}
+```
+Test tags as string instead of array of strings.
+
+```probe
+{"id": 1, "amount": "100", "name": null, "status": "active", "tags": [123], "child": null}
+```
+Test tags as array with non-string element.
+
+```probe
+{"id": 1, "amount": "100", "name": null, "status": "active", "tags": [], "child": {"id": 2, "amount": "50", "name": "Bob", "status": "inactive", "tags": [], "child": null}}
+```
+Test valid nested child record.
+
+```probe
+{"id": 1, "amount": "100", "name": null, "status": "active", "tags": [], "child": {"id": "2", "amount": "50", "name": "Bob", "status": "inactive", "tags": [], "child": null}}
+```
+Test nested child with id as string instead of integer.
+
+```probe
+{"id": 1, "amount": "100", "name": null, "status": "active", "tags": [], "child": {"id": 2, "amount": "50", "name": "Bob", "status": "inactive", "tags": [123], "child": null}}
+```
+Test nested child with tags containing non-string element.
+
+```probe
+{"id": 1, "amount": "100", "name": null, "status": "active", "tags": [], "child": {}}
+```
+Test child as empty object (missing all fields).
+
+```probe
+{"id": 1, "amount": "100", "name": null, "status": "active", "tags": [], "child": null, "extra": "field"}
+```
+Test extra unexpected field at top level.

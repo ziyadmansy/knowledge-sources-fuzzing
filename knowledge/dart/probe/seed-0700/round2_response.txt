@@ -1,0 +1,39 @@
+```probe
+{"id": 1, "amount": "100.00", "name": null, "status": "active", "tags": [], "child": {"id": 2, "amount": "50.00", "name": null, "status": "inactive", "tags": ["tag2"], "child": null}}
+```
+Test nested child with name null (valid null in nested record).
+
+```probe
+{"id": 1, "amount": "100.00", "name": null, "status": "active", "tags": [], "child": {"id": 2, "amount": "50.00", "name": null, "status": "enabled", "tags": ["tag2"], "child": null}}
+```
+Test nested child with invalid status value ("enabled").
+
+```probe
+{"id": 1, "amount": "100.00", "name": null, "status": "active", "tags": [], "child": {"id": 2, "amount": "50.00", "name": null, "status": "inactive", "tags": ["tag2"], "child": {}}}
+```
+Test nested child with empty object as grandchild (invalid child).
+
+```probe
+{"id": 1, "amount": "100.00", "name": null, "status": "active", "tags": [], "child": {"id": 2, "amount": "50.00", "name": null, "status": "inactive", "tags": ["tag2"], "child": {"id": 3, "amount": "25.00", "name": null, "status": "unknown", "tags": [], "child": null}}}
+```
+Test nested child with grandchild present (two-level recursion).
+
+```probe
+{"id": 1, "amount": "100.00", "name": null, "status": "active", "tags": [], "child": {"id": 2, "amount": "50.00", "name": null, "status": "inactive", "tags": ["tag2"], "child": null, "extra": "field"}}
+```
+Test nested child with extra unexpected field.
+
+```probe
+{"id": 1, "amount": "100.00", "name": null, "status": "active", "tags": [], "child": {"id": 2, "amount": "50.00", "name": null, "status": "inactive", "tags": ["tag2"], "child": null, "id": "2"}}
+```
+Test nested child with duplicate field "id" but wrong type (string instead of int).
+
+```probe
+{"id": 1, "amount": "100.00", "name": null, "status": "active", "tags": [], "child": {"id": 2, "amount": "50.00", "name": null, "status": "inactive", "tags": ["tag2"], "child": null, "tags": ["tag3"]}}
+```
+Test nested child with duplicate field "tags" (should last one win or error?).
+
+```probe
+{"id": 1, "amount": "100.00", "name": null, "status": "active", "tags": [], "child": null, "extra": "field"}
+```
+Test top-level object with extra unexpected field.

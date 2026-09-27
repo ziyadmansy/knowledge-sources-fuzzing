@@ -1,0 +1,24 @@
+{
+  "agent": "code",
+  "knowledge_chars": 1352,
+  "llm_usage": {
+    "calls": 2,
+    "input_tokens": 5221,
+    "output_tokens": 1259,
+    "truncated": 0
+  },
+  "sources": [
+    "manual.dart",
+    "json_serializable_model.dart",
+    "json_serializable_model.g.dart",
+    "freezed_model.dart",
+    "freezed_model.g.dart",
+    "built_value_model.dart",
+    "built_value_model.g.dart",
+    "serializers.dart",
+    "serializers.g.dart"
+  ],
+  "summary_over_cap_chars": 3197,
+  "target": "dart",
+  "truncated_from_chars": 2253
+}

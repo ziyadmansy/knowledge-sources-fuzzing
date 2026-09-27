@@ -1,0 +1,23 @@
+Shorten this list to at most 1500 characters, keeping the most useful observations and their exact facts. Return only the list.
+
+1. Manual uses `json['id'] as int` and `json['amount'] as String` with direct casts, so it rejects if `id` is not an int or `amount` not a string exactly; json_serializable and freezed cast `id` as `num` then `.toInt()`, so they accept floats like 1.0 as id, but manual rejects those.
+
+2. Manual’s `status` uses `Enum.values.byName` which throws a raw `ArgumentError` if the string is not exactly one of "active", "inactive", "unknown". Json_serializable and freezed use `$enumDecode` which throws a `CheckedFromJsonException` with a clear message on unknown enum values. built_value’s `valueOf` throws `ArgumentError` on unknown enum strings, similar to manual but possibly with a different message.
+
+3. Manual casts `tags` as `List` then maps each element as `String` with `e as String`, so it rejects if any tag is not a string. Json_serializable and freezed do the same but cast `tags` as `List<dynamic>`. built_value expects a `BuiltList<String>` and uses `serializers.deserialize` with `BuiltList<String>` type, so it rejects if tags is not a list of strings, but error types differ.
+
+4. Manual allows `name` to be `null` or `String` via `json['name'] as String?`. Json_serializable and freezed do the same. built_value’s `name` is nullable and only serialized if non-null, so it accepts missing or null `name`.
+
+5. Manual and json_serializable/freezed accept `child` as null or a nested record. built_value requires `child` to be deserialized via `serializers.deserialize` as `BvRecord`, so it rejects if `child` is present but not a valid nested record. built_value’s builder uses `.replace()` on `child`, so partial or malformed child objects cause `BuiltValueNestedFieldError`.
+
+6. Manual’s enum parsing throws undocumented raw `ArgumentError` on unknown enum strings, which is uncaught and not wrapped, unlike json_serializable/freezed which throw documented exceptions. built_value also throws `ArgumentError` but wrapped in `BuiltValueNestedFieldError` if nested.
+
+7. Manual’s casts are strict and do not coerce types (e.g., `id` must be int exactly), json_serializable/freezed coerce numeric `id` via `.toInt()`, so they accept floats like 1.0 for `id` but manual rejects.
+
+8. built_value uses `BuiltList<String>` for `tags` and `BuiltValueNullFieldError` for missing required fields, so missing `tags` or `status` causes built_value to throw `BuiltValueNullFieldError`, while manual and json_serializable/freezed throw cast or enum errors earlier.
+
+9. built_value’s serialization omits `name` and `child` if null, so presence of these fields as null or missing may cause divergence in acceptance or decoding.
+
+10. Differences in exception types and messages: manual throws raw `ArgumentError` on enum mismatch, json_serializable/freezed throw `CheckedFromJsonException`, built_value throws `ArgumentError` wrapped in `BuiltValueNestedFieldError` for nested fields, or `BuiltValueNullFieldError` for missing required fields.
+
+Summary: Expect divergences on numeric `id` with float vs int, unknown enum strings, null vs missing optional fields (`name`, `child`), malformed or missing `tags` array, and nested `child` deserialization errors with different exception types and messages.

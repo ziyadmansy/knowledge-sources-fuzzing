@@ -1,0 +1,23 @@
+{
+  "arguments": {
+    "arm": "probe",
+    "executable": "None",
+    "model": "gpt-4.1-mini",
+    "out_dir": "None",
+    "overwrite": "False",
+    "runs": "5",
+    "seed": "700",
+    "target": "dart"
+  },
+  "arm": "probe",
+  "feedback_mode": null,
+  "harness_sha256": "f63c28fbb9a901d61391740ae37ddd4cf03b5ad26d6f39a9527e849dceba6c13",
+  "hypothesis_version": "6.165.5",
+  "model": "gpt-4.1-mini",
+  "platform": "macOS-26.5.2-arm64-arm-64bit-Mach-O",
+  "python_implementation": "CPython",
+  "python_version": "3.14.7 (main, Aug  5 2026, 10:29:49) [Clang 21.0.0 (clang-2100.1.1.101)]",
+  "seed": 703,
+  "target": "dart",
+  "timestamp": "2026-09-27T03:13:31.292241+00:00"
+}

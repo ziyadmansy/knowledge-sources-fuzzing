@@ -1,0 +1,39 @@
+```probe
+{"id": 1, "amount": "100", "name": null, "status": "active", "tags": ["tag1", null], "child": null}
+```
+Tests if `tags` array containing null (instead of string) is rejected similarly to number in tags (probe 6).
+
+```probe
+{"id": 1, "amount": "100", "name": null, "status": "ACTIVE", "tags": ["tag1"], "child": null}
+```
+Tests case sensitivity of `status` enum values.
+
+```probe
+{"id": 1, "amount": "100", "name": null, "status": "unknown", "tags": ["tag1"], "child": null}
+```
+Tests acceptance of the other valid enum value "unknown".
+
+```probe
+{"id": 1, "amount": "100", "name": null, "status": "active", "tags": ["tag1"], "child": {"id": 2, "amount": "50", "name": null, "status": "inactive", "tags": ["tag2"], "child": {}}}
+```
+Tests nested child with empty object as grandchild (should reject due to missing fields).
+
+```probe
+{"id": 1, "amount": "100", "name": null, "status": "active", "tags": ["tag1"], "child": {"id": 2, "amount": "50", "name": null, "status": "inactive", "tags": ["tag2"], "child": {"id": 3, "amount": "25", "name": "Charlie", "status": "active", "tags": ["tag3"], "child": null}}}
+```
+Tests deeper nested child (two levels) to confirm one-level recursion limit.
+
+```probe
+{"id": 1, "amount": "100", "name": null, "status": "active", "tags": ["tag1"], "child": {"id": 2, "amount": "50", "name": null, "status": "inactive", "tags": ["tag2"], "child": null, "extra": "field"}}
+```
+Tests if extra fields inside `child` are ignored as in root (probe 10).
+
+```probe
+{"id": 1, "amount": "100", "name": null, "status": "active", "tags": ["tag1"], "child": null, "id": 2}
+```
+Tests duplicate root-level `id` field to see which value is taken (like probe 12 for tags).
+
+```probe
+{"id": 1, "amount": "100", "name": null, "status": "active", "tags": ["tag1"], "child": null, "name": "Eve"}
+```
+Tests duplicate root-level `name` field to see which value is taken.

@@ -1,0 +1,43 @@
+Shorten this list to at most 1500 characters, keeping the most useful observations and their exact facts. Return only the list.
+
+1. All four accept fully well-formed documents with correct types (Probe 1).
+
+2. All four accept numeric "id" given as string (Probe 2), decoding to integer.
+
+3. Gson, Moshi, Jackson accept numeric "amount" as number, converting to string; kotlinx rejects (Probe 3).
+
+4. Gson, Moshi, Jackson accept non-string "name" (number, boolean), coercing to string; kotlinx rejects (Probes 4,14).
+
+5. Invalid enum "status" string causes Moshi, kotlinx, Jackson to reject; Gson accepts with null status (Probe 5).
+
+6. All reject non-array "tags" (string) (Probe 6).
+
+7. Gson, Moshi, Jackson accept non-string elements in "tags" array, coercing to strings or allowing null; kotlinx rejects (Probes 7,16).
+
+8. All accept nested "child" with correct fields and types (Probe 8).
+
+9. All accept nested "child" with numeric "id" as string, coercing to int (Probe 9).
+
+10. Extra top-level fields cause Gson and Moshi to accept ignoring them; kotlinx and Jackson reject (Probe 10).
+
+11. Empty nested "child" object causes Gson to accept with default/zero values; others reject for missing required fields or nulls (Probe 12).
+
+12. Numeric "amount" as integer accepted by Gson, Moshi, Jackson (converted to string); kotlinx rejects (Probe 13).
+
+13. Null "status" rejected by Moshi, kotlinx, Jackson; Gson accepts with null status (Probe 15).
+
+14. Null elements inside "tags" array accepted by Gson, Moshi, Jackson; rejected by kotlinx (Probe 16).
+
+15. Nested "child" with empty "child" inside rejected by Moshi, kotlinx, Jackson; Gson accepts with default values (Probe 17).
+
+16. Nested "child" with extra fields accepted by Gson, Moshi; rejected by kotlinx, Jackson (Probe 19).
+
+17. Duplicate fields with null value (e.g. "tags": null overriding array) accepted by Gson and Jackson; Moshi and kotlinx reject (Probe 20).
+
+18. Overall, Gson is most permissive, allowing coercions and ignoring unknown fields.
+
+19. Moshi is strict on types, enum values, unknown fields, and missing required fields.
+
+20. kotlinx.serialization is strictest, rejecting type mismatches, unknown fields, missing required fields, and invalid enum values.
+
+21. Jackson is permissive on coercions like Gson but strict on unknown fields and nulls in non-nullable fields.

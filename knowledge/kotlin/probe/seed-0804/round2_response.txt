@@ -1,0 +1,39 @@
+```probe
+{"id": 1, "amount": 100, "name": "Alice", "status": "active", "tags": ["tag1"], "child": null}
+```
+Tests if kotlinx.serialization rejects amount as a number (not string) but others accept and convert to string.
+
+```probe
+{"id": 1, "amount": "100.50", "name": true, "status": "active", "tags": ["tag1"], "child": null}
+```
+Tests how deserializers handle boolean for name (string or null expected).
+
+```probe
+{"id": 1, "amount": "100.50", "name": null, "status": null, "tags": ["tag1"], "child": null}
+```
+Tests how deserializers handle null for status (enum expected).
+
+```probe
+{"id": 1, "amount": "100.50", "name": null, "status": "active", "tags": [null], "child": null}
+```
+Tests how deserializers handle null inside tags array (strings expected).
+
+```probe
+{"id": 1, "amount": "100.50", "name": null, "status": "active", "tags": [], "child": {"id": 2, "amount": "50", "name": null, "status": "unknown", "tags": [], "child": {}}}
+```
+Tests nested child with empty object as child field (should fail or default).
+
+```probe
+{"id": 1, "amount": "100.50", "name": null, "status": "active", "tags": [], "child": {"id": 2, "amount": "50", "name": null, "status": "unknown", "tags": [], "child": {"id": 3, "amount": "25", "name": "Charlie", "status": "active", "tags": [], "child": null}}}
+```
+Tests deeper recursion in child field (two levels).
+
+```probe
+{"id": 1, "amount": "100.50", "name": null, "status": "active", "tags": [], "child": {"id": 2, "amount": "50", "name": null, "status": "unknown", "tags": [], "child": null, "extra": "field"}}
+```
+Tests extra field inside nested child object.
+
+```probe
+{"id": 1, "amount": "100.50", "name": null, "status": "active", "tags": [], "child": null, "tags": null}
+```
+Tests null for tags field (array expected).

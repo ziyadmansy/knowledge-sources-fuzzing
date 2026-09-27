@@ -1,0 +1,61 @@
+```probe
+{"id": 1, "amount": "100.50", "name": "Alice", "status": "active", "tags": ["tag1", "tag2"], "child": null}
+```
+Baseline well-formed document, all fields correct types.
+
+```probe
+{"id": "1", "amount": "100.50", "name": "Alice", "status": "active", "tags": ["tag1"], "child": null}
+```
+"id" as string instead of integer.
+
+```probe
+{"id": 2, "amount": 100.50, "name": "Bob", "status": "inactive", "tags": ["tag1"], "child": null}
+```
+"amount" as number instead of string.
+
+```probe
+{"id": 3, "amount": "200", "name": null, "status": "unknown", "tags": ["tag1"], "child": null}
+```
+"name" explicitly null (valid nullable field).
+
+```probe
+{"id": 4, "amount": "300", "name": "Charlie", "status": "invalid_status", "tags": ["tag1"], "child": null}
+```
+"status" with invalid enum value.
+
+```probe
+{"id": 5, "amount": "400", "name": "Dana", "status": "active", "tags": "not_an_array", "child": null}
+```
+"tags" as string instead of array.
+
+```probe
+{"id": 6, "amount": "500", "name": "Eve", "status": "inactive", "tags": [], "child": {"id": 7, "amount": "50", "name": "Frank", "status": "active", "tags": [], "child": null}}
+```
+Valid nested "child" record.
+
+```probe
+{"id": 8, "amount": "600", "name": "Grace", "status": "active", "tags": [], "child": {"id": "9", "amount": "60", "name": "Heidi", "status": "inactive", "tags": [], "child": null}}
+```
+Nested "child" with "id" as string instead of integer.
+
+```probe
+{"id": 10, "amount": "700", "name": "Ivan", "status": "active", "tags": [], "child": null, "extra": "field"}
+```
+Extra unexpected field at root level.
+
+```probe
+{"id": 11, "amount": "800", "name": "Judy", "status": "active", "tags": [], "child": null}
+```
+Baseline again for control.
+
+```probe
+{"id": 12, "amount": "900", "name": "Ken", "status": "active", "tags": [], "child": {}}
+```
+"child" as empty object instead of full record or null.
+
+```probe
+{"id": 13, "amount": "1000", "name": "Leo", "status": "active", "tags": [], "child": null}
+```
+Baseline again for control.
+```
+These 12 probes test type mismatches on each field, enum invalidity, nested child with type errors, extra fields, and empty object for child.

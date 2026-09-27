@@ -1,0 +1,27 @@
+1. All four accept fully well-formed documents with correct types (Probe 1).
+
+2. All accept numeric fields given as strings or numbers for "id" (Probes 1,2,9).
+
+3. Gson, Moshi, and Jackson accept numeric "amount" as number, converting to string; kotlinx.serialization rejects (Probes 3,13).
+
+4. Gson, Moshi, and Jackson accept "name" as non-string (number or boolean), converting to string; kotlinx.serialization rejects (Probes 4,14).
+
+5. All reject invalid enum values for "status" except Gson, which accepts but sets null (Probe 5).
+
+6. All reject non-array "tags" (Probe 6).
+
+7. Gson, Moshi, and Jackson accept non-string elements in "tags" by converting to string; kotlinx.serialization rejects (Probe 7).
+
+8. All accept nested "child" records with correct fields (Probe 8).
+
+9. All accept nested "child" with numeric "id" as string or number (Probe 9).
+
+10. Gson and Moshi accept extra unknown fields at root level; kotlinx.serialization and Jackson reject (Probes 10,20).
+
+11. Gson accepts empty object for "child", filling missing fields with defaults/nulls; others reject (Probe 12).
+
+12. Gson accepts empty object for nested "child" similarly; others reject (Probe 18).
+
+13. Gson and Moshi accept missing optional "child" in nested records, defaulting to null; kotlinx.serialization rejects missing fields; Jackson accepts missing "child" (Probe 19).
+
+14. Gson accepts null or invalid enum "status" as null; others reject null or invalid enum (Probes 5,16).

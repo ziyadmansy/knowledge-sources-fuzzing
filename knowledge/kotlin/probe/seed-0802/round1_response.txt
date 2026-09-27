@@ -1,0 +1,61 @@
+```probe
+{"id": 1, "amount": "100", "name": "Alice", "status": "active", "tags": ["tag1"], "child": null}
+```
+Baseline valid document, all fields correct types and values.
+
+```probe
+{"id": "1", "amount": "100", "name": "Alice", "status": "active", "tags": ["tag1"], "child": null}
+```
+"id" as string instead of integer.
+
+```probe
+{"id": 1, "amount": 100, "name": "Alice", "status": "active", "tags": ["tag1"], "child": null}
+```
+"amount" as integer instead of string.
+
+```probe
+{"id": 1, "amount": "100", "name": 123, "status": "active", "tags": ["tag1"], "child": null}
+```
+"name" as integer instead of string or null.
+
+```probe
+{"id": 1, "amount": "100", "name": null, "status": "enabled", "tags": ["tag1"], "child": null}
+```
+"status" with invalid enum value.
+
+```probe
+{"id": 1, "amount": "100", "name": null, "status": "active", "tags": "tag1", "child": null}
+```
+"tags" as string instead of array.
+
+```probe
+{"id": 1, "amount": "100", "name": null, "status": "active", "tags": [123], "child": null}
+```
+"tags" array contains integer instead of string.
+
+```probe
+{"id": 1, "amount": "100", "name": null, "status": "active", "tags": [], "child": {"id": 2, "amount": "50", "name": "Bob", "status": "inactive", "tags": ["tag2"], "child": null}}
+```
+Valid nested "child" record.
+
+```probe
+{"id": 1, "amount": "100", "name": null, "status": "active", "tags": [], "child": {"id": "2", "amount": "50", "name": "Bob", "status": "inactive", "tags": ["tag2"], "child": null}}
+```
+Nested "child" with "id" as string instead of integer.
+
+```probe
+{"id": 1, "amount": "100", "name": null, "status": "active", "tags": [], "child": null, "extra": "field"}
+```
+Extra unexpected field at root level.
+
+```probe
+{"id": 1, "amount": "100", "name": null, "status": "active", "tags": [], "child": null}
+```
+Repeat baseline to check consistency.
+
+```probe
+{"id": 1, "amount": "100", "name": null, "status": "active", "tags": [], "child": {}}
+```
+Empty object for "child" instead of null or full record.
+```
+These 12 probes test type mismatches, enum invalid values, array element types, nested records, extra fields, and empty objects for nullable nested fields.

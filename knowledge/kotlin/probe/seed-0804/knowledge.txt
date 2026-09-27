@@ -1,0 +1,27 @@
+1. All four accept fully well-formed documents with correct types (Probe 1).
+
+2. All accept numeric "id" as string, decoding to integer (Probe 2).
+
+3. Gson, Moshi, Jackson accept numeric "amount" as number, converting to string; kotlinx rejects (Probe 3,13).
+
+4. Gson, Moshi, Jackson accept non-string "name" (number, boolean), coercing to string; kotlinx rejects (Probes 4,14).
+
+5. Invalid enum "status" string causes Moshi, kotlinx, Jackson to reject; Gson accepts with null status (Probe 5).
+
+6. All reject non-array "tags" (string) (Probe 6).
+
+7. Gson, Moshi, Jackson accept non-string elements and nulls in "tags" array, coercing or allowing null; kotlinx rejects (Probes 7,16).
+
+8. All accept nested "child" with correct fields and types (Probe 8).
+
+9. All accept nested "child" with numeric "id" as string, coercing to int (Probe 9).
+
+10. Extra top-level fields cause Gson and Moshi to accept ignoring them; kotlinx and Jackson reject (Probe 10).
+
+11. Empty nested "child" object causes Gson to accept with default/zero values; others reject for missing required fields or nulls (Probe 12).
+
+12. Null "status" rejected by Moshi, kotlinx, Jackson; Gson accepts with null status (Probe 15).
+
+13. Nested "child" with empty "child" inside rejected by Moshi, kotlinx, Jackson; Gson accepts with default values (Probe 17).
+
+14. Nested "child" with extra fields accepted by Gson, Moshi; rejected by kotlinx, Jackson (Probe 19).

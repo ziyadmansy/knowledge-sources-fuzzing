@@ -1,0 +1,23 @@
+1. Manual parsing uses `as` casts and `Enum.values.byName` which throws a raw `ArgumentError` if `status` is not exactly "active", "inactive", or "unknown". It expects `id` as int, `amount` as String, `name` as String or null (field must exist), `tags` as List<String>, and `child` as null or nested Map.
+
+2. json_serializable and freezed share JSON decoding logic via `$enumDecode`, throwing `CheckedFromJsonException` on unknown enum strings. They accept `id` as any num (converted to int), `amount` as String, `name` nullable and optionally missing, `tags` as List<dynamic> mapped to String, and `child` recursively.
+
+3. built_value uses typed `Serializers` with `StandardJsonPlugin`. It expects `id` as int, `amount` as String, `name` nullable and optionally missing, `tags` as `BuiltList<String>`, and `child` nullable `BvRecord`. Enum deserialization throws `ArgumentError` wrapped in built_value errors.
+
+4. built_value omits `name` and `child` if null during serialization and tolerates missing fields during deserialization (sets to null). Manual, json_serializable, and freezed require these fields present (though nullable).
+
+5. Manual and built_value require `id` strictly as int; json_serializable and freezed accept any num and convert via `.toInt()`.
+
+6. Manual and built_value throw raw or wrapped `ArgumentError` on unknown enum strings; json_serializable and freezed throw documented `CheckedFromJsonException`.
+
+7. Manual and built_value use strict `as` casts for `tags` (must be List<String> exactly); json_serializable and freezed cast from List<dynamic> via `.map((e) => e as String)`.
+
+8. All parse `child` recursively only if non-null.
+
+9. Enum parsing is case-sensitive and exact in all; exception types differ.
+
+10. built_value deserialization uses key-value iterators; missing required fields cause `BuiltValueNullFieldError`, while manual and json_serializable/freezed throw cast or enum errors earlier.
+
+11. Differences in exception types and error messages on enum decoding and missing fields provide fuzzing divergence points.
+
+12. Fuzzing targets: `id` as double (accepted by json_serializable/freezed, rejected by manual/built_value), unknown enum strings (manual/built_value throw `ArgumentError`, json_serializable/freezed throw `CheckedFromJsonException`), missing nullable fields (accepted by json_serializable/freezed/built_value, rejected by manual), and `tags` with non-string elements (likely rejected by all, error types may differ).

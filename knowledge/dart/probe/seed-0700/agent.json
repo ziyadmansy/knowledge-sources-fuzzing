@@ -1,0 +1,18 @@
+{
+  "agent": "probe",
+  "knowledge_chars": 1455,
+  "llm_usage": {
+    "calls": 4,
+    "input_tokens": 7222,
+    "output_tokens": 2399,
+    "truncated": 0
+  },
+  "probes": [
+    12,
+    8
+  ],
+  "round1_dropped_over_budget": 1,
+  "summary_over_cap_chars": 1991,
+  "target": "dart",
+  "truncated_from_chars": 1738
+}

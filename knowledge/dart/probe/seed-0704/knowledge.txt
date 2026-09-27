@@ -1,0 +1,25 @@
+1. All four implementations accept a fully well-formed document with correct types and values (Probe 1).
+
+2. All reject if "id" is a string instead of int (Probe 2), with manual/json_serializable/freezed throwing _TypeError, built_value throwing DeserializationError.
+
+3. All reject if "amount" is an int instead of string (Probe 3), same error pattern as above.
+
+4. All reject if "name" is a non-null non-string (e.g., int) (Probe 4).
+
+5. All reject if "status" is not one of the allowed strings ("active", "inactive", "unknown") (Probe 5), manual/json_serializable/freezed throw ArgumentError, built_value throws DeserializationError.
+
+6. All reject if "tags" is not an array (Probe 6) or if array elements are not strings (Probes 7, 18, 19).
+
+7. All reject if "child" is an empty object {} instead of null or a valid Record (Probe 8).
+
+8. All accept nested valid "child" records one level deep (Probe 9).
+
+9. All reject if nested "child" contains an invalid "child" field (empty object) (Probe 10).
+
+10. All accept nested "child" records with extra unknown fields ignored (Probes 11, 16, 20).
+
+11. All accept top-level documents with extra unknown fields ignored (Probes 12, 17).
+
+12. All accept nested "child" records with one level (Probe 13) and two levels (Probe 14) of recursion.
+
+13. All reject nested "child" records with invalid "child" deeper than one level (Probe 15).

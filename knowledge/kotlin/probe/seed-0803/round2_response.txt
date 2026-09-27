@@ -1,0 +1,39 @@
+```probe
+{"id": 14, "amount": 1000, "name": "Mia", "status": "active", "tags": [], "child": null}
+```
+Test if kotlinx.serialization rejects numeric amount consistently (like in probe 3).
+
+```probe
+{"id": 15, "amount": "1100", "name": "Nina", "status": null, "tags": [], "child": null}
+```
+Test how each handles null for the enum field "status".
+
+```probe
+{"id": 16, "amount": "1200", "name": "Oscar", "status": "active", "tags": [123], "child": null}
+```
+Test tags array with a non-string element (integer).
+
+```probe
+{"id": 17, "amount": "1300", "name": "Paul", "status": "active", "tags": [], "child": {"id": 18, "amount": 1400, "name": "Quinn", "status": "inactive", "tags": [], "child": null}}
+```
+Test nested child with numeric amount (like probe 3 but nested).
+
+```probe
+{"id": 19, "amount": "1500", "name": "Rita", "status": "active", "tags": [], "child": {"id": 20, "amount": "1600", "name": "Sam", "status": "invalid_status", "tags": [], "child": null}}
+```
+Test nested child with invalid enum status.
+
+```probe
+{"id": 21, "amount": "1700", "name": "Tina", "status": "active", "tags": [], "child": {"id": 22, "amount": "1800", "name": "Uma", "status": "active", "tags": [], "child": {}}}
+```
+Test nested child with empty object as child field (like probe 11 but nested).
+
+```probe
+{"id": 23, "amount": "1900", "name": "Vera", "status": "active", "tags": [], "child": {"id": 24, "amount": "2000", "name": "Will", "status": "active", "tags": [], "child": null, "extra": "field"}}
+```
+Test nested child with extra field (like probe 9 but nested).
+
+```probe
+{"id": 25, "amount": "2100", "name": "Xena", "status": "active", "tags": [], "child": null, "extra": "field"}
+```
+Confirm rejection of extra field at root by kotlinx and Jackson, acceptance by Gson and Moshi.

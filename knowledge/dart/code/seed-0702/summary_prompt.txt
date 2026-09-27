@@ -1,0 +1,660 @@
+You are characterizing four Dart JSON deserializers by reading their deserialization
+code, before a fuzzing campaign.
+
+Record schema (all six fields always present in a well-formed document):
+{
+  "id": <integer>,
+  "amount": <string>,
+  "name": <string or null>,
+  "status": <one of "active", "inactive", "unknown">,
+  "tags": <array of strings>,
+  "child": <Record or null, one level of recursion normally>
+}
+
+Four independent Dart JSON deserializers are run against every document you
+produce: hand-written manual parsing, and three codegen frameworks
+(json_serializable, freezed, built_value). Your goal is to produce documents
+that are syntactically valid JSON objects but make these four
+implementations disagree with each other -- one accepting where another
+rejects, or two accepting but decoding to different values -- or that make
+any of them fail with an undocumented (private, unnameable) exception type
+rather than a clear, catchable one.
+
+You will not write the fuzzer. Your job is to read the code below, work out
+how these four implementations behave, and then write down what you learned
+for the model that will write the fuzzer.
+
+Strategy hint: implementations are more likely to disagree on documents that
+are *almost* well-formed with one specific thing off (a field of the wrong
+type, a field missing rather than present-but-wrong, a value at a type
+boundary) than on documents that are broadly malformed in many ways at once
+-- broad malformation tends to make every implementation reject identically,
+which scores zero. Vary one or two things about an otherwise valid document
+at a time, across many documents, rather than maximizing how unusual any
+single document looks.
+
+=== manual.dart ===
+// Path A: hand-written parsing with no codegen, using `dart:convert` and
+// explicit `as` casts / null checks the way a typical un-audited Flutter
+// codebase does it. Deliberately naive where a real developer would be naive
+// (see docs/dart-oracle-design.md Section 3) so the divergences this produces
+// are representative, not artificially injected.
+
+enum ManualStatus { active, inactive, unknown }
+
+class ManualRecord {
+  final int id;
+  final String amount;
+  final String? name;
+  final ManualStatus status;
+  final List<String> tags;
+  final ManualRecord? child;
+
+  ManualRecord({
+    required this.id,
+    required this.amount,
+    required this.name,
+    required this.status,
+    required this.tags,
+    required this.child,
+  });
+
+  static ManualRecord fromJson(Map<String, dynamic> json) {
+    return ManualRecord(
+      id: json['id'] as int,
+      amount: json['amount'] as String,
+      name: json['name'] as String?,
+      // Idiomatic-but-naive: `Enum.values.byName` throws a raw ArgumentError
+      // for any string not exactly matching an enum name, rather than a
+      // documented decoding exception. This is intentional (Tier B).
+      status: ManualStatus.values.byName(json['status'] as String),
+      tags: (json['tags'] as List).map((e) => e as String).toList(),
+      child: json['child'] == null
+          ? null
+          : ManualRecord.fromJson(json['child'] as Map<String, dynamic>),
+    );
+  }
+}
+
+
+=== json_serializable_model.dart ===
+// Path B: json_serializable codegen. Left at its own defaults deliberately
+// (no `unknownEnumValue`, no custom converters) since the point of RQ2 is to
+// compare how these frameworks behave *out of the box*, matching how most
+// real Flutter codebases actually use them.
+
+import 'package:json_annotation/json_annotation.dart';
+
+part 'json_serializable_model.g.dart';
+
+enum JsStatus { active, inactive, unknown }
+
+@JsonSerializable()
+class JsRecord {
+  final int id;
+  final String amount;
+  final String? name;
+  final JsStatus status;
+  final List<String> tags;
+  final JsRecord? child;
+
+  JsRecord({
+    required this.id,
+    required this.amount,
+    required this.name,
+    required this.status,
+    required this.tags,
+    required this.child,
+  });
+
+  factory JsRecord.fromJson(Map<String, dynamic> json) =>
+      _$JsRecordFromJson(json);
+
+  Map<String, dynamic> toJson() => _$JsRecordToJson(this);
+}
+
+
+=== json_serializable_model.g.dart ===
+// GENERATED CODE - DO NOT MODIFY BY HAND
+
+part of 'json_serializable_model.dart';
+
+// **************************************************************************
+// JsonSerializableGenerator
+// **************************************************************************
+
+JsRecord _$JsRecordFromJson(Map<String, dynamic> json) => JsRecord(
+  id: (json['id'] as num).toInt(),
+  amount: json['amount'] as String,
+  name: json['name'] as String?,
+  status: $enumDecode(_$JsStatusEnumMap, json['status']),
+  tags: (json['tags'] as List<dynamic>).map((e) => e as String).toList(),
+  child: json['child'] == null
+      ? null
+      : JsRecord.fromJson(json['child'] as Map<String, dynamic>),
+);
+
+Map<String, dynamic> _$JsRecordToJson(JsRecord instance) => <String, dynamic>{
+  'id': instance.id,
+  'amount': instance.amount,
+  'name': instance.name,
+  'status': _$JsStatusEnumMap[instance.status]!,
+  'tags': instance.tags,
+  'child': instance.child,
+};
+
+const _$JsStatusEnumMap = {
+  JsStatus.active: 'active',
+  JsStatus.inactive: 'inactive',
+  JsStatus.unknown: 'unknown',
+};
+
+
+=== freezed_model.dart ===
+// Path C: freezed, configured to delegate JSON leaf-decoding to
+// json_serializable (its default JSON backend) so that any B-vs-C divergence
+// can be attributed to freezed's own contribution (immutability, union
+// discrimination) rather than a second, independent JSON decoder
+// (docs/dart-oracle-design.md Section 8).
+
+import 'package:freezed_annotation/freezed_annotation.dart';
+
+part 'freezed_model.freezed.dart';
+part 'freezed_model.g.dart';
+
+enum FreezedStatus { active, inactive, unknown }
+
+@freezed
+abstract class FreezedRecord with _$FreezedRecord {
+  const factory FreezedRecord({
+    required int id,
+    required String amount,
+    required String? name,
+    required FreezedStatus status,
+    required List<String> tags,
+    required FreezedRecord? child,
+  }) = _FreezedRecord;
+
+  factory FreezedRecord.fromJson(Map<String, Object?> json) =>
+      _$FreezedRecordFromJson(json);
+}
+
+
+=== freezed_model.g.dart ===
+// GENERATED CODE - DO NOT MODIFY BY HAND
+
+part of 'freezed_model.dart';
+
+// **************************************************************************
+// JsonSerializableGenerator
+// **************************************************************************
+
+_FreezedRecord _$FreezedRecordFromJson(Map<String, dynamic> json) =>
+    _FreezedRecord(
+      id: (json['id'] as num).toInt(),
+      amount: json['amount'] as String,
+      name: json['name'] as String?,
+      status: $enumDecode(_$FreezedStatusEnumMap, json['status']),
+      tags: (json['tags'] as List<dynamic>).map((e) => e as String).toList(),
+      child: json['child'] == null
+          ? null
+          : FreezedRecord.fromJson(json['child'] as Map<String, dynamic>),
+    );
+
+Map<String, dynamic> _$FreezedRecordToJson(_FreezedRecord instance) =>
+    <String, dynamic>{
+      'id': instance.id,
+      'amount': instance.amount,
+      'name': instance.name,
+      'status': _$FreezedStatusEnumMap[instance.status]!,
+      'tags': instance.tags,
+      'child': instance.child,
+    };
+
+const _$FreezedStatusEnumMap = {
+  FreezedStatus.active: 'active',
+  FreezedStatus.inactive: 'inactive',
+  FreezedStatus.unknown: 'unknown',
+};
+
+
+=== built_value_model.dart ===
+// Path D: built_value. An independently-designed serialization model
+// (typed `Serializers`/`FullType`, not annotation+`Map`-based like B/C) --
+// the path most likely to diverge for genuinely independent-implementation
+// reasons rather than shared-backend reasons (docs/dart-oracle-design.md
+// Section 2).
+
+import 'package:built_collection/built_collection.dart';
+import 'package:built_value/built_value.dart';
+import 'package:built_value/serializer.dart';
+
+part 'built_value_model.g.dart';
+
+class BvStatus extends EnumClass {
+  static const BvStatus active = _$active;
+  static const BvStatus inactive = _$inactive;
+  static const BvStatus unknown = _$unknown;
+
+  const BvStatus._(String name) : super(name);
+
+  static BuiltSet<BvStatus> get values => _$bvStatusValues;
+  static BvStatus valueOf(String name) => _$bvStatusValueOf(name);
+  static Serializer<BvStatus> get serializer => _$bvStatusSerializer;
+}
+
+abstract class BvRecord implements Built<BvRecord, BvRecordBuilder> {
+  static Serializer<BvRecord> get serializer => _$bvRecordSerializer;
+
+  int get id;
+  String get amount;
+  String? get name;
+  BvStatus get status;
+  BuiltList<String> get tags;
+  BvRecord? get child;
+
+  BvRecord._();
+  factory BvRecord([void Function(BvRecordBuilder) updates]) = _$BvRecord;
+}
+
+
+=== built_value_model.g.dart ===
+// GENERATED CODE - DO NOT MODIFY BY HAND
+
+part of 'built_value_model.dart';
+
+// **************************************************************************
+// BuiltValueGenerator
+// **************************************************************************
+
+const BvStatus _$active = const BvStatus._('active');
+const BvStatus _$inactive = const BvStatus._('inactive');
+const BvStatus _$unknown = const BvStatus._('unknown');
+
+BvStatus _$bvStatusValueOf(String name) {
+  switch (name) {
+    case 'active':
+      return _$active;
+    case 'inactive':
+      return _$inactive;
+    case 'unknown':
+      return _$unknown;
+    default:
+      throw ArgumentError(name);
+  }
+}
+
+final BuiltSet<BvStatus> _$bvStatusValues = BuiltSet<BvStatus>(const <BvStatus>[
+  _$active,
+  _$inactive,
+  _$unknown,
+]);
+
+Serializer<BvStatus> _$bvStatusSerializer = _$BvStatusSerializer();
+Serializer<BvRecord> _$bvRecordSerializer = _$BvRecordSerializer();
+
+class _$BvStatusSerializer implements PrimitiveSerializer<BvStatus> {
+  @override
+  final Iterable<Type> types = const <Type>[BvStatus];
+  @override
+  final String wireName = 'BvStatus';
+
+  @override
+  Object serialize(
+    Serializers serializers,
+    BvStatus object, {
+    FullType specifiedType = FullType.unspecified,
+  }) => object.name;
+
+  @override
+  BvStatus deserialize(
+    Serializers serializers,
+    Object serialized, {
+    FullType specifiedType = FullType.unspecified,
+  }) => BvStatus.valueOf(serialized as String);
+}
+
+class _$BvRecordSerializer implements StructuredSerializer<BvRecord> {
+  @override
+  final Iterable<Type> types = const [BvRecord, _$BvRecord];
+  @override
+  final String wireName = 'BvRecord';
+
+  @override
+  Iterable<Object?> serialize(
+    Serializers serializers,
+    BvRecord object, {
+    FullType specifiedType = FullType.unspecified,
+  }) {
+    final result = <Object?>[
+      'id',
+      serializers.serialize(object.id, specifiedType: const FullType(int)),
+      'amount',
+      serializers.serialize(
+        object.amount,
+        specifiedType: const FullType(String),
+      ),
+      'status',
+      serializers.serialize(
+        object.status,
+        specifiedType: const FullType(BvStatus),
+      ),
+      'tags',
+      serializers.serialize(
+        object.tags,
+        specifiedType: const FullType(BuiltList, const [
+          const FullType(String),
+        ]),
+      ),
+    ];
+    Object? value;
+    value = object.name;
+    if (value != null) {
+      result
+        ..add('name')
+        ..add(
+          serializers.serialize(value, specifiedType: const FullType(String)),
+        );
+    }
+    value = object.child;
+    if (value != null) {
+      result
+        ..add('child')
+        ..add(
+          serializers.serialize(value, specifiedType: const FullType(BvRecord)),
+        );
+    }
+    return result;
+  }
+
+  @override
+  BvRecord deserialize(
+    Serializers serializers,
+    Iterable<Object?> serialized, {
+    FullType specifiedType = FullType.unspecified,
+  }) {
+    final result = BvRecordBuilder();
+
+    final iterator = serialized.iterator;
+    while (iterator.moveNext()) {
+      final key = iterator.current! as String;
+      iterator.moveNext();
+      final Object? value = iterator.current;
+      switch (key) {
+        case 'id':
+          result.id =
+              serializers.deserialize(
+                    value,
+                    specifiedType: const FullType(int),
+                  )!
+                  as int;
+          break;
+        case 'amount':
+          result.amount =
+              serializers.deserialize(
+                    value,
+                    specifiedType: const FullType(String),
+                  )!
+                  as String;
+          break;
+        case 'name':
+          result.name =
+              serializers.deserialize(
+                    value,
+                    specifiedType: const FullType(String),
+                  )
+                  as String?;
+          break;
+        case 'status':
+          result.status =
+              serializers.deserialize(
+                    value,
+                    specifiedType: const FullType(BvStatus),
+                  )!
+                  as BvStatus;
+          break;
+        case 'tags':
+          result.tags.replace(
+            serializers.deserialize(
+                  value,
+                  specifiedType: const FullType(BuiltList, const [
+                    const FullType(String),
+                  ]),
+                )!
+                as BuiltList<Object?>,
+          );
+          break;
+        case 'child':
+          result.child.replace(
+            serializers.deserialize(
+                  value,
+                  specifiedType: const FullType(BvRecord),
+                )!
+                as BvRecord,
+          );
+          break;
+      }
+    }
+
+    return result.build();
+  }
+}
+
+class _$BvRecord extends BvRecord {
+  @override
+  final int id;
+  @override
+  final String amount;
+  @override
+  final String? name;
+  @override
+  final BvStatus status;
+  @override
+  final BuiltList<String> tags;
+  @override
+  final BvRecord? child;
+
+  factory _$BvRecord([void Function(BvRecordBuilder)? updates]) =>
+      (BvRecordBuilder()..update(updates))._build();
+
+  _$BvRecord._({
+    required this.id,
+    required this.amount,
+    this.name,
+    required this.status,
+    required this.tags,
+    this.child,
+  }) : super._();
+  @override
+  BvRecord rebuild(void Function(BvRecordBuilder) updates) =>
+      (toBuilder()..update(updates)).build();
+
+  @override
+  BvRecordBuilder toBuilder() => BvRecordBuilder()..replace(this);
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(other, this)) return true;
+    return other is BvRecord &&
+        id == other.id &&
+        amount == other.amount &&
+        name == other.name &&
+        status == other.status &&
+        tags == other.tags &&
+        child == other.child;
+  }
+
+  @override
+  int get hashCode {
+    var _$hash = 0;
+    _$hash = $jc(_$hash, id.hashCode);
+    _$hash = $jc(_$hash, amount.hashCode);
+    _$hash = $jc(_$hash, name.hashCode);
+    _$hash = $jc(_$hash, status.hashCode);
+    _$hash = $jc(_$hash, tags.hashCode);
+    _$hash = $jc(_$hash, child.hashCode);
+    _$hash = $jf(_$hash);
+    return _$hash;
+  }
+
+  @override
+  String toString() {
+    return (newBuiltValueToStringHelper(r'BvRecord')
+          ..add('id', id)
+          ..add('amount', amount)
+          ..add('name', name)
+          ..add('status', status)
+          ..add('tags', tags)
+          ..add('child', child))
+        .toString();
+  }
+}
+
+class BvRecordBuilder implements Builder<BvRecord, BvRecordBuilder> {
+  _$BvRecord? _$v;
+
+  int? _id;
+  int? get id => _$this._id;
+  set id(int? id) => _$this._id = id;
+
+  String? _amount;
+  String? get amount => _$this._amount;
+  set amount(String? amount) => _$this._amount = amount;
+
+  String? _name;
+  String? get name => _$this._name;
+  set name(String? name) => _$this._name = name;
+
+  BvStatus? _status;
+  BvStatus? get status => _$this._status;
+  set status(BvStatus? status) => _$this._status = status;
+
+  ListBuilder<String>? _tags;
+  ListBuilder<String> get tags => _$this._tags ??= ListBuilder<String>();
+  set tags(ListBuilder<String>? tags) => _$this._tags = tags;
+
+  BvRecordBuilder? _child;
+  BvRecordBuilder get child => _$this._child ??= BvRecordBuilder();
+  set child(BvRecordBuilder? child) => _$this._child = child;
+
+  BvRecordBuilder();
+
+  BvRecordBuilder get _$this {
+    final $v = _$v;
+    if ($v != null) {
+      _id = $v.id;
+      _amount = $v.amount;
+      _name = $v.name;
+      _status = $v.status;
+      _tags = $v.tags.toBuilder();
+      _child = $v.child?.toBuilder();
+      _$v = null;
+    }
+    return this;
+  }
+
+  @override
+  void replace(BvRecord other) {
+    _$v = other as _$BvRecord;
+  }
+
+  @override
+  void update(void Function(BvRecordBuilder)? updates) {
+    if (updates != null) updates(this);
+  }
+
+  @override
+  BvRecord build() => _build();
+
+  _$BvRecord _build() {
+    _$BvRecord _$result;
+    try {
+      _$result =
+          _$v ??
+          _$BvRecord._(
+            id: BuiltValueNullFieldError.checkNotNull(id, r'BvRecord', 'id'),
+            amount: BuiltValueNullFieldError.checkNotNull(
+              amount,
+              r'BvRecord',
+              'amount',
+            ),
+            name: name,
+            status: BuiltValueNullFieldError.checkNotNull(
+              status,
+              r'BvRecord',
+              'status',
+            ),
+            tags: tags.build(),
+            child: _child?.build(),
+          );
+    } catch (_) {
+      late String _$failedField;
+      try {
+        _$failedField = 'tags';
+        tags.build();
+        _$failedField = 'child';
+        _child?.build();
+      } catch (e) {
+        throw BuiltValueNestedFieldError(
+          r'BvRecord',
+          _$failedField,
+          e.toString(),
+        );
+      }
+      rethrow;
+    }
+    replace(_$result);
+    return _$result;
+  }
+}
+
+// ignore_for_file: deprecated_member_use_from_same_package,type=lint
+
+
+=== serializers.dart ===
+// Central built_value Serializers registry (built_value convention: one
+// file, one @SerializersFor list, generated once).
+
+import 'package:built_collection/built_collection.dart';
+import 'package:built_value/serializer.dart';
+import 'package:built_value/standard_json_plugin.dart';
+
+import 'built_value_model.dart';
+
+part 'serializers.g.dart';
+
+@SerializersFor([BvRecord])
+final Serializers serializers = (_$serializers.toBuilder()
+      ..addPlugin(StandardJsonPlugin()))
+    .build();
+
+
+=== serializers.g.dart ===
+// GENERATED CODE - DO NOT MODIFY BY HAND
+
+part of 'serializers.dart';
+
+// **************************************************************************
+// BuiltValueGenerator
+// **************************************************************************
+
+Serializers _$serializers =
+    (Serializers().toBuilder()
+          ..add(BvRecord.serializer)
+          ..add(BvStatus.serializer)
+          ..addBuilderFactory(
+            const FullType(BuiltList, const [const FullType(String)]),
+            () => ListBuilder<String>(),
+          ))
+        .build();
+
+// ignore_for_file: deprecated_member_use_from_same_package,type=lint
+
+
+Write down what you learned, for the model that will write a generator to
+make these four implementations disagree. Rules:
+- At most 1500 characters in total.
+- A numbered list of observations about behaviour: which implementations
+  accept or reject what, and how they decode it.
+- State only what the evidence above shows. No generator code.
+Return only the list.

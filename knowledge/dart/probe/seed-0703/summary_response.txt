@@ -1,0 +1,39 @@
+1. All four implementations accept fully well-formed documents with correct types and values (Probe 1, 8, 12, 13, 15, 16).
+
+2. All reject if "id" is a string instead of integer (Probe 2) or if "amount" is an integer instead of string (Probe 3).
+
+3. All reject if "name" is a non-null non-string (e.g., integer) (Probe 4).
+
+4. All reject if "status" is not one of the allowed strings ("active", "inactive", "unknown"), including "enabled" or null (Probes 5, 14, 19).
+
+5. All reject if "tags" is not an array of strings (e.g., string or array with non-string elements) (Probes 6, 7).
+
+6. All reject if "child" is present but missing required fields or with wrong types in nested records (Probes 9, 10, 11, 17, 18, 20).
+
+7. All accept "child": null and nested valid child records with one level of recursion (Probes 8, 15, 16).
+
+8. Extra fields beyond the schema are ignored by all and do not cause rejection (Probe 12).
+
+9. All implementations reject documents with missing required fields (not tested explicitly but implied by child empty object rejection in Probe 11).
+
+10. Exception types differ: manual, json_serializable, and freezed mostly throw _TypeError or ArgumentError; built_value throws a distinct DeserializationError on all rejections.
+
+11. No evidence of disagreement in acceptance/rejection or decoded values; all four behave identically on all probes.
+
+12. Nested recursion beyond one level is accepted if types and values are correct (Probe 16).
+
+13. Null is accepted for "name" and "child" fields but not for "status".
+
+14. The "tags" array must contain only strings; empty arrays are accepted.
+
+15. The "status" field is strictly validated against the three allowed strings; null or unknown strings cause rejection.
+
+16. The "id" and "amount" fields require exact types: integer and string respectively, no coercion.
+
+17. The "name" field accepts string or null only; other types cause rejection.
+
+18. The "child" field accepts either null or a fully valid nested record; partial or malformed nested records cause rejection.
+
+19. No implementation tolerates type mismatches in nested records, even one level deep.
+
+20. No implementation produces different decoded values on the same accepted input; all decode identically.

@@ -1,0 +1,40 @@
+Shorten this list to at most 1500 characters, keeping the most useful observations and their exact facts. Return only the list.
+
+1. Manual uses `as int` for `id`, so it rejects floats (e.g. 1.0) but json_serializable/freezed cast `(num).toInt()`, accepting floats that are integral-valued.
+
+2. Manual and json_serializable/freezed accept `name: null` or string; built_value omits `name` if null but accepts null if present.
+
+3. Manual’s `status` uses `Enum.values.byName` which throws raw `ArgumentError` on unknown strings; json_serializable/freezed use `$enumDecode` which throws `CheckedFromJsonException`; built_value’s `valueOf` throws `ArgumentError` too. So Manual and built_value throw raw `ArgumentError` on unknown enum strings, json_serializable/freezed throw documented exceptions.
+
+4. Manual casts `tags` as `List` then each element as `String`; json_serializable/freezed cast as `List<dynamic>` then map to `String`; built_value expects `BuiltList<String>`. All reject non-string elements in `tags`.
+
+5. Manual and json_serializable/freezed accept `child: null` or nested object; built_value’s builder requires `child` to be either null or a valid `BvRecord`. If `child` is present but not a map/object, all reject.
+
+6. Manual’s enum decoding is case-sensitive exact match; json_serializable/freezed same; built_value same. No unknownEnumValue fallback in any.
+
+7. Manual’s `id` and `amount` require exact types (`int` and `String`), no coercion; json_serializable/freezed coerce `id` from `num` to `int` via `.toInt()`, built_value uses serializers which likely require exact types.
+
+8. Manual’s `name` is nullable string or null; if missing, `json['name']` is null, so accepted as null; json_serializable/freezed same; built_value omits `name` if null, so missing `name` accepted as null.
+
+9. Manual’s `tags` requires a `List` (not null) with all strings; missing `tags` will cause `json['tags'] as List` to throw; json_serializable/freezed same; built_value requires `tags` non-null and builds `BuiltList`, so missing `tags` rejected.
+
+10. Manual’s `child` is recursively parsed if non-null; json_serializable/freezed same; built_value uses builder and serializers, so recursive deserialization consistent but may throw `BuiltValueNestedFieldError` on nested failures.
+
+11. Manual’s enum decoding throws undocumented raw `ArgumentError` on unknown enum strings, which is a private exception type; json_serializable/freezed throw documented exceptions; built_value throws `ArgumentError` but wrapped in `BuiltValueNestedFieldError` if nested.
+
+12. Manual’s `amount` must be string exactly; json_serializable/freezed same; built_value same.
+
+13. Manual’s `tags` must be a list; if `tags` is null or missing, all reject.
+
+14. Manual’s `id` must be int exactly; json_serializable/freezed accept numeric but convert to int; built_value likely requires int exactly.
+
+15. Manual’s `name` can be null or string; if `name` is missing, all treat as null.
+
+16. Manual’s `child` can be null or nested record; if `child` is missing, all treat as null.
+
+Summary:  
+- Manual is strict on `id` type (int only), strict on enum decoding (throws raw `ArgumentError`), strict on `tags` type (List only).  
+- Json_serializable/freezed accept numeric `id` (coerce to int), throw documented exceptions on enum errors.  
+- Built_value requires exact types, throws wrapped errors on nested failures, omits null `name` and `child` fields on serialization.  
+- Enum decoding errors differ in exception type and wrapping.  
+- `id` numeric type coercion and enum error exception types are key divergence points.

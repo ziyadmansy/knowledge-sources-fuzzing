@@ -1,0 +1,17 @@
+1. Manual parsing uses `as` casts and `Enum.values.byName` which throws a raw `ArgumentError` if `status` is not exactly `"active"`, `"inactive"`, or `"unknown"`. This error is undocumented and not catchable as a decoding exception.
+
+2. json_serializable and freezed share the same JSON decoding code using `$enumDecode` without `unknownEnumValue`. They throw a documented and catchable `CheckedFromJsonException` on unknown enum strings.
+
+3. built_value uses `BvStatus.valueOf` which throws an `ArgumentError` on unknown enum strings, similar to manual but wrapped in built_value error types.
+
+4. Manual parsing casts `id` as `int` directly; json_serializable and freezed cast `id` as `num` then call `.toInt()`, accepting numeric JSON values that are integers or doubles representing integers (e.g., `1.0`).
+
+5. built_value deserializes `id` as `int` via serializers, likely requiring JSON numbers to be integral; fractional numbers may cause errors or be rejected.
+
+6. All accept `name` as nullable string or null; no divergence expected.
+
+7. All accept `child` as null or a nested record; recursion depth is one level normally.
+
+8. Manual parsing uses `(json['tags'] as List).map((e) => e as String)`, so any non-string element in `tags` causes a cast error (likely `TypeError`).
+
+9. json_serializable and freezed use `(json['tags'] as List<dynamic>).map((e) => e as String)`, similarly causing cast errors on non-string elements.

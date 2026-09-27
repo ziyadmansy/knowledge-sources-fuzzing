@@ -1,0 +1,39 @@
+```probe
+{"id": 1, "amount": "100", "name": null, "status": "active", "tags": [], "child": {"id": 2, "amount": "50", "name": null, "status": "inactive", "tags": ["tag2"], "child": null}}
+```
+Tests acceptance of child with name=null (like parent).
+
+```probe
+{"id": 1, "amount": "100", "name": null, "status": "active", "tags": [], "child": {"id": 2, "amount": "50", "name": "Bob", "status": "inactive", "tags": ["tag2"], "child": {"id": 3, "amount": "25", "name": "Carol", "status": "active", "tags": ["tag3"], "child": null}}}
+```
+Tests rejection of child with recursion depth > 1.
+
+```probe
+{"id": 1, "amount": "100", "name": null, "status": "active", "tags": [], "child": {"id": 2, "amount": "50", "name": "Bob", "status": "inactive", "tags": ["tag2"], "child": {}}}
+```
+Tests rejection of child with empty object as child field.
+
+```probe
+{"id": 1, "amount": "100", "name": null, "status": "active", "tags": [], "child": {"id": 2, "amount": "50", "name": "Bob", "status": "inactive", "tags": ["tag2"], "child": null, "extra": "field"}}
+```
+Tests acceptance of extra fields inside child.
+
+```probe
+{"id": 1, "amount": "100", "name": null, "status": "active", "tags": [], "child": {"id": 2, "amount": "50", "name": "Bob", "status": "inactive", "tags": ["tag2"], "child": null, "tags": null}}
+```
+Tests child with tags=null (should be array).
+
+```probe
+{"id": 1, "amount": "100", "name": null, "status": "active", "tags": [], "child": {"id": 2, "amount": "50", "name": "Bob", "status": "inactive", "tags": [], "child": null}}
+```
+Tests child with empty tags array.
+
+```probe
+{"id": 1, "amount": "100", "name": null, "status": "active", "tags": [], "child": {"id": 2, "amount": "50", "name": "Bob", "status": "inactive", "tags": ["tag2"], "child": null, "status": "enabled"}}
+```
+Tests child with invalid status value.
+
+```probe
+{"id": 1, "amount": "100", "name": null, "status": "active", "tags": [], "child": null, "id": 2}
+```
+Tests duplicate field keys at top level.

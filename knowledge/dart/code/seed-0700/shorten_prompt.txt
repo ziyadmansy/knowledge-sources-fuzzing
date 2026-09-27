@@ -1,0 +1,27 @@
+Shorten this list to at most 1500 characters, keeping the most useful observations and their exact facts. Return only the list.
+
+1. Manual parsing uses `as` casts and `Enum.values.byName` which throws a raw `ArgumentError` if `status` is not exactly one of "active", "inactive", or "unknown". It expects `id` as int, `amount` as String, `name` as String or null, `tags` as List<String>, and `child` as null or nested Map.
+
+2. json_serializable and freezed share the same JSON decoding logic (via generated code using `$enumDecode`), which throws a `CheckedFromJsonException` on unknown enum strings, not a raw `ArgumentError`. They accept `id` as any num (converted to int), `amount` as String, `name` nullable String, `tags` as List<dynamic> mapped to String, and `child` recursively.
+
+3. built_value uses a typed `Serializers` with `StandardJsonPlugin`. It expects `id` as int, `amount` as String, `name` nullable String, `tags` as `BuiltList<String>`, and `child` nullable `BvRecord`. Its enum deserialization throws an `ArgumentError` on unknown enum strings, similar to manual but wrapped in built_value errors.
+
+4. built_value omits `name` and `child` fields entirely if null during serialization, but during deserialization it tolerates missing `name` and `child` fields (sets to null). Manual, json_serializable, and freezed require these fields present (though nullable).
+
+5. Manual requires `id` to be an int exactly; json_serializable and freezed accept any num (e.g., double) and convert to int via `.toInt()`. built_value expects int strictly.
+
+6. Manual and built_value throw raw or wrapped `ArgumentError` on unknown enum strings; json_serializable and freezed throw a documented `CheckedFromJsonException`.
+
+7. Manual and built_value use strict `as` casts for list elements (`tags` must be List<String> exactly), json_serializable and freezed cast from List<dynamic> to List<String> via `.map((e) => e as String)`.
+
+8. Manual and built_value recursively parse `child` only if non-null; json_serializable and freezed do the same.
+
+9. Manual’s enum parsing is case-sensitive and exact; json_serializable and freezed also case-sensitive but throw different exception types; built_value similarly strict.
+
+10. built_value’s deserialization uses an iterator over key-value pairs, so missing required fields cause `BuiltValueNullFieldError`, while manual and json_serializable/freezed throw cast or enum errors earlier.
+
+11. Manual’s `name` field is cast as `String?` but requires presence (field must exist, even if null); json_serializable and freezed allow missing `name` (null); built_value tolerates missing `name` and `child`.
+
+12. Differences in exception types and error messages on enum decoding and missing fields provide divergence points for fuzzing.
+
+13. Acceptable fuzzing targets include: `id` as double (accepted by B and C, rejected by A and D), unknown enum strings (A and D throw `ArgumentError`, B and C throw `CheckedFromJsonException`), missing nullable fields (accepted by B, C, D; rejected by A), and `tags` with non-string elements (likely rejected by all but may differ in error type).

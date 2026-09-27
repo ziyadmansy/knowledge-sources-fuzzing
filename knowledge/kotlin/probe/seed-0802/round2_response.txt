@@ -1,0 +1,39 @@
+```probe
+{"id": 1, "amount": 100, "name": null, "status": "active", "tags": [], "child": null}
+```
+Test if kotlinx rejects numeric amount when name is null (like Probe 3 with name string).
+
+```probe
+{"id": 1, "amount": "100", "name": null, "status": "active", "tags": ["tag1", null], "child": null}
+```
+Test how null inside tags array is handled by each deserializer.
+
+```probe
+{"id": 1, "amount": "100", "name": null, "status": "active", "tags": ["tag1", 123], "child": null}
+```
+Test mixed string and number inside tags array, building on Probe 7.
+
+```probe
+{"id": 1, "amount": "100", "name": null, "status": null, "tags": [], "child": null}
+```
+Test null status field (Probe 5 showed invalid string rejected, what about null?).
+
+```probe
+{"id": 1, "amount": "100", "name": null, "status": "active", "tags": [], "child": {"id": 2, "amount": "50", "name": null, "status": "active", "tags": [], "child": {}}}
+```
+Test nested empty object in child.child, building on Probe 12.
+
+```probe
+{"id": 1, "amount": "100", "name": null, "status": "active", "tags": [], "child": {"id": 2, "amount": "50", "name": null, "status": "active", "tags": [], "child": null, "extra": "field"}}
+```
+Test extra field in nested child object, building on Probe 10.
+
+```probe
+{"id": 1, "amount": "100", "name": null, "status": "active", "tags": [], "child": {"id": 2, "amount": "50", "name": null, "status": "active", "tags": [], "child": null, "id": "2"}}
+```
+Test duplicate field "id" in nested child object (string and int).
+
+```probe
+{"id": 1, "amount": "100", "name": null, "status": "active", "tags": [], "child": null, "name": "Bob"}
+```
+Test duplicate top-level field "name" (null and string).

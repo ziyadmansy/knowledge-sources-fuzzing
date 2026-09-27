@@ -1,0 +1,39 @@
+```probe
+{"id": 1, "amount": 100, "name": "Alice", "status": "active", "tags": ["tag1"], "child": null}
+```
+Test if kotlinx.serialization rejects numeric amount without quotes, others accept and coerce to string.
+
+```probe
+{"id": 1, "amount": "100.50", "name": true, "status": "active", "tags": ["tag1"], "child": null}
+```
+Test if Gson/Moshi/Jackson coerce boolean name to string or reject; confirm kotlinx rejects.
+
+```probe
+{"id": 1, "amount": "100.50", "name": null, "status": "unknown", "tags": ["tag1"], "child": null}
+```
+Test if all accept valid enum value "unknown" for status.
+
+```probe
+{"id": 1, "amount": "100.50", "name": null, "status": null, "tags": ["tag1"], "child": null}
+```
+Test if any accept null for non-nullable enum status.
+
+```probe
+{"id": 1, "amount": "100.50", "name": null, "status": "active", "tags": ["tag1", null], "child": null}
+```
+Test if any accept null inside tags array.
+
+```probe
+{"id": 1, "amount": "100.50", "name": null, "status": "active", "tags": ["tag1"], "child": {"id": 2, "amount": "50", "name": null, "status": "inactive", "tags": ["tag2"], "child": {}}}
+```
+Test nested child with empty object as child field to confirm rejection or coercion.
+
+```probe
+{"id": 1, "amount": "100.50", "name": null, "status": "active", "tags": ["tag1"], "child": {"id": 2, "amount": "50", "name": null, "status": "inactive", "tags": ["tag2"]}}
+```
+Test child object missing required field 'child' to check if default or rejection.
+
+```probe
+{"id": 1, "amount": "100.50", "name": null, "status": "active", "tags": ["tag1"], "child": null, "id_extra": 123}
+```
+Test if unknown field with different name pattern is accepted or rejected by each.

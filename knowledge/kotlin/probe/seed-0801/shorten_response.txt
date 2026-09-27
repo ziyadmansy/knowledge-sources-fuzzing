@@ -1,0 +1,39 @@
+1. All four accept fully well-formed documents with correct types (Probe 1).
+
+2. All accept numeric "id" as integer or string convertible to integer (Probes 2, 9).
+
+3. Gson, Moshi, Jackson accept "amount" as string or number (converted to string); kotlinx rejects number (Probes 3, 13).
+
+4. Gson and Jackson accept "name" as string, number, or boolean (converted to string); Moshi and kotlinx reject non-string non-null "name" (Probes 4, 14).
+
+5. All accept "name" as null (Probes 1, 5, 7, 10).
+
+6. For "status", only exact enum strings "active", "inactive", "unknown" accepted; invalid values cause Moshi, kotlinx, Jackson to reject; Gson accepts but sets null (Probe 5).
+
+7. "tags" must be an array; non-array causes all to reject (Probe 6).
+
+8. Gson, Moshi, Jackson accept non-string elements in "tags" by converting to strings; kotlinx rejects (Probe 7).
+
+9. Nested "child" records accepted recursively with same rules (Probes 8, 9, 12).
+
+10. Empty object for "child" accepted by Gson with defaults; rejected by Moshi, kotlinx, Jackson (Probe 11).
+
+11. Invalid enum in nested "child" causes Moshi, kotlinx, Jackson to reject; Gson accepts with null (Probe 16).
+
+12. Numeric "amount" in nested "child" accepted by Gson, Moshi, Jackson (converted to string); rejected by kotlinx (Probe 17).
+
+13. Null "status" in nested "child" rejected by Moshi, kotlinx, Jackson; accepted by Gson with null (Probe 18).
+
+14. Null elements in "tags" accepted by Gson, Moshi, Jackson; rejected by kotlinx (Probe 15).
+
+15. Non-string elements in nested "tags" accepted by Gson, Moshi, Jackson (converted to string); rejected by kotlinx (Probe 19).
+
+16. Empty object as nested "child" inside "child" accepted by Gson with defaults; rejected by Moshi, kotlinx, Jackson (Probe 20).
+
+17. Gson is permissive: converts numbers/booleans to strings for string fields, accepts invalid enum as null, accepts empty objects with defaults.
+
+18. Moshi and kotlinx are strict: reject type mismatches, invalid enums, missing required fields.
+
+19. Jackson is mostly strict like Moshi/kotlinx but accepts number-to-string conversions and non-string "name" by converting to string.
+
+20. Only Gson accepts invalid enum values by setting null; others reject.

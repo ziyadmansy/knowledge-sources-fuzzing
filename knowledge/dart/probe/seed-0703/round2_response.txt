@@ -1,0 +1,39 @@
+```probe
+{"id": 1, "amount": "100", "name": null, "status": "unknown", "tags": [], "child": null}
+```
+Test acceptance of the third allowed status value "unknown".
+
+```probe
+{"id": 1, "amount": "100", "name": null, "status": null, "tags": [], "child": null}
+```
+Test rejection of null for the non-nullable enum field `status`.
+
+```probe
+{"id": 1, "amount": "100", "name": null, "status": "active", "tags": [], "child": {"id": 2, "amount": "50", "name": null, "status": "inactive", "tags": [], "child": null}}
+```
+Test nested child with `name` null to confirm recursive nullability handling.
+
+```probe
+{"id": 1, "amount": "100", "name": null, "status": "active", "tags": [], "child": {"id": 2, "amount": "50", "name": null, "status": "inactive", "tags": ["tag2"], "child": {"id": 3, "amount": "25", "name": "Carol", "status": "active", "tags": [], "child": null}}}
+```
+Test deeper recursion (2 levels) in `child` field to check if implementations handle more than one level.
+
+```probe
+{"id": 1, "amount": "100", "name": null, "status": "active", "tags": [], "child": {"id": 2, "amount": "50", "name": null, "status": "inactive", "tags": [], "child": {"id": "3", "amount": "25", "name": "Carol", "status": "active", "tags": [], "child": null}}}
+```
+Test type error in nested grandchild `id` field to see if rejection cascades through recursion.
+
+```probe
+{"id": 1, "amount": "100", "name": null, "status": "active", "tags": [], "child": {"id": 2, "amount": "50", "name": null, "status": "inactive", "tags": [], "child": {"id": 3, "amount": 25, "name": "Carol", "status": "active", "tags": [], "child": null}}}
+```
+Test type error in nested grandchild `amount` field (string expected, int given).
+
+```probe
+{"id": 1, "amount": "100", "name": null, "status": "active", "tags": [], "child": {"id": 2, "amount": "50", "name": null, "status": "inactive", "tags": [], "child": {"id": 3, "amount": "25", "name": "Carol", "status": "enabled", "tags": [], "child": null}}}
+```
+Test invalid enum value in nested grandchild `status` field.
+
+```probe
+{"id": 1, "amount": "100", "name": null, "status": "active", "tags": [], "child": {"id": 2, "amount": "50", "name": null, "status": "inactive", "tags": [], "child": {"id": 3, "amount": "25", "name": "Carol", "status": "active", "tags": [], "child": {}}}}
+```
+Test empty object as `child` of grandchild to confirm rejection of incomplete nested records.

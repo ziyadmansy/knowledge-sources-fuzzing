@@ -1,0 +1,39 @@
+```probe
+{"id": 1, "amount": "100", "name": null, "status": "active", "tags": [], "child": {"id": 2, "amount": "50", "name": null, "status": "unknown", "tags": [], "child": null}}
+```
+Tests that a well-formed nested child with null child is accepted (confirming Probe 9 and 11 child acceptance).
+
+```probe
+{"id": 1, "amount": "100", "name": null, "status": "active", "tags": [], "child": {"id": 2, "amount": "50", "name": null, "status": "unknown", "tags": [], "child": {"id": 3, "amount": "25", "name": null, "status": "active", "tags": [], "child": null}}}
+```
+Tests two-level nested child accepted (confirming recursion depth limit is at least 2).
+
+```probe
+{"id": 1, "amount": "100", "name": null, "status": "active", "tags": [], "child": {"id": 2, "amount": "50", "name": null, "status": "unknown", "tags": [], "child": {"id": 3, "amount": "25", "name": null, "status": "active", "tags": [], "child": {}}}}
+```
+Tests two-level nested child with empty object as grandchild (Probe 10 showed rejection on empty object child).
+
+```probe
+{"id": 1, "amount": "100", "name": null, "status": "active", "tags": [], "child": {"id": 2, "amount": "50", "name": null, "status": "unknown", "tags": [], "child": null, "extra1": "field", "extra2": 123}}
+```
+Tests multiple extra fields in child are ignored (confirming Probe 11 behavior).
+
+```probe
+{"id": 1, "amount": "100", "name": null, "status": "active", "tags": [], "child": null, "extra1": "field", "extra2": 123}
+```
+Tests multiple extra fields at root level are ignored (confirming Probe 12 behavior).
+
+```probe
+{"id": 1, "amount": "100", "name": null, "status": "active", "tags": ["tag1", 2], "child": null}
+```
+Tests mixed-type array in tags (Probe 7 showed rejection on all int tags).
+
+```probe
+{"id": 1, "amount": "100", "name": null, "status": "active", "tags": ["tag1", null], "child": null}
+```
+Tests null element in tags array (not tested before).
+
+```probe
+{"id": 1, "amount": "100", "name": null, "status": "active", "tags": [], "child": {"id": 2, "amount": "50", "name": null, "status": "unknown", "tags": [], "child": null, "extra": null}}
+```
+Tests extra field with null value in child (variant of Probe 11 with null extra).
