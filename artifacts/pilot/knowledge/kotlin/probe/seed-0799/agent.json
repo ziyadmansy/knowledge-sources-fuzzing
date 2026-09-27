@@ -1,0 +1,16 @@
+{
+  "agent": "probe",
+  "knowledge_chars": 1482,
+  "llm_usage": {
+    "calls": 4,
+    "input_tokens": 8369,
+    "output_tokens": 2370
+  },
+  "probes": [
+    12,
+    8
+  ],
+  "summary_over_cap_chars": 2284,
+  "target": "kotlin",
+  "truncated_from_chars": 2235
+}

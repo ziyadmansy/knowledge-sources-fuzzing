@@ -1,0 +1,39 @@
+1. All four accept fully well-formed documents with correct types (Probe 1).
+
+2. All accept numeric "id" as integer or string convertible to integer (Probes 1,2).
+
+3. Gson, Moshi, Jackson accept numeric "amount" as number, coercing to string; kotlinx rejects (Probes 3,10,13).
+
+4. Gson, Moshi, Jackson accept numeric "id" inside nested "child" objects, coercing string to int similarly (Probes 9,10).
+
+5. Gson and Moshi accept non-string "name" by coercing to string; kotlinx rejects; Jackson coerces to string (Probe 4).
+
+6. "status" must be one of "active", "inactive", "unknown"; invalid values cause Moshi, kotlinx, Jackson to reject; Gson accepts but sets null (Probe 5).
+
+7. "tags" must be an array of strings; non-array "tags" rejected by all (Probe 6).
+
+8. Gson, Moshi, Jackson accept numeric or null elements inside "tags" by coercing to string or allowing null; kotlinx rejects (Probes 7,14).
+
+9. All accept null "name" (Probes 5,7,8,12).
+
+10. Nested "child" objects follow same rules recursively; numeric coercion applies similarly (Probes 8–10,17,19).
+
+11. Extra fields cause Gson and Moshi to accept ignoring them; kotlinx and Jackson reject (Probe 11).
+
+12. Null "status" accepted only by Gson (decoded as null); others reject (Probe 15).
+
+13. All accept "status" = "unknown" (Probe 16).
+
+14. Empty "tags" array accepted by all (Probes 8,12,16).
+
+15. Empty "child" object accepted only by Gson, which fills missing fields with defaults/nulls; others reject (Probe 20).
+
+16. Nested "tags" with invalid types cause Moshi, kotlinx to reject; Gson and Jackson accept with coercion (Probe 17).
+
+17. All reject non-array "tags" inside nested "child" (Probe 18).
+
+18. Gson and Jackson tolerate null elements inside "tags"; Moshi accepts null elements too; kotlinx rejects null elements in "tags" (Probe 14).
+
+19. Gson and Jackson coerce numeric "amount" and "id" to string/int respectively; kotlinx is strict about types.
+
+20. Overall, kotlinx.serialization is strictest, rejecting on type mismatches, extra fields, invalid enum values; Gson most permissive with coercions and ignoring unknowns; Moshi stricter than Gson but less than kotlinx; Jackson strict on unknown fields and null enum values but accepts numeric coercions.

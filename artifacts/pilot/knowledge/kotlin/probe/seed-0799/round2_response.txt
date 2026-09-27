@@ -1,0 +1,39 @@
+```probe
+{"id": 1, "amount": 100.50, "name": null, "status": "active", "tags": [], "child": null}
+```
+Test if kotlinx rejects numeric amount when others accept string amount.
+
+```probe
+{"id": 1, "amount": "100.50", "name": null, "status": "active", "tags": [null], "child": null}
+```
+Test how null inside tags array is handled.
+
+```probe
+{"id": 1, "amount": "100.50", "name": null, "status": null, "tags": [], "child": null}
+```
+Test how null status is handled by each deserializer.
+
+```probe
+{"id": 1, "amount": "100.50", "name": null, "status": "unknown", "tags": [], "child": null}
+```
+Test acceptance of the other valid enum value "unknown".
+
+```probe
+{"id": 1, "amount": "100.50", "name": null, "status": "active", "tags": [], "child": {"id": 2, "amount": "50", "name": null, "status": "inactive", "tags": [123], "child": null}}
+```
+Test nested tags with integer element inside child record.
+
+```probe
+{"id": 1, "amount": "100.50", "name": null, "status": "active", "tags": [], "child": {"id": 2, "amount": "50", "name": null, "status": "inactive", "tags": "tag1", "child": null}}
+```
+Test nested tags as string instead of array inside child record.
+
+```probe
+{"id": 1, "amount": "100.50", "name": null, "status": "active", "tags": [], "child": {"id": 2, "amount": "50", "name": null, "status": "inactive", "tags": [], "child": {"id": 3, "amount": "25", "name": "Carol", "status": "active", "tags": [], "child": null}}}
+```
+Test deeper recursion (two levels) in child field.
+
+```probe
+{"id": 1, "amount": "100.50", "name": null, "status": "active", "tags": [], "child": {}}
+```
+Test empty object as child field.

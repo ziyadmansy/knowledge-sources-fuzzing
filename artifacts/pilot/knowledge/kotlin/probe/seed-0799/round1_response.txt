@@ -1,0 +1,60 @@
+```probe
+{"id": 1, "amount": "100.50", "name": "Alice", "status": "active", "tags": ["tag1"], "child": null}
+```
+Baseline valid document, all fields correct types and values.
+
+```probe
+{"id": "1", "amount": "100.50", "name": "Alice", "status": "active", "tags": ["tag1"], "child": null}
+```
+Test id as string instead of integer.
+
+```probe
+{"id": 1, "amount": 100.50, "name": "Alice", "status": "active", "tags": ["tag1"], "child": null}
+```
+Test amount as number instead of string.
+
+```probe
+{"id": 1, "amount": "100.50", "name": 123, "status": "active", "tags": ["tag1"], "child": null}
+```
+Test name as number instead of string or null.
+
+```probe
+{"id": 1, "amount": "100.50", "name": null, "status": "enabled", "tags": ["tag1"], "child": null}
+```
+Test invalid status value not in enum.
+
+```probe
+{"id": 1, "amount": "100.50", "name": null, "status": "active", "tags": "tag1", "child": null}
+```
+Test tags as string instead of array.
+
+```probe
+{"id": 1, "amount": "100.50", "name": null, "status": "active", "tags": [123], "child": null}
+```
+Test tags array with number instead of string.
+
+```probe
+{"id": 1, "amount": "100.50", "name": null, "status": "active", "tags": [], "child": {"id": 2, "amount": "50", "name": "Bob", "status": "inactive", "tags": [], "child": null}}
+```
+Test valid nested child record.
+
+```probe
+{"id": 1, "amount": "100.50", "name": null, "status": "active", "tags": [], "child": {"id": "2", "amount": "50", "name": "Bob", "status": "inactive", "tags": [], "child": null}}
+```
+Test nested child with id as string instead of integer.
+
+```probe
+{"id": 1, "amount": "100.50", "name": null, "status": "active", "tags": [], "child": {"id": 2, "amount": 50, "name": "Bob", "status": "inactive", "tags": [], "child": null}}
+```
+Test nested child with amount as number instead of string.
+
+```probe
+{"id": 1, "amount": "100.50", "name": null, "status": "active", "tags": [], "child": null, "extra": "field"}
+```
+Test extra unexpected field at top level.
+
+```probe
+{"id": 1, "amount": "100.50", "name": null, "status": "active", "tags": [], "child": null}
+```
+Repeat baseline to check consistency after other probes.
+```

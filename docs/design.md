@@ -222,3 +222,6 @@ $3/month org limit (resets 1 October). Actual spend is taken from the OpenAI das
   nothing more. This was the only change, and the agent prompts are now frozen. Pilot v2 tested one wrong
   thing at a time, but still never removed a field or used a non-integer `id`, and found 0 divergences
   in 20 probes. That is kept as data about the method, not tuned away.
+- **2026-09-27, pilot: Kotlin probe agent (seed 799, outside 800–804), frozen prompts.** 11 of 20 probes
+  diverged (patterns AARA, ARRR, AARR). The summary was cut from 2,235 to 1,482 characters by the cap rule.
+  **Step-3 gate: passed.** Kotlin shows divergence, and the probe agent plus loop ran end to end on Dart.
