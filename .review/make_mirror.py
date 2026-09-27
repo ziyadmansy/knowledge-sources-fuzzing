@@ -18,7 +18,7 @@ import subprocess
 import sys
 
 ROOT = Path.cwd()
-DELETE = ["CITATION.cff", "CLAUDE.md", "paper/main.tex", "docs/upstream", ".review"]
+DELETE = ["CITATION.cff", ".zenodo.json", "CLAUDE.md", "paper/main.tex", "docs/upstream", ".review"]
 
 # Order matters: specific phrases first, generic ones last.
 REPLACE = [
