@@ -244,5 +244,6 @@ def _write_log(llm: Any, calls_before: int, body: str, out_dir: Path, log: dict[
         "calls": len(usage),
         "input_tokens": sum(u["input_tokens"] for u in usage),
         "output_tokens": sum(u["output_tokens"] for u in usage),
+        "truncated": sum(u.get("truncated", 0) for u in usage),
     }
     (out_dir / "agent.json").write_text(json.dumps(log, indent=2, sort_keys=True) + "\n", encoding="utf-8")

@@ -1,0 +1,40 @@
+{
+  "arguments": {
+    "arm": "probe",
+    "artifact_dir": "artifacts/pilot/dart/probe-8k",
+    "examples": "500",
+    "executable": "None",
+    "iterations": "5",
+    "knowledge_file": "artifacts/pilot/knowledge/dart/probe/seed-{seed:04d}/knowledge.txt",
+    "model": "gpt-4.1-mini",
+    "overwrite": "False",
+    "runs": "1",
+    "seed": "699",
+    "target": "dart",
+    "timeout": "5.0"
+  },
+  "arm": "probe",
+  "feedback_mode": null,
+  "harness_sha256": "f63c28fbb9a901d61391740ae37ddd4cf03b5ad26d6f39a9527e849dceba6c13",
+  "hypothesis_version": "6.165.5",
+  "knowledge_section": "What is already known about these four implementations, from running\nprobe documents against them before any fuzzing (use it however you see\nfit):\n1. All four implementations accept fully well-formed documents with correct types and valid enum values (Probe 1, 8, 10, 12, 14, 15).\n\n2. All reject if \"id\" is not an integer (string \"1\") (Probe 2) or if \"amount\" is not a string (integer 100) (Probe 3).\n\n3. All reject if \"name\" is not a string or null (e.g., integer 123) (Probe 4).\n\n4. All reject if \"status\" is not one of the allowed enum values (\"active\", \"inactive\", \"unknown\"), including in nested \"child\" (Probe 5, 16).\n\n5. All reject if \"tags\" is not an array of strings (e.g., contains integer 2, or is a string) (Probe 6, 7).\n\n6. All reject if \"child\" is present but missing required fields or empty object (Probe 9, 11, 17).\n\n7. All accept nested \"child\" objects with correct schema and types, including multi-level recursion (Probe 8, 12, 15).\n\n8. All reject if \"tags\" array contains null (Probe 13), but accept empty strings in \"tags\" (Probe 14).\n\n9. All accept extra unknown fields at any level and ignore them (Probe 18).\n\n10. When duplicate keys appear in an object, the last key wins in all implementations (Probe 19, 20), affecting decoding of \"id\" and \"name\" in \"child\".\n\n11. Exception types differ: manual, json_serializable, and freezed mostly throw _TypeError or ArgumentError; built_value throws DeserializationError.\n\n12. No disagreement in acceptance/rejection or decoded values except for duplicate keys where the last occurrence is used consistently.",
+  "llm_usage": {
+    "calls": 5,
+    "input_tokens": 5214,
+    "output_tokens": 10454,
+    "truncated": 0
+  },
+  "model": "gpt-4.1-mini",
+  "path_order": [
+    "A_manual",
+    "B_json_serializable",
+    "C_freezed",
+    "D_built_value"
+  ],
+  "platform": "macOS-26.5.2-arm64-arm-64bit-Mach-O",
+  "python_implementation": "CPython",
+  "python_version": "3.14.7 (main, Aug  5 2026, 10:29:49) [Clang 21.0.0 (clang-2100.1.1.101)]",
+  "seed": 699,
+  "target": "dart",
+  "timestamp": "2026-09-27T03:04:12.923294+00:00"
+}

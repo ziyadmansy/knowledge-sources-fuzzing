@@ -113,6 +113,7 @@ def main() -> None:
             "calls": len(run_usage),
             "input_tokens": sum(u["input_tokens"] for u in run_usage),
             "output_tokens": sum(u["output_tokens"] for u in run_usage),
+            "truncated": sum(u.get("truncated", 0) for u in run_usage),
         }
         write_manifest(run_dir / "manifest.json", manifest)
 

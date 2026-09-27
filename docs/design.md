@@ -225,3 +225,11 @@ $3/month org limit (resets 1 October). Actual spend is taken from the OpenAI das
 - **2026-09-27, pilot: Kotlin probe agent (seed 799, outside 800–804), frozen prompts.** 11 of 20 probes
   diverged (patterns AARA, ARRR, AARR). The summary was cut from 2,235 to 1,482 characters by the cap rule.
   **Step-3 gate: passed.** Kotlin shows divergence, and the probe agent plus loop ran end to end on Dart.
+- **2026-09-27, pilot, before any experiment data: refinement output limit raised from 2,500 to 8,000
+  tokens for every arm.** On the Dart pilot loop, 4 of 5 proposals were cut off mid-generator at paper
+  2's 2,500-token limit (paper 2's knowledge-parity arm: 1 of 50), because a long knowledge section
+  invites one branch per observation. Truncation measures code length, not knowledge quality. Every arm
+  is re-run fresh on seeds 700+, so the within-paper comparison stays fair; the prompts are unchanged
+  (the parity test still passes). Re-pilot (`artifacts/pilot/dart/probe-8k/`): 0 of 5 truncated. The two
+  remaining failures were ordinary generator bugs, and one iteration found `RRRA`. Whether each response
+  was truncated is now recorded per call and reported per arm. Decided by the author on 2026-09-27.
