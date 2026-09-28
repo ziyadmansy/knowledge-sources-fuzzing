@@ -6,8 +6,8 @@ specific field to be absent or an integer literal to leave the 64-bit range,
 20 probes chosen by the model's prior found a divergence on one seed in five.
 Table~\ref{tab:coverage} classifies every probe by what it changes
 relative to a valid record. Unguided, the agents probed the same way on both
-targets: mostly valid documents, then one wrong type, an unknown enum
-constant or an extra key. None of their 300 probes removed a field, used an
+targets: about half of their probes left the top level unchanged, and most
+of the rest changed a type, an enum constant or a key. None of their 300 probes removed a field, used an
 \texttt{id} near a 53- or 64-bit boundary, or sent text that is not JSON,
 although probes were raw text precisely to allow that. Wrong types, unknown
 enum constants and extra keys never diverged on Dart; on Kotlin they are
@@ -23,9 +23,10 @@ integer-overflow pattern remained mostly out of reach.
 \begin{table}[t]
 \centering
 \caption{What the probes changed, relative to a valid record (number of
-probes; a probe can be in several rows). Kotlin unguided probing has 200
-probes (ten seeds), the others 100. Last row: probes that observed a
-divergence, per seed.}
+probes; a probe can be in several rows; a list element of the wrong type
+counts as a wrong type). Kotlin unguided probing has 200 probes (ten seeds),
+the others 100. Last row: probes that observed a divergence, per seed.
+Computed by \texttt{scripts/probe\_coverage.py}.}
 \label{tab:coverage}
 \footnotesize
 \setlength{\tabcolsep}{3pt}
@@ -35,14 +36,14 @@ divergence, per seed.}
 \cmidrule(lr){2-4}\cmidrule(l){5-6}
 Change & probe & sys. & gpt-4.1 & probe & sys. \\
 \midrule
-nothing at top level     & 68 & 29 & 40 & 117 & 34 \\
+nothing at top level     & 60 & 26 & 26 & 95  & 33 \\
 field missing            & 0  & 30 & 17 & 0   & 30 \\
 non-nullable field null  & 1  & 21 & 9  & 10  & 20 \\
-wrong type               & 19 & 6  & 22 & 48  & 5 \\
+wrong type               & 27 & 7  & 36 & 70  & 6 \\
 unknown enum constant    & 6  & 9  & 9  & 11  & 9 \\
 extra key                & 6  & 5  & 3  & 14  & 2 \\
-nested \texttt{child} changed & 19 & 11 & 10 & 42 & 20 \\
-fractional \texttt{id}  & 0  & 2  & 0  & 0   & 0 \\
+nested \texttt{child} changed & 29 & 11 & 11 & 52 & 22 \\
+fractional/exponent \texttt{id} & 0 & 2 & 0 & 0 & 0 \\
 \texttt{id} near 53/64-bit bound & 0 & 0 & 0 & 0 & 0 \\
 not JSON                 & 0  & 0  & 0  & 0   & 0 \\
 \midrule
@@ -89,7 +90,7 @@ confirm or refute what code reading claims. That would also address the
 overgeneralization we observed, because a claim of agreement would then have
 to name the probes that support it.
 
-\textbf{For practitioners.} Where a human characterization exists, use it:
+\textbf{For practitioners.} Where a manual characterization exists, use it:
 it was the best source by a wide margin and costs nothing at run time. Where
 source is available, a code-reading summary gives a dependable improvement
 for a few cents. Where neither exists, probe systematically: give the
@@ -101,8 +102,8 @@ agreement.
 
 \subsection{Threats to validity}
 
-\textbf{Sample size.} Each arm has five seeds, the smallest size at which an
-exact Mann--Whitney test can reach $p < 0.05$. The primary Dart result is a
+\textbf{Sample size.} Each arm has five seeds, where the smallest attainable
+exact two-sided Mann--Whitney $p$ is $2/252 \approx 0.008$. The primary Dart result is a
 non-detection, and the bimodal probe distribution means a larger sample
 would most likely estimate how often probing hits, not remove the
 variance. The Kotlin result relies on a pre-declared replication and is

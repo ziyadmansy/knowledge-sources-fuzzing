@@ -13,7 +13,7 @@ Richer feedback, incremental mutation and a larger model did not close the
 gap. Four observations taken from a thirteen-case manual characterization
 did: with them in the prompt, the same loop reached 28.8\%. But it never
 found a divergence it had not been told about. The bottleneck was domain
-knowledge, and it came from a human.
+knowledge, and it came from the researchers.
 
 This paper asks where else that knowledge can come from. A human
 characterization is slow and requires an expert; if a fuzzer is to be
@@ -23,7 +23,7 @@ implementations under test and summarize what it finds, as white-box LLM
 testing tools do~\cite{yang2024whitefox,yang2025kernelgpt,vadayath2026aijon}.
 Or an agent can \emph{run experiments}: design a small number of probe
 documents, observe how each implementation handles them, and write down what
-it learned. The second is what the human did in that study, and it
+it learned. The second is what the researchers did by hand in that study, and it
 needs no source code, which matters when the implementations are closed,
 generated at compile time, or reflective. We call it \emph{black-box
 self-characterization}.

@@ -40,7 +40,7 @@ Both targets decode the same logical record: a non-null integer
 \texttt{id}, a string \texttt{amount}, a nullable string \texttt{name}, a
 \texttt{status} enum with three values, a non-null list of strings
 \texttt{tags}, and a nullable recursive \texttt{child}. Each generated
-document is run through four independent deserialization paths in one
+document is run through four deserialization paths in one
 long-lived harness process. A document \emph{diverges} if one path accepts
 it and another rejects it, or if all accept but decode different values.
 Values are compared through a canonical JSON rendering of the decoded
@@ -89,8 +89,8 @@ missing field, a boundary value), and asks for a new generator. A test
 rebuilds all 100 prompts committed by the previous study's score-only and
 knowledge arms byte for byte. The one change is the output-token limit,
 raised from 2{,}500 to 8{,}000 for every arm before any experiment data, after
-a pilot lost four of five generators to truncation; no experiment response
-was truncated.
+a pilot lost four of five generators to truncation; no response in the main
+study was truncated, and one of the extension's 75 was.
 
 \subsection{Knowledge arms}
 
@@ -104,7 +104,9 @@ verbatim (1{,}291 characters): that invalid JSON never reaches the paths;
 that \texttt{built\_value} alone accepts a missing \texttt{tags} and uses
 an empty list; that wrong types and nulls are rejected by all four in every
 case tried; and that two paths decode \texttt{id} as \texttt{num.toInt()},
-which saturates for integer literals outside the 64-bit range.
+which saturates for integer literals outside the 64-bit range. The label
+means that the researchers produced this knowledge outside the pipeline,
+from documents they chose, rather than an agent inside it.
 
 \textbf{Code} (Dart only). An agent reads a fixed, per-seed identical set
 of nine source files, about 17{,}000 characters: each path's model and its

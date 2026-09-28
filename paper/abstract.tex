@@ -1,10 +1,10 @@
 An LLM-guided refinement loop for differential testing of Dart JSON
 deserializers found divergence in 2.9\% of generated documents on its own
-and in 28.8\% when given four observations from a human characterization:
+and in 28.8\% when given four observations from a manual characterization:
 the bottleneck was domain knowledge. We ask whether the fuzzer can acquire
 that knowledge itself. Holding the loop fixed and varying only a
 1{,}500-character knowledge slot, a pre-registered study compares no
-knowledge, the human's observations, a summary by an agent that reads the
+knowledge, those observations, a summary by an agent that reads the
 deserializers' code, and a summary by an agent that runs 20 black-box probe
 documents. On Dart ($n{=}5$ seeds per arm), human knowledge reaches 30.9\%,
 code-read knowledge 11.6\% and none 1.5\% (Holm-adjusted $p \approx 0.048$
