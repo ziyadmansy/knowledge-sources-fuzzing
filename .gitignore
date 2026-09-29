@@ -14,3 +14,6 @@ kotlin-harness/.kotlin/
 
 # LaTeX output (build with: cd paper && tectonic main.tex / main-icst-submission.tex)
 paper/*.pdf
+
+# macOS folder metadata
+.DS_Store
