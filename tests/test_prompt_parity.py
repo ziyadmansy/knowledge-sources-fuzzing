@@ -1,6 +1,6 @@
-"""The Dart arms must run paper 2's loop unchanged (docs/design.md §4).
+"""The Dart arms must run the previous study's loop unchanged (docs/design.md §4).
 
-Replays paper 2's committed runs: every prompt.txt must be rebuilt byte for byte
+Replays the previous study's committed runs: every prompt.txt must be rebuilt byte for byte
 from the previous iterations' summary.json / proposal_error.txt, and every
 results.jsonl must summarize to the committed summary.json. Skipped if the
 sibling repo is not checked out.
@@ -16,9 +16,9 @@ from ksfuzz.campaign import DivergenceCampaignSummary, build_refinement_prompt, 
 from ksfuzz.knowledge import knowledge_section
 from ksfuzz.targets import DART, REPO_ROOT
 
-PAPER2 = REPO_ROOT.parent / "agentic-fuzzing-dart-json" / "artifacts" / "repeated"
+PAPER2 = REPO_ROOT.parent / "previous-study-artifact" / "artifacts" / "repeated"
 
-# Paper 2 arms with the score-only prompt (no json/category/mutate ablation), and
+# The previous study arms with the score-only prompt (no json/category/mutate ablation), and
 # which knowledge arm each corresponds to here.
 _ARMS = {"rq2-loop-knowledge-parity": "human", "rq2-loop-gpt41": "none", "rq2-loop-gpt41-lenient": "none"}
 

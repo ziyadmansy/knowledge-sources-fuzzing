@@ -11,7 +11,7 @@ import kotlinx.serialization.json.jsonObject
 import kotlinx.serialization.json.jsonPrimitive
 import kotlinx.serialization.json.put
 
-// NDJSON batch harness, same protocol as paper 2's Dart harness:
+// NDJSON batch harness, same protocol as the previous study's Dart harness:
 //   stdin:  {"input_b64": "<base64 of the candidate's raw bytes>"}   (one per line)
 //   stdout: one JSON result per line, flushed immediately.
 // Difference from Dart (docs/design.md §10): the four paths are run on EVERY input, because each

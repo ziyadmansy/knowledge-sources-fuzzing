@@ -1,6 +1,6 @@
 """OpenAI proposer used by the refinement loop and the knowledge agents.
 
-Ported from paper 2's `llm.py`. Three changes: lenient fence parsing is ON by
+Ported from the previous study's `llm.py`. Three changes: lenient fence parsing is ON by
 default (a fixed setting for every arm in this repo, docs/design.md §4); the
 refinement output limit is 8,000 tokens, not 2,500 (§10, after the pilot
 showed truncated generators); and every call's token usage, and whether the

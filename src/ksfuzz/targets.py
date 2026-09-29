@@ -62,8 +62,8 @@ class Target:
         return digest.hexdigest()
 
 
-# Paper 2's SCHEMA_DESCRIPTION and closing sentence, verbatim, so the Dart prompts
-# are byte-identical to paper 2's (tests/test_prompt_parity.py checks this).
+# The previous study's SCHEMA_DESCRIPTION and closing sentence, verbatim, so the Dart prompts
+# are byte-identical to the previous study's (tests/test_prompt_parity.py checks this).
 DART = Target(
     name="dart",
     path_order=("A_manual", "B_json_serializable", "C_freezed", "D_built_value"),
@@ -82,7 +82,7 @@ rather than a clear, catchable one.""",
     syntax_note="""Emit syntactically valid JSON objects only (invalid JSON syntax is rejected
 identically by all four paths before any of them run, so it cannot score).""",
     divergence_on_all_inputs=False,
-    default_executable=REPO_ROOT.parent / "agentic-fuzzing-dart-json" / "build" / "dart_json_harness",
+    default_executable=REPO_ROOT.parent / "previous-study-artifact" / "build" / "dart_json_harness",
 )
 
 # Same structure, with only harness facts stated: which libraries run, and that each

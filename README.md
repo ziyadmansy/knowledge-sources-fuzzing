@@ -3,10 +3,7 @@
 Research artifact for the paper *Where Does an LLM Fuzzer's Domain Knowledge Come From? Human, Code-Read, and
 Self-Acquired Knowledge for Differential Testing of Typed Deserializers*.
 
-Preprint: [doi:10.5281/zenodo.23002933](https://doi.org/10.5281/zenodo.23002933) ·
-Software: [doi:10.5281/zenodo.23003263](https://doi.org/10.5281/zenodo.23003263)
-
-An earlier study ([Beyond Sanitizers](https://doi.org/10.5281/zenodo.22555794)) found that an LLM-guided
+An earlier study (anonymized for review) found that an LLM-guided
 refinement loop for differential testing of Dart JSON deserializers found divergence in 2.9% of generated
 documents on its own, but in 28.8% with four observations written by a human. This repository asks whether the
 fuzzer can acquire that knowledge itself. The loop is held fixed, and only a 1,500-character knowledge slot in its
@@ -63,8 +60,8 @@ existed at the time. The git history shows the order.
 
 Requirements: Python 3.14, a JDK 21 (no system Java is needed; any JDK 21 works through `JAVA_HOME`), and for
 Dart the compiled harness from
-[agentic-fuzzing-dart-json](https://github.com/ziyadmansy/agentic-fuzzing-dart-json) checked out next to this
-repository.
+the previous study's artifact (anonymized for review) checked out next to this
+repository as `previous-study-artifact`.
 
 ```sh
 python3 -m venv .venv && .venv/bin/pip install -r requirements.txt

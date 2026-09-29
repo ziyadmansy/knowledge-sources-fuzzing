@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 """Run one arm (docs/design.md §4) of the refinement loop on one target, for one or
-more seeds. Adapted from paper 2's `run_dart_rq2_refinement.py`.
+more seeds. Adapted from the previous study's `run_dart_rq2_refinement.py`.
 
-  set -a; . ../agentic-fuzzing-dart-json/.env; set +a
+  set -a; . ../previous-study-artifact/.env; set +a
   .venv/bin/python scripts/run_arm.py --target dart --arm none --seed 700 --runs 5
 
 For the `code` and `probe` arms the knowledge body is per seed: pass

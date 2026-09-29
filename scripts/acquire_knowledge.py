@@ -24,7 +24,7 @@ from ksfuzz.targets import DART, TARGETS  # noqa: E402
 # The code arm's reading list (§4.2): each path's model source and its generated
 # `*.g.dart`, identical for every seed. ~17K characters, under the budget, so
 # nothing is truncated; the check below fails loudly if that ever changes.
-DART_SCHEMA_DIR = REPO_ROOT.parent / "agentic-fuzzing-dart-json" / "harness" / "lib" / "schema"
+DART_SCHEMA_DIR = REPO_ROOT.parent / "previous-study-artifact" / "harness" / "lib" / "schema"
 DART_CODE_SOURCES = (
     "manual.dart",
     "json_serializable_model.dart",

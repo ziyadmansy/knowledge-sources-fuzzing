@@ -1,4 +1,4 @@
-// Kotlin counterpart of paper 2's Dart harness: one long-lived process, NDJSON over
+// Kotlin counterpart of the previous study's Dart harness: one long-lived process, NDJSON over
 // stdin/stdout, four deserialization paths run on every input (docs/design.md §5.2, §10).
 // Every library is used at its documented defaults; versions are pinned for the paper.
 plugins {

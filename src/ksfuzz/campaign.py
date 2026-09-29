@@ -1,17 +1,17 @@
 """Divergence campaign, summary and refinement loop (docs/design.md §4).
 
-Ported from paper 2's `dart_divergence_campaign.py`. The loop and the score-only
+Ported from the previous study's `dart_divergence_campaign.py`. The loop and the score-only
 prompt are unchanged; what is new:
 
 - a `Target` (targets.py) supplies the path names and the prompt's description of
   the four paths, so the same loop drives Dart and Kotlin;
-- a generic knowledge slot replaces paper 2's `knowledge_parity` flag. Each arm
+- a generic knowledge slot replaces the previous study's `knowledge_parity` flag. Each arm
   differs only in the text placed there (knowledge.py);
 - for Kotlin, divergence is counted on all inputs, not only `schema_evaluated`
   ones (§10), and the summary also splits divergence by gate status;
 - the summary keeps a count per divergent signature, for pattern recall (§6).
 
-Paper 2's `allow_json`, `category_feedback` and `mutate_source` ablations are
+The previous study's `allow_json`, `category_feedback` and `mutate_source` ablations are
 not ported: no arm in this design uses them.
 """
 
@@ -103,7 +103,7 @@ def _generation_error_observation(index: int, error: GenerationError) -> dict[st
 
 
 # Summary keys that are new in this repo. They are left out of the prompt's
-# "other metrics" blob so the Dart prompts stay byte-identical to paper 2's.
+# "other metrics" blob so the Dart prompts stay byte-identical to the previous study's.
 _NEW_SUMMARY_KEYS = ("divergence_signatures", "tier_c_by_gate")
 
 
@@ -148,7 +148,7 @@ _STATUS_VALUES = ("active", "inactive", "unknown")
 
 def _classify_perturbations(document: object) -> set[str]:
     """Categorize what is unusual about a document, by its shape against the schema.
-    Unchanged from paper 2; reporting only (no arm feeds it back to the proposer)."""
+    Unchanged from the previous study; reporting only (no arm feeds it back to the proposer)."""
     categories: set[str] = set()
     if not isinstance(document, dict):
         return categories
@@ -280,7 +280,7 @@ def build_refinement_prompt(
     previous_error: str | None = None,
     knowledge: str | None = None,
 ) -> str:
-    """Paper 2's score-only prompt. `knowledge` is the arm's whole knowledge section
+    """The previous study's score-only prompt. `knowledge` is the arm's whole knowledge section
     (knowledge.py), or None for the `none` arm."""
     other_metrics = {
         key: value
@@ -294,7 +294,7 @@ def build_refinement_prompt(
         else ""
     )
     knowledge_section = f"\n{knowledge}\n" if knowledge else ""
-    # The two empty lines where paper 2 had its (unused here) regression and
+    # The two empty lines where the previous study had its (unused here) regression and
     # previous-source sections are kept, so the prompt bytes match.
     return f"""You are refining a Hypothesis strategy to find behavioral divergence between four {target.title}.
 
@@ -334,7 +334,7 @@ def run_refinement_loop(
     examples_per_iteration: int = 500,
     timeout_seconds: float = 5.0,
 ) -> list[DivergenceCampaignSummary]:
-    """Paper 2's bounded loop: each iteration writes a fresh generator from the
+    """The previous study's bounded loop: each iteration writes a fresh generator from the
     score of the last iteration that produced data; failures fall back to it."""
     summaries: list[DivergenceCampaignSummary] = []
     last_good = empty_summary()

@@ -6,9 +6,9 @@ Everything in §4–§7 is fixed now. Changes after data exists are recorded in 
 
 ---
 
-## 1. Motivation (from paper 2)
+## 1. Motivation (from the previous study)
 
-Paper 2 (*Beyond Sanitizers*, AST 2027 submission, repo `agentic-fuzzing-dart-json`, design doc §17–18)
+The previous study (anonymized for review; design doc §17–18)
 ended with a controlled result. An LLM-guided refinement loop found cross-implementation divergence in
 2.9% of documents, against 22.2% for a hand-built static generator. Given **four observations from a
 13-case manual characterization** (the knowledge the static generator was designed from), the same loop
@@ -16,7 +16,7 @@ reached 28.8% (pooled n=10, p≈0.013 vs no knowledge; indistinguishable from or
 generator). A larger model (`gpt-4.1`) without that knowledge did not improve (1.91%, p≈0.31). The
 loop exploited the knowledge it was given but never found a divergence it had not been told about.
 
-**So the bottleneck is domain knowledge, and in paper 2 it came from a human.** Paper 3 asks whether the
+**So the bottleneck is domain knowledge, and in the previous study it came from a human.** This study asks whether the
 fuzzer can acquire that knowledge itself.
 
 ## 2. Positioning against related work (checked 2026-09-27)
@@ -31,7 +31,7 @@ fuzzer can acquire that knowledge itself.
 | Gson issue #1657 | Gson bypasses Kotlin null-safety (known) | Used as a **second answer key**: a known behaviour the agent should rediscover |
 
 The novel element is **black-box self-characterization**: an agent that designs probe documents, runs
-them against the targets, and writes its own knowledge summary, the way the human did in paper 2. It is
+them against the targets, and writes its own knowledge summary, the way the human did in the previous study. It is
 compared under control with no knowledge, human knowledge, and code-derived knowledge.
 
 ## 3. Research questions
@@ -46,16 +46,16 @@ compared under control with no knowledge, human knowledge, and code-derived know
 
 ## 4. Arms
 
-All arms use paper 2's unchanged refinement loop: 5 iterations × 500 examples, score-only prompt,
+All arms use the previous study's unchanged refinement loop: 5 iterations × 500 examples, score-only prompt,
 constrained sandbox, `gpt-4.1-mini`, temperature 0.2, lenient fence parsing ON for every arm (a fixed
 setting in this repo, so there's no asymmetry). The **only** difference between arms is the text in the
-knowledge slot of the prompt, which is capped at **1,500 characters** for every arm (paper 2's human
+knowledge slot of the prompt, which is capped at **1,500 characters** for every arm (the previous study's human
 section was about 1,400).
 
 | Arm | Knowledge slot content | Targets |
 |---|---|---|
 | **none** | empty | Dart, Kotlin |
-| **human** | paper 2's four observations, verbatim | Dart only (no human characterization exists for Kotlin) |
+| **human** | the previous study's four observations, verbatim | Dart only (no human characterization exists for Kotlin) |
 | **code** | an LLM summary written after reading the four paths' deserialization code | Dart only (see §4.2) |
 | **probe** | an LLM summary written after running its own probe documents (§4.1) | Dart, Kotlin |
 
@@ -84,7 +84,7 @@ asymmetry is itself a practical argument for black-box probing and is reported a
 
 ### 5.1 Dart (answer key known)
 
-Paper 2's harness and Record schema, reused byte-for-byte (json_serializable 6.14.1, freezed 4.0.1,
+The previous study's harness and Record schema, reused byte-for-byte (json_serializable 6.14.1, freezed 4.0.1,
 built_value 8.13.0, Dart 3.13.2). Known divergence patterns: `RAAR` (id saturation) and `RRRA`
 (built_value missing `tags`).
 
@@ -92,7 +92,7 @@ built_value 8.13.0, Dart 3.13.2). Known divergence patterns: `RAAR` (id saturati
 
 The same logical Record schema, as a Kotlin data class with a non-null `id: Long`, `amount: String`,
 nullable `name: String?`, `status` enum, `tags: List<String>`, and nullable recursive `child`. Four
-paths, each at its **documented defaults** (as paper 2 used "out of the box" configurations):
+paths, each at its **documented defaults** (as the previous study used "out of the box" configurations):
 
 | Path | Library | Mechanism |
 |---|---|---|
@@ -114,7 +114,7 @@ before any report.
 
 - **Seeds:** Dart arms 700–704 (none, human, code, probe; each n=5, fresh seeds, all re-run in this repo
   for self-containment). Kotlin arms 800–804 (none, probe).
-- **Primary metric:** per-run divergence rate over all generated documents, as in paper 2.
+- **Primary metric:** per-run divergence rate over all generated documents, as in the previous study.
 - **Secondary:** rate over schema-evaluated documents; **pattern recall** (fraction of answer-key
   patterns found at least once per run); new patterns; LLM calls and tokens per arm.
 - **Tests:** exact two-sided Mann-Whitney U, reported with the mean difference and Cliff's δ.
@@ -129,25 +129,25 @@ before any report.
     equivalence-style claim is only made if the effect size is small, not from p alone); p < 0.05 either
     direction → report the direction.
   - If the first n=5 of any primary comparison is suggestive but not significant, a replication on fresh
-    seeds may be added **only** if declared in §10 *before* it runs, as in paper 2 §17.2.
+    seeds may be added **only** if declared in §10 *before* it runs, as in the previous study §17.2.
 - **Bug reports:** any Kotlin divergence becomes a candidate. Each is minimized, reproduced by hand
   outside the harness, checked against docs and existing issues, and only then reported. The paper
   counts reported / acknowledged / fixed separately.
 
 ## 7. Budget
 
-`gpt-4.1-mini` at about $0.003 per refinement call (measured in paper 2), so about $0.08 per 25-call arm.
+`gpt-4.1-mini` at about $0.003 per refinement call (measured in the previous study), so about $0.08 per 25-call arm.
 Probing adds about 3 calls per seed. Estimate: 6 arm-sets × 5 seeds ≈ $0.6–1.0 total, well inside the
 $3/month org limit (resets 1 October). Actual spend is taken from the OpenAI dashboard, not estimates.
 
-## 8. Steps (progress-based, not dated; hard deadline: preprint before PhD applications on 1 December)
+## 8. Steps (progress-based, not dated; hard deadline: 1 December)
 
 1. **Harnesses**: Kotlin 4-path harness (same NDJSON protocol as Dart); port the Dart pipeline into this repo; hand-characterization smoke test on Kotlin.
 2. **Agents**: probing agent and code-reading agent; knowledge-slot plumbing in the refinement loop.
 3. **Gate**: Kotlin shows ≥1 divergence pattern, and the probing agent runs end-to-end on Dart. If Kotlin fails, fall back to Dart-only RQ1–RQ2.
 4. **Experiments**: all arms (§6); analyses; Kotlin bug triage and upstream reports.
 5. **Paper**: draft, then revision.
-6. **Release**: artifact release, Zenodo DOI, preprint; CV/SOP entry.
+6. **Release**: artifact release, DOI, preprint.
 
 ## 9. Threats known up front
 
@@ -178,9 +178,9 @@ $3/month org limit (resets 1 October). Actual spend is taken from the OpenAI das
 - **2026-09-27, before any data: knowledge-slot framing.** Each arm's slot is a one-sentence header
   naming the source ("from a hand-run characterization", "from reading their deserialization code",
   "from running probe documents"), then the body. The 1,500-character cap applies to the body. The human
-  section is paper 2's, verbatim with its header (body: 1,291 characters), so the Dart `human` arm is
-  paper 2's knowledge-parity prompt exactly. A test (`tests/test_prompt_parity.py`) rebuilds every
-  committed paper 2 prompt for the score-only and knowledge-parity arms (20 runs, 100 prompts) byte for byte.
+  section is the previous study's, verbatim with its header (body: 1,291 characters), so the Dart `human` arm is
+  the previous study's knowledge-parity prompt exactly. A test (`tests/test_prompt_parity.py`) rebuilds every
+  committed the previous study prompt for the score-only and knowledge-parity arms (20 runs, 100 prompts) byte for byte.
 - **2026-09-27, before any data: Kotlin prompt text.** It uses the same prompt skeleton, schema and
   strategy hint as Dart. Two Dart-specific sentences are replaced with harness facts only: the path list
   (Gson, Moshi generated adapter, kotlinx.serialization, Jackson with its Kotlin module, each at defaults
@@ -189,7 +189,7 @@ $3/month org limit (resets 1 October). Actual spend is taken from the OpenAI das
   entry). The Dart goal sentence's clause about private exception types is dropped for Kotlin, because
   the JVM has no equivalent (Tier B is always empty there). No behavioural claim about any library
   appears in the Kotlin `none` prompt.
-- **2026-09-27, before any data: paper 2's ablation flags are not ported.** `allow_json`,
+- **2026-09-27, before any data: the previous study's ablation flags are not ported.** `allow_json`,
   `category_feedback` and `mutate_source` belong to no arm in §4. Divergence signatures counted per
   run (for pattern recall) and LLM token usage per run (for cost) are recorded in each run's artifacts.
 - **2026-09-27, before any data: probing-agent protocol details (fixes §4.1's "e.g.").** Round 1 allows
@@ -227,7 +227,7 @@ $3/month org limit (resets 1 October). Actual spend is taken from the OpenAI das
   **Step-3 gate: passed.** Kotlin shows divergence, and the probe agent plus loop ran end to end on Dart.
 - **2026-09-27, pilot, before any experiment data: refinement output limit raised from 2,500 to 8,000
   tokens for every arm.** On the Dart pilot loop, 4 of 5 proposals were cut off mid-generator at paper
-  2's 2,500-token limit (paper 2's knowledge-parity arm: 1 of 50), because a long knowledge section
+  2's 2,500-token limit (the previous study's knowledge-parity arm: 1 of 50), because a long knowledge section
   invites one branch per observation. Truncation measures code length, not knowledge quality. Every arm
   is re-run fresh on seeds 700+, so the within-paper comparison stays fair; the prompts are unchanged
   (the parity test still passes). Re-pilot (`artifacts/pilot/dart/probe-8k/`): 0 of 5 truncated. The two

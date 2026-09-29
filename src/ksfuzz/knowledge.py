@@ -2,8 +2,8 @@
 
 A section is a one-sentence header naming where the knowledge came from, then
 the knowledge body. The 1,500-character cap applies to the body. The human
-section is paper 2's `_KNOWLEDGE_PARITY_SECTION`, verbatim, header included, so
-the Dart `human` arm replicates paper 2's knowledge-parity prompt byte for byte.
+section is the previous study's `_KNOWLEDGE_PARITY_SECTION`, verbatim, header included, so
+the Dart `human` arm replicates the previous study's knowledge-parity prompt byte for byte.
 """
 
 KNOWLEDGE_CAP = 1500
@@ -16,7 +16,7 @@ _HUMAN_HEADER = """What is already known about these four implementations, from 
 hand-run characterization of them before any fuzzing (use it however you
 see fit):"""
 
-# Paper 2's four observations (its design doc §17), unchanged.
+# The previous study's four observations (its design doc §17), unchanged.
 HUMAN_DART_BODY = """1. All four receive the output of one shared `jsonDecode` call. Invalid
    JSON syntax, or a top-level value that is not an object, is rejected
    identically before any of them runs, so it can never cause disagreement.

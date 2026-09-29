@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Pre-registered analysis (docs/design.md §6) over artifacts/<target>/<arm>/run-*.
 
-Per run, following paper 2's aggregate_rq2_runs.py: iterations whose proposal was
+Per run, following the previous study's aggregate_rq2_runs.py: iterations whose proposal was
 rejected before producing data are excluded; divergence is summed over the rest.
 Primary metric: divergence rate over all generated documents. Secondary: rate over
 schema-evaluated documents, pattern recall, LLM calls/tokens/truncation.

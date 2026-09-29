@@ -1,7 +1,7 @@
-"""Batch subprocess client for the NDJSON harnesses (paper 2's Dart harness and
+"""Batch subprocess client for the NDJSON harnesses (the previous study's Dart harness and
 this repo's Kotlin harness speak the same protocol).
 
-Ported from paper 2's `dart_runner.py`. One long-lived process handles a whole
+Ported from the previous study's `dart_runner.py`. One long-lived process handles a whole
 campaign; a batch-level timeout or crash is checked around the whole invocation.
 The only change is `env`, needed to point the Kotlin launcher script at a JDK.
 """

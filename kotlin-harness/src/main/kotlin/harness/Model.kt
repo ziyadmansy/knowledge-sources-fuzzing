@@ -3,7 +3,7 @@ package harness
 import com.squareup.moshi.JsonClass
 import kotlinx.serialization.Serializable
 
-// The shared Record schema from paper 2 (docs/design.md §5.2), as one idiomatic Kotlin data class
+// The shared Record schema from the previous study (docs/design.md §5.2), as one idiomatic Kotlin data class
 // used by all four paths. No default values and no configuration: the only annotations are the ones
 // kotlinx.serialization and Moshi codegen need to run at all (Gson and Jackson ignore them).
 // Enum constants are lowercase so every library maps them by name with zero configuration.
