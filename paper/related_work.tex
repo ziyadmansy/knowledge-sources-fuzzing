@@ -4,7 +4,12 @@
 zero-shot input generators for deep-learning libraries~\cite{deng2023titanfuzz},
 as universal fuzzers across languages~\cite{xia2024fuzz4all}, and to escape
 coverage plateaus in search-based test generation~\cite{lemieux2023codamosa}.
-These systems draw on what the model already knows from pre-training. Two
+G$^2$Fuzz~\cite{zhang2025g2fuzz} and ELFuzz~\cite{chen2025elfuzz} have an LLM
+write and evolve input generators under coverage guidance, and
+ChatAFL~\cite{meng2024chatafl} asks the model for the message grammar of a
+protocol it has seen in training. These systems draw on what the model
+already knows from pre-training; our \emph{none} arm measures how far that
+prior goes for typed deserializers. Two
 earlier studies put such a model inside a bounded, coverage-free refinement
 loop, first against C parsers~\grammarcite{} and then against Dart
 deserializers with a differential oracle~\dartcite{}; the second is where
@@ -22,6 +27,19 @@ code or specifications, for coverage or for test requirements. None compares
 knowledge sources under control, and none acquires knowledge by running the
 target. Our \emph{code} arm is a small, controlled instance of this family;
 our \emph{probe} arm is the black-box alternative.
+
+\textbf{Knowledge from running the target.} Learning a black-box system's
+behavior from queries is the premise of active automata
+learning~\cite{angluin1987learning}, and protocol state
+fuzzing~\cite{deruiter2015protocol} learns state machines of TLS
+implementations this way and compares them to find flaws. These methods
+explore systematically, within an alphabet fixed in advance. Our probing
+agent chooses its own queries in free-form JSON from a small budget, which is
+why its coverage, and not its reasoning, turns out to decide what it learns.
+Mokav~\cite{etemadi2025mokav} feeds the outputs of two program versions back
+to an LLM until it finds a difference-exposing input, which is execution
+feedback rather than distilled knowledge; our loop receives only a score, so
+the knowledge slot is its only source of behavioral facts.
 
 \textbf{Differential testing of JSON processing.} Differential
 testing~\cite{mckeeman1998differential} of JSON parsers across languages has

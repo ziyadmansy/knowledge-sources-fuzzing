@@ -32,7 +32,11 @@ Divergence rate, % of all generated documents (mean over seeds):
   is all-or-nothing: 49% on the one seed whose probes hit a divergence, at most 1.3% on the others.
 - Kotlin: probe vs none p ≈ 0.007 over ten seeds, pooling the pre-registered seeds with a replication that was
   declared before it ran.
-- The divergence patterns each arm finds match the facts its knowledge states.
+- The divergence patterns each arm finds largely follow the facts its knowledge states.
+- Pre-registered extension (RQ4): systematic probing, with a generic category checklist, reaches 20.21% on Dart
+  (p ≈ 0.032 against none; 0.159 after Holm across six tests) and 81.59% on Kotlin; a larger prober (`gpt-4.1`,
+  acquisition only) reaches 12.09% on Dart. Both mostly miss the integer-overflow pattern, which their probes never
+  reach. Results: [`artifacts/analysis-extension.json`](artifacts/analysis-extension.json).
 
 Full analysis: [`artifacts/analysis.json`](artifacts/analysis.json) and
 [`artifacts/analysis-kotlin-pooled.json`](artifacts/analysis-kotlin-pooled.json). Kotlin triage:

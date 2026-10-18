@@ -8,7 +8,7 @@ Everything in §4–§7 is fixed now. Changes after data exists are recorded in 
 
 ## 1. Motivation (from paper 2)
 
-Paper 2 (*Beyond Sanitizers*, AST 2027 submission, repo `agentic-fuzzing-dart-json`, design doc §17–18)
+Paper 2 (*Beyond Sanitizers*, repo `agentic-fuzzing-dart-json`, design doc §17–18)
 ended with a controlled result. An LLM-guided refinement loop found cross-implementation divergence in
 2.9% of documents, against 22.2% for a hand-built static generator. Given **four observations from a
 13-case manual characterization** (the knowledge the static generator was designed from), the same loop

@@ -12,7 +12,7 @@ kotlin-harness/.kotlin/
 
 .hypothesis/
 
-# LaTeX output (build with: cd paper && tectonic main.tex / main-icst-submission.tex)
+# LaTeX output (build with: cd paper && tectonic main.tex / main-anon.tex)
 paper/*.pdf
 
 # macOS folder metadata

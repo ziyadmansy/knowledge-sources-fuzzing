@@ -22,7 +22,7 @@ DELETE = ["CITATION.cff", ".zenodo.json", "CLAUDE.md", "paper/main.tex", "docs/u
 
 # Order matters: specific phrases first, generic ones last.
 REPLACE = [
-    ("(*Beyond Sanitizers*, AST 2027 submission, repo `agentic-fuzzing-dart-json`, ", "(anonymized for review; "),
+    ("(*Beyond Sanitizers*, repo `agentic-fuzzing-dart-json`, ", "(anonymized for review; "),
     ("An earlier study ([Beyond Sanitizers](https://doi.org/10.5281/zenodo.22555794))", "An earlier study (anonymized for review)"),
     ("[agentic-fuzzing-dart-json](https://github.com/ziyadmansy/agentic-fuzzing-dart-json) checked out next to this\nrepository",
      "the previous study's artifact (anonymized for review) checked out next to this\nrepository as `previous-study-artifact`"),
