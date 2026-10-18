@@ -64,10 +64,11 @@ path runs. Two divergence patterns are known (written in path order):
 \texttt{tags} missing and substitutes an empty list.
 
 \textbf{Kotlin} uses a new harness with the same protocol and four libraries
-at their documented defaults: Gson~\cite{gson2026},
-Moshi with its generated adapter~\cite{moshi2026},
-kotlinx.serialization~\cite{kotlinxserialization2026} and Jackson with its
-Kotlin module~\cite{jacksonkotlin2026}. The record is an idiomatic data
+at their documented defaults: Gson~2.14.0~\cite{gson2026},
+Moshi~1.15.2 with its generated adapter~\cite{moshi2026},
+kotlinx.serialization~1.11.0~\cite{kotlinxserialization2026} and
+Jackson~2.22.3 with its Kotlin module~\cite{jacksonkotlin2026}, on Kotlin
+2.4.20 and JDK~21. The record is an idiomatic data
 class with no default values and no configuration beyond the annotations each
 library needs to run. Unlike Dart, each library parses the raw text itself,
 so all four run on every input and syntax-level divergence counts. The known

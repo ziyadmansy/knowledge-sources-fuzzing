@@ -1,0 +1,14 @@
+% IEEEtran sets text in Times. Under XeTeX (tectonic), Times (ptm) is not
+% available, so text, bold, italics and \texttt all fell back to upright Latin
+% Modern. Use the TeX Gyre clones of Times and Courier instead; pdfLaTeX builds
+% are unaffected.
+\usepackage{iftex}
+\ifXeTeX
+  \usepackage{fontspec}
+  \setmainfont{texgyretermes}[Extension=.otf, UprightFont=*-regular,
+    BoldFont=*-bold, ItalicFont=*-italic, BoldItalicFont=*-bolditalic]
+  \setmonofont{texgyrecursor}[Extension=.otf, UprightFont=*-regular,
+    BoldFont=*-bold, ItalicFont=*-italic, BoldItalicFont=*-bolditalic]
+\fi
+% No coloured boxes around citations and links (hyperref is loaded after this file).
+\PassOptionsToPackage{hidelinks}{hyperref}
